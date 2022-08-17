@@ -16,6 +16,10 @@ module.exports = {
       }
     },
   },
+  daisyui: {
+    themes: ['cyberpunk', 'dark'],
+    darkTheme: 'dark'
+  },
   plugins: [
     require('@tailwindcss/typography'),
     require("daisyui")
