@@ -14,9 +14,9 @@ const Header = () => {
                 </div>
                 <div class="flex-none">
                     <ul class="menu menu-horizontal p-0 hidden sm:flex">
-                        <li><Link to="/"><button>Projects</button></Link></li>
-                        <li><Link to="/"><button>Resume</button></Link></li>
-                        <li><Link to="/"><button>Blog</button></Link></li>
+                        <li><Link to="/">Projects</Link></li>
+                        <li><Link to="/">Resume</Link></li>
+                        <li><Link to="/">Blog</Link></li>
                     </ul>
                     <button onClick={ () => setOpenMenu(!openMenu) } className="md:hidden mr-2">                        
                         <label class={`swap swap-rotate ${openMenu && 'swap-active'}`}> 
