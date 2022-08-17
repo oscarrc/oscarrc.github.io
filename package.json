@@ -1,6 +1,7 @@
 {
-  "name": "oscarrc.github.io",
-  "version": "0.1.0",
+  "name": "Oscar R.C. Web Developer",
+  "version": "1.0.0",
+  "homepage": "https://oscarrc.github.io/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -27,7 +28,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "react-scripts build",    
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,5 +49,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.4",
+    "autoprefixer": "^10.4.8",
+    "daisyui": "^2.24.0",
+    "gh-pages": "^4.0.0",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8"
   }
 }
