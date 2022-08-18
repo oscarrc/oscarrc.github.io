@@ -5,12 +5,12 @@ const FORWARD = "forward";
 
 const useTypewriter = (strings, speed, delay, loop = false) => {
     const [index, setIndex] = useState(0);
-    const [current, setCurrent] = useState(strings[index].split(''));
+    const [current, setCurrent] = useState([]);
     const [isStopped, setIsStopped] = useState(false);
 
-    const direction = useRef('BACKWARD');
+    const direction = useRef(FORWARD);
 	const typingInterval = useRef();
-	const letterIndex = useRef();
+	const letterIndex = useRef(0);
 
     const stop = () => {
         clearInterval(typingInterval.current);
@@ -23,22 +23,23 @@ const useTypewriter = (strings, speed, delay, loop = false) => {
         let pause = 0;
 
         const backspace = () => {
+            const isLast = index === strings.length - 1;
+              
+            if( isLast && !loop ) return stop();
+
             if (letterIndex.current === 0) {
-                const isLast = index === strings.length - 1;
                 setIndex(!isLast ? index + 1 : 0);
                 direction.current = FORWARD;
                 return;
-              }
-            
-              const segment = current.slice(0, current.length - 1);
-              setCurrent(segment);
-              letterIndex.current = current.length - 1;
+            }
+
+            const segment = current.slice(0, current.length - 1);
+            setCurrent(segment);
+            letterIndex.current = current.length - 1;
         }
 
         const type = () => {
             if (letterIndex.current >= strings[index].length) {
-                if(!loop) return stop();
-                
                 direction.current = BACKWARD;
                 pause = delay;
                 return;

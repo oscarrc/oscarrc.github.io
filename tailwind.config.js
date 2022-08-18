@@ -19,11 +19,26 @@ module.exports = {
         '1/2': '50vh',
         '3/4': '75vh',
         'view': 'calc(100vh - 4rem)',
+      },
+      gridTemplateColumns: {
+        'qwerty': 'repeat(64, 0.5rem)',
+      },
+      gridTemplateRows: {
+        'qwerty': 'repeat(5, 2rem)'
       }
     },
   },
   daisyui: {
-    themes: ['cyberpunk', 'black'],
+    themes: [
+      'cyberpunk', 
+      {
+        black: {
+          ...require("daisyui/src/colors/themes")["[data-theme=black]"],
+          secondary: "white",
+          accent: "green"
+        },
+      }
+    ],
     darkTheme: 'black'
   },
   plugins: [
