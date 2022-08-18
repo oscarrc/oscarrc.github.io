@@ -1,6 +1,6 @@
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { Link, NavLink } from 'react-router-dom';
 
-import { Link } from 'react-router-dom';
 import menu from "../../config/menu";
 import { useState } from 'react';
 
@@ -17,7 +17,7 @@ const Header = () => {
                     <ul className="menu menu-horizontal p-0 hidden sm:flex">
                         {
                             menu.map((item, index) =>
-                                <li key={ index }><Link className="hover:bg-transparent hover:text-success" to={item.path}>{item.label}</Link></li>
+                                <li key={ index }><NavLink activeClassName="text-accent" className="hover:bg-transparent hover:text-accent" to={item.path}>{item.label}</NavLink></li>
                             )
                         } 
                     </ul>
