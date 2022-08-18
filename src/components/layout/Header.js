@@ -17,7 +17,7 @@ const Header = () => {
                     <ul className="menu menu-horizontal p-0 hidden sm:flex">
                         {
                             menu.map((item, index) =>
-                                <li key={ index }><NavLink activeClassName="text-accent" className="hover:bg-transparent hover:text-accent" to={item.path}>{item.label}</NavLink></li>
+                                <li key={ index }><NavLink className="menu-button" to={item.path}>{item.label}</NavLink></li>
                             )
                         } 
                     </ul>

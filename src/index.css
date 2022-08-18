@@ -8,12 +8,17 @@
     }
 }
 
+@layer components { 
+    .menu-button{
+        @apply bg-transparent;
+    }
+    .menu-button:hover, .menu-button:focus, .menu-button:active, .menu-button.active {
+        @apply bg-transparent text-accent;
+    } 
+}
+
 @layer utilities {
     .writing-mode-vertical {      
         writing-mode: vertical-rl;
-    }
-
-    .qwerty-layout {
-        
     }
 }
