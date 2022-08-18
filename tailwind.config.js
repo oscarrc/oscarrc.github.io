@@ -17,7 +17,8 @@ module.exports = {
       minHeight: {
         '1/4': '25vh',
         '1/2': '50vh',
-        '3/4': '50vh',
+        '3/4': '75vh',
+        'view': 'calc(100vh - 4rem)',
       }
     },
   },

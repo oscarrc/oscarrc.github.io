@@ -18,7 +18,7 @@ const Header = () => {
                         <li><Link to="/">Resume</Link></li>
                         <li><Link to="/">Blog</Link></li>
                     </ul>
-                    <button onClick={ () => setOpenMenu(!openMenu) } className="md:hidden mr-2">                        
+                    <button onClick={ () => setOpenMenu(!openMenu) } className="sm:hidden mr-2">                        
                         <label className={`swap swap-rotate ${openMenu && 'swap-active'}`}> 
                             <AiOutlineClose className="swap-on h-6 w-6" />
                             <AiOutlineMenu className="swap-off h-6 w-6" />
