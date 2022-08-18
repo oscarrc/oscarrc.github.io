@@ -21,10 +21,12 @@ module.exports = {
         'view': 'calc(100vh - 4rem)',
       },
       gridTemplateColumns: {
-        'qwerty': 'repeat(64, 0.5rem)',
+        'qwerty': 'repeat(62, 0.5rem)',
+        'qwerty-responsive': 'repeat(62, 1.25vw)'
       },
       gridTemplateRows: {
-        'qwerty': 'repeat(5, 2rem)'
+        'qwerty': 'repeat(5, 2rem)',
+        'qwerty-responsive': 'repeat(5, 5vw)'
       }
     },
   },

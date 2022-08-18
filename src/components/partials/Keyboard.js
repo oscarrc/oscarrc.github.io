@@ -247,7 +247,7 @@ const keys = [
 
 const Keyboard = ({ pressed }) => {
     return (
-        <div className="grid grid-cols-qwerty grid-rows-qwerty gap-y-1">
+        <div className="grid grid-cols-qwerty-responsive md:grid-cols-qwerty grid-rows-qwerty-responsive md:grid-rows-qwerty gap-y-[0.75vw] md:gap-y-1">
             {
                 keys.map((key, index) => <div key={ index } className={`mr-1 rounded-sm transition-all ${ pressed.toLowerCase() === key.key ? 'bg-primary' : 'bg-secondary' } ${key.span}`}></div>)
             }

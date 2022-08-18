@@ -6,8 +6,8 @@ const Footer = ({ terminal, setTerminal }) => {
     return (
         <footer>
             <div className="flex flex-col items-center gap-4 md:w-8 fixed bottom-4 left-2">
-                <div className="w-full md:h-32 m-0 divider md:divider-horizontal self-center text-xs">
-                    <span className="md:rotate-180 md:writing-mode-vertical">SOCIAL</span>   
+                <div className="w-full h-32 m-0 divider divider-horizontal self-center text-xs hidden md:flex">
+                    <span className="rotate-180 writing-mode-vertical">SOCIAL</span>   
                 </div>
                 <ul className="flex md:flex-col justify-center gap-4">
                     {
