@@ -1,6 +1,7 @@
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 
 import { Link } from 'react-router-dom';
+import menu from "../../config/menu";
 import { useState } from 'react';
 
 const Header = () => {
@@ -14,9 +15,11 @@ const Header = () => {
                 </div>
                 <div className="flex-none">
                     <ul className="menu menu-horizontal p-0 hidden sm:flex">
-                        <li><Link to="/">Projects</Link></li>
-                        <li><Link to="/">Resume</Link></li>
-                        <li><Link to="/">Blog</Link></li>
+                        {
+                            menu.map((item, index) =>
+                                <li key={ index }><Link to={item.path}>{item.label}</Link></li>
+                            )
+                        } 
                     </ul>
                     <button onClick={ () => setOpenMenu(!openMenu) } className="sm:hidden mr-2">                        
                         <label className={`swap swap-rotate ${openMenu && 'swap-active'}`}> 

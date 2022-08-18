@@ -11,9 +11,9 @@ const Footer = ({ terminal, setTerminal }) => {
                 </div>
                 <ul className="flex md:flex-col justify-center gap-4">
                     {
-                        Object.keys(social).map(key =>
-                            <li key={key} className="tooltip md:tooltip-right" data-tip={social[key].label}>
-                                <a href={social[key].url} target="_blank" rel="noopener noreferrer">{ social[key].icon }</a>
+                        social.map( (service, index) =>
+                            <li key={index} className="tooltip md:tooltip-right" data-tip={service.label}>
+                                <a href={service.url} target="_blank" rel="noopener noreferrer">{ service.icon }</a>
                             </li>
                         )
                     }
