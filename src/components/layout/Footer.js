@@ -5,7 +5,7 @@ import social from "../../config/social";
 const Footer = ({ terminal, setTerminal }) => {
     return (
         <footer>
-            <div className="flex flex-col items-center gap-4 md:w-8 fixed bottom-4 left-2">
+            <div className="flex flex-col items-center gap-4 md:w-8 fixed bottom-4 left-4">
                 <div className="w-full h-32 m-0 divider divider-horizontal self-center text-xs hidden md:flex">
                     <span className="rotate-180 writing-mode-vertical">SOCIAL</span>   
                 </div>
