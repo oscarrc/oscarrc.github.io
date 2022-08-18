@@ -9,7 +9,7 @@ const Landing = () => {
       <div className="hero container relative">
         <div className="hero-content min-h-3/4 w-full flex-col xl:flex-row xl:justify-between gap-16">
           <div className="self-center xl:self-start flex flex-col relative text-center xl:text-left">
-            <h1 className="text-6xl xl:text-9xl font-bold">Hi! My name is Oscar</h1>
+            <h1 className="text-6xl xl:text-9xl font-bold">Hi! My name <br/> is Oscar</h1>
             <h3 className="text-3xl xl:text-4xl py-6">{ text }</h3>
           </div>
           <div className="xl:absolute xl:right-0 xl:top-[50%]">            
