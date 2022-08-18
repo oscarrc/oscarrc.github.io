@@ -1,16 +1,23 @@
-import Header from "./Header";
-import Social from "./Social";
-import Terminal from "./Terminal";
+import { Suspense, lazy, useState } from "react";
 
-const Layout = ({ children }) => {
+import Footer from "./Footer";
+import Header from "./Header";
+
+const Terminal = lazy(() => import("../terminal"));
+
+const Layout = ({ children }) => {    
+    const [terminal, setTerminal] = useState(false);
+
     return (
         <>
             <Header />
             <main>
                 { children }
+                <Suspense>
+                    <Terminal isOpen={terminal} />
+                </Suspense>
             </main>
-            <Social />
-            <Terminal />
+            <Footer terminal={terminal} setTerminal={setTerminal} />
         </>
     )
 }

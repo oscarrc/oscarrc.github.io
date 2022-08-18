@@ -1,14 +1,18 @@
 import { Route, Routes } from "react-router-dom";
+import { Suspense, lazy } from "react";
 
 import Layout from "./components/layout";
-import { lazy } from "react";
+
+const Landing = lazy(() => import('./views/Landing'));
 
 function App() {
   return (
     <Layout>
-      <Routes>
-        <Route path="/" element={() => lazy(import('./components/layout'))} />
-      </Routes>
+      <Suspense>
+        <Routes>
+          <Route path="/" element={ <Landing /> } />
+        </Routes>
+      </Suspense>
     </Layout>
   );
 }

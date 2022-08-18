@@ -13,6 +13,11 @@ module.exports = {
           '50%': { opacity: '1' },
           '100%': { opacity: '0' },
         }
+      },
+      minHeight: {
+        '1/4': '25vh',
+        '1/2': '50vh',
+        '3/4': '50vh',
       }
     },
   },
