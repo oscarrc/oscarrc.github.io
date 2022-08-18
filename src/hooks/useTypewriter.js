@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 const BACKWARD = "backward";
 const FORWARD = "forward";
 
-const useTypewriter = (strings, speed, delay, loop = false) => {
+const useTypewriter = (strings, speed=100, delay=20, loop = false) => {
     const [index, setIndex] = useState(0);
     const [current, setCurrent] = useState([]);
     const [isStopped, setIsStopped] = useState(false);
@@ -60,7 +60,9 @@ const useTypewriter = (strings, speed, delay, loop = false) => {
       }, [current, index, speed, strings, delay, isStopped, loop]);
 
     return {
-        text: (
+        text: current,
+        direction: direction.current,
+        typewritter: (
           <>
             {current.length ? current.join('') : ''}
             <span className="ml-1 animate-blink">_</span>
