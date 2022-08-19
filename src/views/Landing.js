@@ -7,11 +7,11 @@ const Landing = () => {
   return (
     <>
       <section id="home" className="flex flex-col justify-center items-center min-h-view">
-        <div className="hero container relative">
+        <div className="hero container relative xl:mt-4 -mt-4">
           <div className="hero-content min-h-3/4 w-full flex-col xl:flex-row xl:justify-between gap-16">
             <div className="self-center xl:self-start flex flex-col relative text-center xl:text-left">
-              <h1 className="text-6xl xl:text-9xl font-bold">Hi! My name <br/> is Oscar</h1>
-              <h3 className="text-3xl xl:text-4xl py-6">{ typewritter }</h3>
+              <h1 className="text-4xl sm:text-6xl xl:text-9xl font-bold">Hi! My name <br/> is Oscar</h1>
+              <h3 className="text-xl sm:text-3xl xl:text-4xl py-6">{ typewritter }</h3>
             </div>
             <div className="xl:absolute xl:right-32 xl:top-[50%]">            
               <Keyboard isDeleting={ direction === 'backwards'} pressed={ text.length ? text.at(-1) : ''} speed={100} />
@@ -22,8 +22,8 @@ const Landing = () => {
       <section id="about" className="flex flex-col justify-start items-center">
         <div className="hero container relative">
           <div className="hero-content min-h-3/4 w-full flex-col-reverse xl:flex-row xl:justify-between gap-16">
-            <img src="https://www.fillmurray.com/400/600" alt=""/>
-            <div className="self-center xl:max-w-1/2 xl:self-end flex flex-col relative gap-4">
+            <img className="max-w-1/4 " src="/me.svg" alt=""/>
+            <div className="self-center  xl:self-end flex flex-col relative gap-4">
               <h2 className="text-2xl xl:text-3xl font-bold py-2">So you want to know more about me, uh?</h2>
               <p>Well, I enjoy creating things that live on the internet. My interest in web development started back in 2012 when I decided to try editing custom Tumblr themes — turns out hacking together a custom reblog button taught me a lot about HTML & CSS!</p>
               <p>Fast-forward to today, and I’ve had the privilege of working at an advertising agency, a start-up, a huge corporation, and a student-led design studio. My main focus these days is building accessible, inclusive products and digital experiences at Upstatement for a variety of clients.</p>
