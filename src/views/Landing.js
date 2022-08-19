@@ -2,7 +2,7 @@ import Keyboard from "../components/partials/Keyboard";
 import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
-  const { typewritter, text } = useTypewriter(["And I do web development", "Keep scrolling to know more"], 100, 20);
+  const { direction, text, typewritter } = useTypewriter(["And I do web development", "Keep scrolling to know more"], 100, 20, true);
 
   return (
     <section className="flex flex-col justify-center items-center min-h-view">
@@ -13,7 +13,7 @@ const Landing = () => {
             <h3 className="text-3xl xl:text-4xl py-6">{ typewritter }</h3>
           </div>
           <div className="xl:absolute xl:right-0 xl:top-[50%]">            
-            <Keyboard pressed={ text.length ? text.at(-1) : ''} speed={100} />
+            <Keyboard isDeleting={ direction === 'backwards'} pressed={ text.length ? text.at(-1) : ''} speed={100} />
           </div>
         </div>
       </div>

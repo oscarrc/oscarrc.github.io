@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-const BACKWARD = "backward";
+const BACKWARDS = "backwards";
 const FORWARD = "forward";
 
 const useTypewriter = (strings, speed=100, delay=20, loop = false) => {
@@ -40,7 +40,7 @@ const useTypewriter = (strings, speed=100, delay=20, loop = false) => {
 
         const type = () => {
             if (letterIndex.current >= strings[index].length) {
-                direction.current = BACKWARD;
+                direction.current = BACKWARDS;
                 pause = delay;
                 return;
             }
