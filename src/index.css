@@ -14,7 +14,17 @@
     }
     .menu-button:hover, .menu-button:focus, .menu-button:active, .menu-button.active {
         @apply bg-transparent text-accent;
-    } 
+    }     
+
+    @media (max-width: theme('screens.sm')) {        
+        .menu {
+            @apply fixed top-0 left-0 bg-base-100 w-full h-full justify-center p-16
+        }
+
+        .menu-button:before {
+            content: '> '
+        }
+    }
 }
 
 @layer utilities {
