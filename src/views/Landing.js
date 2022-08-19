@@ -1,4 +1,5 @@
 import Keyboard from "../components/partials/Keyboard";
+import Me from "../components/partials/Me";
 import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
@@ -20,9 +21,9 @@ const Landing = () => {
         </div>
       </section>
       <section id="about" className="flex flex-col justify-start items-center">
-        <div className="hero container relative">
-          <div className="hero-content min-h-3/4 w-full flex-col-reverse xl:flex-row xl:justify-between gap-16">
-            <img className="max-w-1/4 " src="/me.svg" alt=""/>
+        <div className="container relative">
+          <div className="flex min-h-3/4 w-full flex-col-reverse xl:flex-row xl:justify-between gap-32">
+            <Me className="max-w-1/4" fill="fill-secondary" />
             <div className="self-center  xl:self-end flex flex-col relative gap-4">
               <h2 className="text-2xl xl:text-3xl font-bold py-2">So you want to know more about me, uh?</h2>
               <p>Well, I enjoy creating things that live on the internet. My interest in web development started back in 2012 when I decided to try editing custom Tumblr themes — turns out hacking together a custom reblog button taught me a lot about HTML & CSS!</p>
