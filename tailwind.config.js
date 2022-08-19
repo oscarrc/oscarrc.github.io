@@ -45,6 +45,13 @@ module.exports = {
     themes: [
       'cyberpunk', 
       {
+        lofi: {
+          ...require("daisyui/src/colors/themes")["[data-theme=black]"],
+          secondary: "white",
+          accent: "green"
+        },
+      },
+      {
         black: {
           ...require("daisyui/src/colors/themes")["[data-theme=black]"],
           secondary: "white",

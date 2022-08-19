@@ -8,7 +8,7 @@ import { useState } from 'react';
 const Header = () => {
     const [ openMenu, setOpenMenu ] = useState(false);
     return (
-        <header className="sticky top-0 z-10">
+        <header className="sticky top-0 z-10 backdrop-blur-sm">
             <nav className="navbar">
                 <div className="flex-1 z-10">
                     <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC <Cursor /></Link>

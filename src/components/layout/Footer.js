@@ -5,14 +5,14 @@ import social from "../../config/social";
 const Footer = ({ terminal, setTerminal }) => {
     return (
         <footer>
-            <div className="flex flex-col items-center gap-4 md:w-8 fixed bottom-4 left-4 z-10">
-                <div className="w-full h-32 m-0 divider divider-horizontal self-center text-xs hidden md:flex">
+            <div className="flex flex-col items-center gap-4 lg:w-8 fixed bottom-4 left-4 z-10">
+                <div className="w-full h-32 m-0 divider divider-horizontal self-center text-xs hidden lg:flex">
                     <span className="rotate-180 writing-mode-vertical">SOCIAL</span>   
                 </div>
-                <ul className="flex md:flex-col justify-center gap-4">
+                <ul className="flex lg:flex-col justify-center gap-4">
                     {
                         social.map( (service, index) =>
-                            <li key={index} className="tooltip md:tooltip-right" data-tip={service.label}>
+                            <li key={index} className="tooltip lg:tooltip-right" data-tip={service.label}>
                                 <a href={service.url} target="_blank" rel="noopener noreferrer">{ service.icon }</a>
                             </li>
                         )

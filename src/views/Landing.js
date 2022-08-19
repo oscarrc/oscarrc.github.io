@@ -1,5 +1,6 @@
 import Keyboard from "../components/partials/Keyboard";
 import Me from "../components/partials/Me";
+import Project from "../projects/Project";
 import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
@@ -21,7 +22,7 @@ const Landing = () => {
         </div>
       </section>
       <section id="about" className="flex flex-col justify-start items-center">
-        <div className="container px-4">
+        <div className="container">
           <div className="flex min-h-3/4 w-full flex-col-reverse lg:items-end lg:flex-row lg:justify-between gap-16 lg:gap-32">
             <Me className="lg:max-w-1/4" fill="fill-secondary" />
             <div className="flex flex-col relative gap-4">
@@ -39,13 +40,18 @@ const Landing = () => {
               </ul>
             </div>
           </div>
-          <button className="btn btn-block md:my-32">Grab my resume</button>
+          <button className="btn btn-secondary btn-block my-1 md:mt-32">Grab my resume</button>
         </div>
       </section>
       <section id="projects" className="flex flex-col justify-start items-center">
         <div className="container">
-          <div className="flex min-h-3/4 w-full flex-col-reverse xl:items-end xl:flex-row xl:justify-between gap-32">
-
+          <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
+            <Project />
+            <Project />
+            <Project />
+            <Project />
+            <Project />
+            <Project />
           </div>
         </div>
       </section>
