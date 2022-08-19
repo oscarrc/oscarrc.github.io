@@ -14,7 +14,7 @@ const Header = () => {
                     <Link to="/" className="btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC <Cursor /></Link>
                 </div>
                 <div className="flex-none">
-                    <ul className={`menu sm:menu-horizontal p-0 ${ openMenu && 'open'}`}>
+                    <ul className={`menu sm:menu-horizontal px-2 sm:px-0 ${ openMenu && 'open'}`}>
                         {
                             menu.map((item, index) =>
                                 <li onClick={ () => setOpenMenu(false) } key={ index } className="group">
