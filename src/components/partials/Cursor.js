@@ -1,6 +1,6 @@
-const Cursor = ({ className }) => {
+const Cursor = ({ className = '' }) => {
     return (
-        <span className={`ml-1 animate-blink ${className}`}>_</span>
+        <span className={`cursor ml-1 animate-blink ${className}`}>_</span>
     )
 }
 
