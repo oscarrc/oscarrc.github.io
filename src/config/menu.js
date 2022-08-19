@@ -4,8 +4,8 @@ const menu = [
         path: "/projects"
     },
     {
-        label: "Resume",
-        path: "/resume"
+        label: "Experience",
+        path: "/experience"
     },
     {
         label: "Blog",

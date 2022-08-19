@@ -1,3 +1,16 @@
+const widths = {
+  '1/4': '25vw',
+  '1/2': '50vw',
+  '3/4': '75vw'
+}
+
+const heights = {
+  '1/4': '25vh',
+  '1/2': '50vh',
+  '3/4': '75vh',
+  'view': 'calc(100vh - 4rem)',
+}
+
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -14,12 +27,10 @@ module.exports = {
           '100%': { opacity: '0' },
         }
       },
-      minHeight: {
-        '1/4': '25vh',
-        '1/2': '50vh',
-        '3/4': '75vh',
-        'view': 'calc(100vh - 4rem)',
-      },
+      minHeight: heights,
+      minWidth: widths,
+      maxHeight: heights,
+      maxWidth: widths,
       gridTemplateColumns: {
         'qwerty': 'repeat(62, 0.5rem)',
         'qwerty-responsive': 'repeat(62, 1.25vw)'
