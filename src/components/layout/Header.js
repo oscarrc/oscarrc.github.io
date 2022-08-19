@@ -14,11 +14,11 @@ const Header = () => {
                     <Link to="/" className="btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC <Cursor /></Link>
                 </div>
                 <div className="flex-none">
-                    <ul className={`menu sm:menu-horizontal p-0 ${ openMenu ? 'flex' : 'hidden'} sm:flex`}>
+                    <ul className={`menu sm:menu-horizontal p-0 ${ openMenu && 'open'}`}>
                         {
                             menu.map((item, index) =>
-                                <li key={ index } className="group">
-                                    <NavLink className=" menu-button transition-all duration-500" to={item.path}>
+                                <li onClick={ () => setOpenMenu(false) } key={ index } className="group">
+                                    <NavLink className="menu-button transition-all duration-500" to={item.path}>
                                         <span>
                                             {item.label}
                                             <Cursor className="hidden group-hover:inline group-hover:sm:hidden sm:hidden" />
