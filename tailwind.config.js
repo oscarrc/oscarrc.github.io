@@ -52,7 +52,7 @@ module.exports = {
         },
       }
     ],
-    darkTheme: 'cyberpunk'
+    darkTheme: 'black'
   },
   plugins: [
     require('@tailwindcss/typography'),
