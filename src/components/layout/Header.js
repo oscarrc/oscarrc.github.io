@@ -11,7 +11,7 @@ const Header = () => {
         <header className="sticky top-0 z-10">
             <nav className="navbar">
                 <div className="flex-1 z-10">
-                    <Link to="/" className="btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC <Cursor /></Link>
+                    <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC <Cursor /></Link>
                 </div>
                 <div className="flex-none">
                     <ul className={`menu sm:menu-horizontal px-2 sm:px-0 ${ openMenu && 'open'}`}>
