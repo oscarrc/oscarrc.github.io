@@ -6,6 +6,47 @@
     html {
       @apply font-mono;
     }
+
+    :root {
+        --scrollbarTrack: hsla(var(--n));
+        --scrollbarThumb: hsla(var(--b2));
+        --scrollbarThumbHover: hsla(var(--p));
+    }
+    
+    ::-webkit-scrollbar {
+        width: 5px;
+        @apply rounded-2xl
+    }
+      
+          
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: var(--scrollbarTrack);
+        @apply rounded-2xl
+    }
+        
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbarThumb);
+        border-radius: 3px;
+        @apply rounded-2xl
+    }
+        
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbarThumbHover);
+    }
+    
+    ::-webkit-scrollbar:hover ::-webkit-scrollbar-thumb{      
+        background: var(--scrollbarThumbHover);
+    }
+
+    @screen sm {
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+    }
+    
 }
 
 @layer components { 
