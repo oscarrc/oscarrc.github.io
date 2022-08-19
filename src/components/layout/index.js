@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
     return (
         <>
             <Header />
-            <main className="flex flex-col gap-32">
+            <main className="px-6 md:px-8">
                 { children }
                 <Suspense>
                     <Terminal isOpen={terminal} />

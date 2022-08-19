@@ -50,10 +50,6 @@
 }
 
 @layer components { 
-    .container{
-        @apply px-6 md:px-8;
-    }
-
     .menu-button{
         @apply bg-transparent;
     }

@@ -1,4 +1,4 @@
-import { SiGithub, SiInstagram, SiKofi } from 'react-icons/si';
+import { SiGithub, SiInstagram, SiKofi, SiLinkedin } from 'react-icons/si';
 
 const social = [
     {
@@ -10,6 +10,12 @@ const social = [
         label: 'Instagram',
         url: "https://www.instagram.com/oscarrc_web/",
         icon: <SiInstagram className="h-6 w-6" />
+
+    },
+    {
+        label: 'LinkedIn',
+        url: "https://www.linkedin.com/in/oscarrc-web/",
+        icon: <SiLinkedin className="h-6 w-6" />
 
     },
     {
