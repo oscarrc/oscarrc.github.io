@@ -22,7 +22,7 @@ const Terminal = ({ isOpen }) => {
     }, []);
     
     return (
-        <div onClick={ () => inputRef.current.focus() } className={`mockup-code fixed mx-4 sm:mx-16 my-16 transition-all inset-0 duration-250 origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
+        <div onClick={ () => inputRef.current.focus() } className={`mockup-code fixed mx-4 sm:mx-16 my-16 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
             <pre data-prefix="$"><code>npm i daisyui</code></pre> 
             <pre data-prefix=">" className="text-warning"><code>installing...</code></pre> 
             <pre data-prefix=">" className="text-success"><code>Done!</code></pre>
