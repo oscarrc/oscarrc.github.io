@@ -10,7 +10,7 @@ const Landing = () => {
     <>
       <section id="home" className="flex flex-col justify-center items-center min-h-view">
         <div className="hero container relative xl:mt-0 -mt-4">
-          <div className="hero-content min-h-3/4 w-full flex-col xl:flex-row xl:justify-between gap-16">
+          <div className="hero-content min-h-three-quarter w-full flex-col xl:flex-row xl:justify-between gap-16">
             <div className="self-center xl:self-start flex flex-col relative text-center xl:text-left">
               <h1 className="text-4xl sm:text-6xl xl:text-9xl font-bold">Hi! My name <br/> is Oscar</h1>
               <h3 className="text-xl sm:text-3xl xl:text-4xl py-6">{ typewritter }</h3>
@@ -24,7 +24,7 @@ const Landing = () => {
       <section id="about" className="flex flex-col justify-start items-center min-h-view">
         <div className="container">
           <div className="flex w-full flex-col-reverse lg:items-end lg:flex-row lg:justify-between gap-16 lg:gap-32">
-            <Me className="lg:max-w-1/4" fill="fill-secondary" />
+            <Me className="lg:max-w-quarter" fill="fill-secondary" />
             <div className="flex flex-col relative gap-4">
               <h2 className="text-2xl lg:text-3xl font-bold py-2">So you want to know more about me, uh?</h2>
               <p>Well, I enjoy creating things that live on the internet. My interest in web development started back in 2012 when I decided to try editing custom Tumblr themes — turns out hacking together a custom reblog button taught me a lot about HTML & CSS!</p>
@@ -44,7 +44,7 @@ const Landing = () => {
           <span className="divider py-16">or</span>
         </div>
       </section>
-      <section id="projects" className="flex flex-col justify-center items-center min-h-1/4">
+      <section id="projects" className="flex flex-col justify-center items-center min-h-quarter">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Check what I've doing lately</h2>
           <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 py-16">

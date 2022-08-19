@@ -1,13 +1,13 @@
 const widths = {
-  '1/4': '25vw',
-  '1/2': '50vw',
-  '3/4': '75vw'
+  'quarter': '25vw',
+  'half': '50vw',
+  'three-quarter': '75vw'
 }
 
 const heights = {
-  '1/4': '25vh',
-  '1/2': '50vh',
-  '3/4': '75vh',
+  'quarter': '25vh',
+  'half': '50vh',
+  'three-quarter': '75vh',
   'view': 'calc(100vh - 4rem)',
 }
 
