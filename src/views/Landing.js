@@ -6,7 +6,7 @@ const Landing = () => {
 
   return (
     <>
-      <section className="flex flex-col justify-center items-center min-h-view">
+      <section id="home" className="flex flex-col justify-center items-center min-h-view">
         <div className="hero container relative">
           <div className="hero-content min-h-3/4 w-full flex-col xl:flex-row xl:justify-between gap-16">
             <div className="self-center xl:self-start flex flex-col relative text-center xl:text-left">
@@ -19,7 +19,7 @@ const Landing = () => {
           </div>
         </div>
       </section>
-      <section className="flex flex-col justify-start items-center">
+      <section id="about" className="flex flex-col justify-start items-center">
         <div className="hero container relative">
           <div className="hero-content min-h-3/4 w-full flex-col-reverse xl:flex-row xl:justify-between gap-16">
             <img src="https://www.fillmurray.com/400/600" alt=""/>
