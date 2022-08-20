@@ -1,6 +1,7 @@
 import Keyboard from "../components/partials/Keyboard";
 import Me from "../components/partials/Me";
-import Project from "../projects/Project";
+import PostCard from "../components/blog/PostCard";
+import ProjectCard from "../components/projects/ProjectCard";
 import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
@@ -47,10 +48,10 @@ const Landing = () => {
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Check what I've doing lately</h2>
           <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 py-16">
-            <Project />
-            <Project />
-            <Project />
-            <Project />
+            <ProjectCard />
+            <ProjectCard />
+            <ProjectCard />
+            <ProjectCard />
           </div>
         </div>
       </section>      
@@ -58,6 +59,12 @@ const Landing = () => {
       <section id="projects" className="flex flex-col justify-center items-center min-h-quarter">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Read the latest from my blog</h2>
+          <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 py-16">
+            <PostCard />
+            <PostCard />
+            <PostCard />
+            <PostCard />
+          </div>
         </div>
       </section>   
     </>

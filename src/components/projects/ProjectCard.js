@@ -2,7 +2,7 @@ import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 
 import { SiGithub } from 'react-icons/si';
 
-const Project = () => {
+const ProjectCard = () => {
     const getRepoInfo = async (user, repo) => {
         return await fetch(`https://api.github.com/repos/${user}/${repo}`).then( res => res.json())
     }
@@ -33,4 +33,4 @@ const Project = () => {
     )
 }
 
-export default Project
+export default ProjectCard
