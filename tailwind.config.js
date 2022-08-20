@@ -32,6 +32,8 @@ module.exports = {
       minWidth: widths,
       maxHeight: heights,
       maxWidth: widths,
+      width: widths,
+      height: heights,
       gridTemplateColumns: {
         'qwerty': 'repeat(62, 0.5rem)',
         'qwerty-responsive': 'repeat(62, 1.25vw)'
