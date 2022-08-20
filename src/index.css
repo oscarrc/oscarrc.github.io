@@ -63,7 +63,7 @@
 
     @media (max-width: theme('screens.sm')) {        
         .menu {
-            @apply fixed top-0 left-0 bg-base-100 w-full h-full justify-center p-16 transition-opacity duration-500 ease-in-out translate-y-full opacity-0;
+            @apply fixed top-0 left-0 bg-base-100 w-full h-screen justify-center p-16 transition-opacity duration-500 ease-in-out translate-y-full opacity-0;
         }
 
         .menu.open{
@@ -72,6 +72,10 @@
 
         .menu-button:before {
             content: '> '
+        }
+
+        .navbar .dropdown-content {
+            @apply top-12 left-0 w-full
         }
     }
 }

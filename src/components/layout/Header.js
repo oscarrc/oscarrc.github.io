@@ -1,8 +1,9 @@
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineDown, AiOutlineMenu } from 'react-icons/ai';
 import { Link, NavLink } from 'react-router-dom';
 
 import Cursor from '../partials/Cursor';
 import menu from "../../config/menu";
+import themes from '../../config/themes';
 import { useState } from 'react';
 
 const Header = () => {
@@ -27,6 +28,24 @@ const Header = () => {
                                 </li>
                             )
                         } 
+                        {
+                            themes.length &&
+                                <li className="dropdown dropdown-end">
+                                    <label tabIndex={0} className="menu-button transition-all duration-500">Theme <AiOutlineDown className="h-2 w-2"/></label>
+                                    <ul tabindex="0" className="dropdown-content bg-primary p-2 shadow w-52">
+                                        {
+                                            themes.map((theme, index) =>
+                                                <li key={index} className="py-1" >
+                                                    <label class="label cursor-pointer p-0 bg-transparent justify-start gap-4">
+                                                        <input value={ theme.name } type="radio" name="theme" class="radio" checked />
+                                                        <span class="label-text">{ theme.label }</span> 
+                                                    </label>
+                                                </li>
+                                            )
+                                        }
+                                    </ul>
+                                </li>
+                        }
                     </ul>
                     <button onClick={ () => setOpenMenu(!openMenu) } className="sm:hidden mr-2">                        
                         <label className={`swap swap-rotate ${openMenu && 'swap-active'}`}> 
