@@ -11,8 +11,8 @@ const ProjectCard = () => {
         <div role="button" className="card pointer w-full bg-base-100 shadow-xl border-secondary !border-t-4 !border-t-secondary bordered">
             <div className="card-body ">
                 <div className="flex gap-4">
-                    <div class="avatar">
-                        <div class="rounded">
+                    <div className="avatar">
+                        <div className="rounded">
                             <img src="https://placeimg.com/192/192/people" alt="icon" />
                         </div>
                     </div>

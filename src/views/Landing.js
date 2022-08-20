@@ -44,19 +44,16 @@ const Landing = () => {
           <button className="btn btn-secondary btn-block my-1 md:mt-32">Grab my resume</button>
         </div>
       </section>
-      <section id="projects" className="flex flex-col justify-center items-center min-h-quarter">
+      <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Check what I've doing lately</h2>
-          <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 py-16">
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
+          <div className="grid grid-cols lg:grid-cols-2 w-full gap-4 py-16">
             <ProjectCard />
           </div>
         </div>
       </section>      
       <span className="divider py-8 px-32">or</span>
-      <section id="projects" className="flex flex-col justify-center items-center min-h-quarter">
+      <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Read the latest from my blog</h2>
           <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 py-16">
