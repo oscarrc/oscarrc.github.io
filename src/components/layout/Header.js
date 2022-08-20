@@ -6,8 +6,9 @@ import menu from "../../config/menu";
 import themes from '../../config/themes';
 import { useState } from 'react';
 
-const Header = () => {
-    const [ openMenu, setOpenMenu ] = useState(false);
+const Header = ({ toggleTheme, currentTheme }) => {
+    const [ openMenu, setOpenMenu ] = useState(false);    
+
     return (
         <header className="sticky top-0 z-10 backdrop-blur-sm">
             <nav className="navbar">
@@ -31,13 +32,13 @@ const Header = () => {
                         {
                             themes.length &&
                                 <li className="dropdown dropdown-end">
-                                    <label tabIndex={0} className="menu-button transition-all duration-500">Theme <AiOutlineDown className="h-2 w-2"/></label>
-                                    <ul tabindex="0" className="dropdown-content bg-primary p-2 shadow w-52">
+                                    <label tabIndex="0" className="menu-button transition-all duration-500">Theme <AiOutlineDown className="h-2 w-2"/></label>
+                                    <ul tabIndex="0" className="dropdown-content bg-primary p-2 shadow w-52">
                                         {
                                             themes.map((theme, index) =>
                                                 <li key={index} className="py-1" >
                                                     <label class="label cursor-pointer p-0 bg-transparent justify-start gap-4">
-                                                        <input value={ theme.name } type="radio" name="theme" class="radio" checked />
+                                                        <input onChange={(e) => toggleTheme(e.target.value)}  value={ theme.name } type="radio" name="theme" class="radio" checked={ currentTheme === theme.name } />
                                                         <span class="label-text">{ theme.label }</span> 
                                                     </label>
                                                 </li>

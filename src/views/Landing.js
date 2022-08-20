@@ -41,7 +41,6 @@ const Landing = () => {
             </div>
           </div>
           <button className="btn btn-secondary btn-block my-1 md:mt-32">Grab my resume</button>
-          <span className="divider py-16">or</span>
         </div>
       </section>
       <section id="projects" className="flex flex-col justify-center items-center min-h-quarter">
@@ -54,7 +53,13 @@ const Landing = () => {
             <Project />
           </div>
         </div>
-      </section>
+      </section>      
+      <span className="divider py-8 px-32">or</span>
+      <section id="projects" className="flex flex-col justify-center items-center min-h-quarter">
+        <div className="container">
+          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Read the latest from my blog</h2>
+        </div>
+      </section>   
     </>
   );
 }
