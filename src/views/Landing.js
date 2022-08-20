@@ -56,7 +56,7 @@ const Landing = () => {
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Read the latest from my blog</h2>
-          <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 py-16">
+          <div className="grid grid-cols lg:grid-cols-2 xl:grid-cols-4 w-full gap-4 md:gap-8 py-16">
             <PostCard />
             <PostCard />
             <PostCard />

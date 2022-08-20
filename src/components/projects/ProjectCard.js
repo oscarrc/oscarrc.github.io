@@ -1,5 +1,6 @@
 import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 
+import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
 
 const ProjectCard = () => {
@@ -8,7 +9,7 @@ const ProjectCard = () => {
     }
 
     return (
-        <div role="button" className="w-three-quarter bg-base">
+        <div className="w-three-quarter bg-base">
             <div className="card-body">
                 <div className="flex gap-4">
                     <div className="mockup-window border border-base-300 shadow-xl max-w-xl  w-3/4">
@@ -26,7 +27,10 @@ const ProjectCard = () => {
                     <span className="flex items-center gap-1"><AiOutlineEye /> 5</span>
                     <span className="flex items-center gap-1"><AiOutlineFork /> 5</span>
                     <span className="divider divider-horizontal mx-0"></span>
-                    <a href="/"><SiGithub /></a>                                        
+                    <div className="flex items-center gap-4">
+                        <a href="/"><SiGithub /></a>         
+                        <a href="/"><FiExternalLink /></a> 
+                    </div>                               
                 </div>
             </div>
         </div>
