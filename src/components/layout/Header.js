@@ -33,13 +33,13 @@ const Header = ({ toggleTheme, currentTheme }) => {
                             themes.length &&
                                 <li className="dropdown dropdown-end">
                                     <label tabIndex="0" className="menu-button transition-all duration-500">Theme <AiOutlineDown className="h-2 w-2"/></label>
-                                    <ul tabIndex="0" className="dropdown-content bg-primary p-2 shadow w-52">
+                                    <ul tabIndex="0" className="dropdown-content bg-base-100 px-4 py-2 shadow-none sm:shadow w-52">
                                         {
                                             themes.map((theme, index) =>
                                                 <li key={index} className="py-1" >
-                                                    <label class="label cursor-pointer p-0 bg-transparent justify-start gap-4">
-                                                        <input onChange={(e) => toggleTheme(e.target.value)}  value={ theme.name } type="radio" name="theme" class="radio" checked={ currentTheme === theme.name } />
-                                                        <span class="label-text">{ theme.label }</span> 
+                                                    <label className="label cursor-pointer p-0 bg-transparent justify-start gap-4">
+                                                        <input onChange={(e) => toggleTheme(e.target.value)}  value={ theme.name } type="radio" name="theme" className="radio radio-xs" checked={ currentTheme === theme.name } />
+                                                        <span className="label-text">{ theme.label }</span> 
                                                     </label>
                                                 </li>
                                             )
