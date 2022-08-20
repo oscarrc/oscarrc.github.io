@@ -1,13 +1,16 @@
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { IoIosTimer } from 'react-icons/io';
+import { useNavigate } from "react-router-dom";
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
+    const navigate = useNavigate();
+
     return (
-        <div role="button" className="card pointer w-full bg-base-100 shadow-xl border-secondary !border-t-4 !border-t-secondary bordered">
+        <div role="button" onClick={ () => navigate(`/blog/${ post?.slug ? post.slug : '' }`) } className="card pointer w-full bg-base-100 shadow-xl border-secondary !border-t-4 !border-t-secondary bordered">
             <div className="card-body p-4">
                 <div className="flex gap-4">
-                    <div class="avatar">
-                        <div class="rounded">
+                    <div className="avatar">
+                        <div className="rounded">
                             <img src="https://placeimg.com/192/192/people" alt="icon" />
                         </div>
                     </div>
