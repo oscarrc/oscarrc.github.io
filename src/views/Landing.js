@@ -47,7 +47,7 @@ const Landing = () => {
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Check what I've doing lately</h2>
-          <div className="grid grid-cols lg:grid-cols-2 w-full gap-4 py-16">
+          <div className="flex items-center justify-center gap-4 py-16">
             <ProjectCard />
           </div>
         </div>

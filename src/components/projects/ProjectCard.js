@@ -8,12 +8,12 @@ const ProjectCard = () => {
     }
 
     return (
-        <div role="button" className="card pointer w-full bg-base-100 shadow-xl border-secondary !border-t-4 !border-t-secondary bordered">
-            <div className="card-body ">
+        <div role="button" className="w-three-quarter bg-base">
+            <div className="card-body">
                 <div className="flex gap-4">
-                    <div className="avatar">
-                        <div className="rounded">
-                            <img src="https://placeimg.com/192/192/people" alt="icon" />
+                    <div className="mockup-window border border-base-300 shadow-xl max-w-xl  w-3/4">
+                        <div className="w-full aspect-video overflow-y-scroll border-t border-base-300">                            
+                            <img className="w-full" src="https://placeimg.com/192/192/people" alt="icon" />
                         </div>
                     </div>
                     <div>
