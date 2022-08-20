@@ -5,6 +5,7 @@ const Terminal = ({ isOpen }) => {
 
     useEffect(() => {
         isOpen && inputRef.current.focus();
+        isOpen ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden');
     }, [isOpen]);
 
     useEffect(() => {
