@@ -22,6 +22,7 @@ const Landing = () => {
           </div>
         </div>
       </section>
+      
       <section id="about" className="flex flex-col justify-start items-center min-h-view">
         <div className="container">
           <div className="flex w-three-quarter mx-auto flex-col-reverse lg:items-end lg:flex-row lg:justify-between gap-16 lg:gap-32">
