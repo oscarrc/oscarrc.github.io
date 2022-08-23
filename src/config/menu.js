@@ -1,9 +1,5 @@
 const menu = [
     {
-        label: "About",
-        path: "/about"
-    },
-    {
         label: "Projects",
         path: "/projects"
     },
