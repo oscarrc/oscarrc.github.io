@@ -17,6 +17,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
     useEffect(() => {
         setbreadcrumbs( b => b[b.length - 1] !== pathname ? [...b, pathname !== "/" ? pathname : " "] : b )
         start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname])
 
     return (
