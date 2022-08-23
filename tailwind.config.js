@@ -50,6 +50,7 @@ module.exports = {
       {
         lofi: {
           ...require("daisyui/src/colors/themes")["[data-theme=lofi]"],
+          primary: "rgb(52,50,50)",
           accent: "green"
         },
       },
