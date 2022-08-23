@@ -69,7 +69,7 @@ const useTypewriter = (strings, speed=100, delay=20, loop = false) => {
           </>
         ),
         start: () => setIsStopped(false),
-        stop,
+        stop
     };
 }
 
