@@ -15,7 +15,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
     const { start, typewritter } = useTypewriter(breadcrumbs, 100, 20);
 
     useEffect(() => {
-        setbreadcrumbs( b => [...b, pathname !== "/" ? pathname : ""] )
+        setbreadcrumbs( b => [...b, pathname !== "/" ? pathname : " "] )
         start();
     }, [pathname])
 
