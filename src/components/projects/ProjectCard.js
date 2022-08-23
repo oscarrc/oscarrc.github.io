@@ -12,7 +12,7 @@ const ProjectCard = () => {
         <div className="w-three-quarter bg-base">
             <div className="card-body">
                 <div className="flex gap-4">
-                    <div className="mockup-window border border-base-300 shadow-xl max-w-xl  w-3/4">
+                    <div className="mockup-window border border-base-300 shadow-xl max-w-xl w-3/4">
                         <div className="w-full aspect-video overflow-y-scroll border-t border-base-300">                            
                             <img className="w-full" src="https://placeimg.com/192/192/people" alt="icon" />
                         </div>

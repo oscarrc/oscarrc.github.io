@@ -12,7 +12,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
     const [ openMenu, setOpenMenu ] = useState(false);  
     const [breadcrumbs, setbreadcrumbs] = useState([])
     const { pathname } = useLocation();
-    const { start, typewritter } = useTypewriter(breadcrumbs, 100, 20);
+    const { start, typewritter } = useTypewriter(breadcrumbs, 50, 1);
 
     useEffect(() => {
         setbreadcrumbs( b => b[b.length - 1] !== pathname ? [...b, pathname !== "/" ? pathname : " "] : b )

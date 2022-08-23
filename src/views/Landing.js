@@ -24,7 +24,7 @@ const Landing = () => {
       </section>
       <section id="about" className="flex flex-col justify-start items-center min-h-view">
         <div className="container">
-          <div className="flex w-full flex-col-reverse lg:items-end lg:flex-row lg:justify-between gap-16 lg:gap-32">
+          <div className="flex w-three-quarter mx-auto flex-col-reverse lg:items-end lg:flex-row lg:justify-between gap-16 lg:gap-32">
             <Me className="lg:max-w-quarter" fill="fill-secondary" />
             <div className="flex flex-col relative gap-4">
               <h2 className="text-2xl lg:text-3xl font-bold py-2">So you want to know more about me, uh?</h2>
@@ -41,22 +41,22 @@ const Landing = () => {
               </ul>
             </div>
           </div>
-          <button className="btn btn-secondary btn-block my-1 md:mt-32">Grab my resume</button>
         </div>
+        <button className="btn btn-secondary w-three-quarter mx-auto my-1 md:mt-16">Grab my resume</button>
       </section>
-      <section id="projects" className="flex flex-col justify-center items-center min-h-half">
+      <section id="projects" className="flex flex-col justify-center items-center min-h-half py-4">
         <div className="container">
-          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Check what I've doing lately</h2>
-          <div className="flex items-center justify-center gap-4 py-16">
+          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-4">Check what I've doing lately</h2>
+          <div className="flex items-center justify-center gap-4">
             <ProjectCard />
           </div>
         </div>
       </section>      
-      <span className="divider py-8 px-32">or</span>
-      <section id="projects" className="flex flex-col justify-center items-center min-h-half">
+      
+      <section id="projects" className="flex flex-col justify-center items-center min-h-half py-4">
         <div className="container">
-          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-8">Read the latest from my blog</h2>
-          <div className="grid grid-cols lg:grid-cols-2 xl:grid-cols-4 w-full gap-4 md:gap-8 py-16">
+          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-4">Read the latest from my blog</h2>
+          <div className="grid grid-cols grid-cols-2 w-three-quarter gap-4 md:gap-8 p-8 mx-auto">
             <PostCard />
             <PostCard />
             <PostCard />
