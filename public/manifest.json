@@ -5,7 +5,7 @@
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "48x48 32x32 16x16",
+      "sizes": "48x48",
       "type": "image/x-icon"
     },
     {
@@ -51,7 +51,7 @@
     {
       "src": "icons/logo.png",
       "type": "image/png",
-      "sizes": "1024x1024",
+      "sizes": "any",
       "purpose": "maskable"
     }
   ],
@@ -68,14 +68,17 @@
     {
       "name": "Projects",
       "url": "/projects",
-      "description": "Oscar R.C. Web Projects"
+      "description": "Oscar R.C. Web Projects",
+      "icons": [{ "src": "icons/projects.png", "sizes": "96x96" }]
     },
     {
       "name": "Blog",
       "url": "/blog",
-      "description": "Oscar R.C. Blog"
+      "description": "Oscar R.C. Blog",
+      "icons": [{ "src": "icons/blog.png", "sizes": "96x96" }]
     }
   ],
+  "id": "/",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait",
