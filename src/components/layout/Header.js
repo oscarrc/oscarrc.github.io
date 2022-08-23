@@ -6,24 +6,27 @@ import Cursor from '../partials/Cursor';
 import menu from "../../config/menu";
 import themes from '../../config/themes';
 import { useLocation } from 'react-router-dom'
+import useTypewriter from "../../hooks/useTypewriter";
 
 const Header = ({ toggleTheme, currentTheme }) => {
     const [ openMenu, setOpenMenu ] = useState(false);  
-    const [ breadcrumbs, setBreadcrumbs] = useState([]);
-    const location = useLocation();
+    const [breadcrumbs, setbreadcrumbs] = useState([])
+    const { pathname } = useLocation();
+    const { start, typewritter } = useTypewriter(breadcrumbs, 100, 20);
 
     useEffect(() => {
-        const path = location.split("/");
-        path.forEach(p => {
-            
-        });
-    })
+        if(pathname !== "/"){ 
+            setbreadcrumbs( b => [...b, pathname] )
+        }
+        else setbreadcrumbs([])
+        start();
+    }, [pathname])
 
     return (
         <header className="sticky top-0 z-10 backdrop-blur-sm">
             <nav className="navbar">
                 <div className="flex-1 z-10">
-                    <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC <Cursor /></Link>
+                    <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC{typewritter}</Link>
                 </div>
                 <div className="flex-none">
                     <ul className={`menu sm:menu-horizontal px-2 sm:px-0 ${ openMenu && 'open'}`}>
