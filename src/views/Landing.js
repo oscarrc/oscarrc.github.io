@@ -42,8 +42,11 @@ const Landing = () => {
             </div>
           </div>
         </div>
-        <button className="btn btn-secondary w-three-quarter mx-auto my-1 md:mt-16">Grab my resume</button>
+        <button className="btn btn-secondary text-2xl lg:text-3xl w-three-quarter mx-auto my-1 md:mt-16">Grab my resume</button>
       </section>
+
+      <span className="divider">OR</span>
+
       <section id="projects" className="flex flex-col justify-center items-center min-h-half py-4">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-4">Check what I've doing lately</h2>
@@ -51,9 +54,9 @@ const Landing = () => {
             <ProjectCard />
           </div>
         </div>
-      </section>      
+      </section>
       
-      <section id="projects" className="flex flex-col justify-center items-center min-h-half py-4">
+      <section id="blog" className="flex flex-col justify-center items-center min-h-half py-4">
         <div className="container">
           <h2 className="text-2xl lg:text-3xl font-bold text-center pb-4">Read the latest from my blog</h2>
           <div className="grid grid-cols grid-cols-2 w-three-quarter gap-4 md:gap-8 p-8 mx-auto">
