@@ -1,13 +1,23 @@
 import { AiOutlineClose, AiOutlineDown, AiOutlineMenu } from 'react-icons/ai';
 import { Link, NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import Cursor from '../partials/Cursor';
 import menu from "../../config/menu";
 import themes from '../../config/themes';
-import { useState } from 'react';
+import { useLocation } from 'react-router-dom'
 
 const Header = ({ toggleTheme, currentTheme }) => {
-    const [ openMenu, setOpenMenu ] = useState(false);    
+    const [ openMenu, setOpenMenu ] = useState(false);  
+    const [ breadcrumbs, setBreadcrumbs] = useState([]);
+    const location = useLocation();
+
+    useEffect(() => {
+        const path = location.split("/");
+        path.forEach(p => {
+            
+        });
+    })
 
     return (
         <header className="sticky top-0 z-10 backdrop-blur-sm">
