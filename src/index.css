@@ -83,4 +83,11 @@
     .writing-mode-vertical {      
         writing-mode: vertical-rl;
     }
+
+    @supports (-webkit-text-stroke: 1px hsla(var(--s))) {
+        .text-outline  {
+          -webkit-text-stroke: 1px hsla(var(--s));
+          color: transparent;
+        }
+    }
 }
