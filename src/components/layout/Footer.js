@@ -13,14 +13,14 @@ const Footer = ({ terminal, setTerminal }) => {
                     {
                         social.map( (service, index) =>
                             <li key={index} className="tooltip lg:tooltip-right" data-tip={service.label}>
-                                <a href={service.url} target="_blank" rel="noopener noreferrer">{ service.icon }</a>
+                                <a name={ service.label } href={service.url} target="_blank" rel="noopener noreferrer">{ service.icon }</a>
                             </li>
                         )
                     }
                 </ul>
             </div>            
             <div className="fixed bottom-2 right-4 z-10">                
-                <button onClick={() => setTerminal(!terminal) } className="tooltip tooltip-left" data-tip={`${terminal ? 'Close' : 'Open'} terminal`}>        
+                <button name={`${terminal ? 'Close' : 'Open'} terminal`} onClick={() => setTerminal(!terminal) } className="tooltip tooltip-left" data-tip={`${terminal ? 'Close' : 'Open'} terminal`}>        
                     <label className={`swap ${!terminal && 'hover:swap-active'} ${terminal && 'swap-active'}`}> 
                         <BsFillTerminalFill className="swap-on h-6 w-6" />
                         <BsTerminal className="swap-off h-6 w-6" />

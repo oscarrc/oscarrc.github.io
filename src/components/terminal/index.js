@@ -29,7 +29,7 @@ const Terminal = ({ isOpen }) => {
             <pre data-prefix=">" className="text-success"><code>Done!</code></pre>
             <pre data-prefix="$">
                 <code>
-                    <input ref={ inputRef } className="input active:outline-transparent focus:outline-transparent bg-transparent border-none p-0 h-6 rounded-none" type="text" />
+                    <input aria-label="command prompt" ref={ inputRef } className="input active:outline-transparent focus:outline-transparent bg-transparent border-none p-0 h-6 rounded-none" type="text" />
                 </code>
             </pre>
         </div>

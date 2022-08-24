@@ -14,7 +14,7 @@ const Landing = () => {
           <div className="hero-content min-h-three-quarter w-full flex-col xl:flex-row xl:justify-between gap-16">
             <div className="self-center xl:self-start flex flex-col relative text-center xl:text-left">
               <h1 className="text-4xl sm:text-6xl xl:text-9xl font-bold"><span className="text-outline">Hi! My name <br/> is</span> Oscar</h1>
-              <h3 className="text-xl sm:text-3xl xl:text-4xl py-6">{ typewritter }</h3>
+              <h2 className="text-xl sm:text-3xl xl:text-4xl py-6">{ typewritter }</h2>
             </div>
             <div className="xl:absolute xl:right-32 xl:top-[50%]">            
               <Keyboard isDeleting={ direction === 'backwards'} pressed={ text.length ? text.at(-1) : ''} speed={100} />
