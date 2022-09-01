@@ -3,16 +3,16 @@ import { useEffect, useRef, useState } from 'react';
 const welcome = [
     {   
         prefix: ">",
-        text: <>{ new Intl.DateTimeFormat(navigator.languages && navigator.languages.length  ? navigator.languages[0] : navigator.language, { dateStyle: 'medium', timeStyle: 'medium' }).format(Date.now()) }</>,
+        text: <>Welcome</>,
         classes: "text-success"
     },
     { text: <>Hi, my name is <strong>Oscar</strong></> },
     { text: "And I do web development" },
-    { text: "---------------------------------------" },
-    { text: <>Type <i>help</i> for available commands</> }
+    { text: "--------------------------------------------------------------" },
+    { text: <>Type <i>help</i> for available commands or <i>exit</i> to close the terminal</> }
 ]
 
-const Terminal = ({ isOpen }) => {
+const Terminal = ({ isOpen, setOpen }) => {
     const inputRef = useRef(null);
     const isInitialzed = useRef(false);
     const [ lines, setLines ] = useState([]);
@@ -39,7 +39,13 @@ const Terminal = ({ isOpen }) => {
           if (event.code === "Enter" || event.code === "NumpadEnter") {
             console.log("Enter key was pressed. Run your function.");
             event.preventDefault();
-            // callMyFunction();
+
+            if(inputRef.current.value === "exit"){
+                setOpen(false);
+                return;
+            }
+            addLines([{ text: inputRef.current.value, prefix: ">", classes:"text-success mt-2" }])
+            inputRef.current.value = "";
           }
         };
         document.addEventListener("keydown", handleEnter);

@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
             <main className="px-6 md:px-8">
                 { children }
                 <Suspense>
-                    <Terminal isOpen={terminal} />
+                    <Terminal isOpen={terminal} setOpen={setTerminal} />
                 </Suspense>
             </main>
             <Footer terminal={terminal} setTerminal={setTerminal} />
