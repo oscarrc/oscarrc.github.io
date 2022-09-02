@@ -18,7 +18,8 @@ const cmds = {
         { text: <>Available commands</> },
         { text: <>&emsp; - clear &emsp;&emsp; clears the screen </> },
         { text: <>&emsp; - exit &emsp;&emsp; closes the terminal </> },
-        { text: <>&emsp; - help &emsp;&emsp; shows this menu </> }
+        { text: <>&emsp; - help &emsp;&emsp; shows this menu </> },
+        { text: <>&emsp; - history &emsp;&emsp; shows a history of used commands </> }
     ]
 }
 

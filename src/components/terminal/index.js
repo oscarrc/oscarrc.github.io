@@ -31,8 +31,10 @@ const Terminal = ({ isOpen, setOpen }) => {
                 setLines([]);
                 break;
             case "history":
-                addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);   
-                history.forEach( (e,i) => addLines([{text: <>{i}. {e}</>}]))
+                addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
+                let h = [];
+                history.forEach( (e,i) => h.push({text: <>{i}. {e}</>}));
+                addLines(h);
                 break;
             default:
                 addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);                
