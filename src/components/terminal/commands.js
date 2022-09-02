@@ -1,4 +1,4 @@
-const commands = {
+const cmds = {
     welcome: [
         { text: <>Hi, my name is <strong>Oscar</strong></> },
         { text: <>And I do web development</> },
@@ -22,5 +22,9 @@ const commands = {
     ]
 }
 
+const commands = (command, options) => {
+    return cmds[command] || cmds["error"];
+}
+    
 export default commands;
     
