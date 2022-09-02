@@ -16,9 +16,9 @@ const commands = {
     ],
     help: [
         { text: <>Available commands</> },
-        { text: <>&emsp; - clear &emsp; clears the screen </> },
-        { text: <>&emsp; - exit &emsp; closes the terminal </> },
-        { text: <>&emsp; - help &emsp; shows this menu </> }
+        { text: <>&emsp; - clear &emsp;&emsp; clears the screen </> },
+        { text: <>&emsp; - exit &emsp;&emsp; closes the terminal </> },
+        { text: <>&emsp; - help &emsp;&emsp; shows this menu </> }
     ]
 }
 
