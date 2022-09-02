@@ -18,7 +18,7 @@ This site is available at https://oscarrc.me
 ## Features
 
 * Hosted for free on Github pages
-* Projects and blog post fetched from mdx files stored on this repository
+* Projects and blog post fetched from mdx files stored on this repository, at the branch "gh-content"
 
 ## Found a bug?
 
