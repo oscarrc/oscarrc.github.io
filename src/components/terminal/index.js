@@ -1,16 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-const welcome = [
-    {   
-        prefix: ">",
-        text: <>Welcome</>,
-        classes: "text-success"
-    },
-    { text: <>Hi, my name is <strong>Oscar</strong></> },
-    { text: "And I do web development" },
-    { text: "--------------------------------------------------------------" },
-    { text: <>Type <i>help</i> for available commands or <i>exit</i> to close the terminal</> }
-]
+import commands from '../../config/commands';
 
 const Terminal = ({ isOpen, setOpen }) => {
     const inputRef = useRef(null);
@@ -25,34 +15,42 @@ const Terminal = ({ isOpen, setOpen }) => {
         });
     }
 
-    useEffect(() => {
+    const runCommand = useCallback((command) => { 
+        inputRef.current.value = "";
+        addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
+        
+        if(command === "exit"){
+            setOpen(false);
+            return
+        }
+
+        if(!commands[command]){
+            addLines(commands.error);
+            return;
+        }
+        
+        addLines(commands[command]);        
+    }, [setOpen])
+
+    useEffect(() => {        
+        const handleEnter = event => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+              event.preventDefault();            
+              runCommand(inputRef.current.value);
+            }
+        };
+
         isOpen && inputRef.current.focus();
         isOpen ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden');
+        isOpen ? document.addEventListener("keydown", handleEnter) : document.removeEventListener("keydown", handleEnter);
+        
         if(isOpen && !isInitialzed.current){ 
-            addLines(welcome);
+            runCommand("welcome");
             isInitialzed.current = true;
         }
-    }, [isOpen]);
 
-    useEffect(() => {
-        const handleEnter = event => {
-          if (event.code === "Enter" || event.code === "NumpadEnter") {
-            console.log("Enter key was pressed. Run your function.");
-            event.preventDefault();
-
-            if(inputRef.current.value === "exit"){
-                setOpen(false);
-                return;
-            }
-            addLines([{ text: inputRef.current.value, prefix: ">", classes:"text-success mt-2" }])
-            inputRef.current.value = "";
-          }
-        };
-        document.addEventListener("keydown", handleEnter);
-        return () => {
-          document.removeEventListener("keydown", handleEnter);
-        };
-    }, []);
+        return () => document.removeEventListener("keydown", handleEnter);
+    }, [isOpen, runCommand]);
     
     return (
         <div onClick={ () => inputRef.current.focus() } className={`mockup-code fixed mx-4 sm:mx-16 my-16 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
