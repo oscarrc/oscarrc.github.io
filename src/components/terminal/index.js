@@ -17,12 +17,19 @@ const Terminal = ({ isOpen, setOpen }) => {
 
     const runCommand = useCallback((command) => { 
         inputRef.current.value = "";
-        addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
-        
-        if(command === "exit"){
-            setOpen(false);
-            return
+            
+        switch(command){
+            case "exit":
+                setOpen(false);
+                return
+            case "clear":
+                setLines([]);
+                return
+            default:
+                break;
         }
+        
+        addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
 
         if(!commands[command]){
             addLines(commands.error);

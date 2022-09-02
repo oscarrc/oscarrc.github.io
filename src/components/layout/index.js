@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
     return (
         <>
             <Header toggleTheme={ toggleTheme } currentTheme={ theme } />
-            <main className="px-6 md:px-8">
+            <main className="flex flex-col gap-32 px-6 md:px-8">
                 { children }
                 <Suspense>
                     <Terminal isOpen={terminal} setOpen={setTerminal} />
