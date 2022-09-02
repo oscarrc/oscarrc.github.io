@@ -26,5 +26,5 @@ Open an [issue](https://github.com/oscarrc/oscarrc.github.io/issues) and let me 
 
 ### License
 
-[![by-nc-sa](https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/) This work is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License](https://github.com/oscarrc/oscarrc.github.io/blob/master/LICENSE)
+[![by-nc-sa](https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png)](http://creativecommons.org/licenses/by-nc-sa/4.0/) This work is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License](https://github.com/oscarrc/oscarrc.github.io/blob/master/LICENSE.md)
 
