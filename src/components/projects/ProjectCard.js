@@ -9,7 +9,7 @@ const ProjectCard = () => {
     }
 
     return (
-        <div className="w-three-quarter bg-base">
+        <div className="bg-base">
             <div className="card-body">
                 <div className="flex gap-4">
                     <div className="mockup-window border border-base-300 shadow-xl max-w-xl w-3/4">
