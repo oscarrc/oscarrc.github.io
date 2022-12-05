@@ -6,23 +6,17 @@ import { SiGithub } from 'react-icons/si';
 const ProjectCard = ({ project }) => {
     return (
         <div className="mockup-code pb-0">
-            <div className="card border-t border-t-base-100">
-                <figure><img src="https://placeimg.com/1920/1080/arch"  alt="Movie"/></figure>
-                <div className="card-body gap-8">
-                    <div className="card-content">
-                        <h2 className="card-title">New movie is released!</h2>
-                        <p>Click the button to watch on Jetflix app.</p>   
-                    </div>
-                    <div className="card-actions justify-end">
-                        <span className="flex items-center gap-1"><AiFillStar /> 5</span>
-                        <span className="flex items-center gap-1"><AiOutlineEye /> 5</span>
-                        <span className="flex items-center gap-1"><AiOutlineFork /> 5</span>
-                        <span className="divider divider-horizontal mx-0"></span>
-                        <div className="flex items-center gap-4">
-                            <a href="/"><SiGithub /></a>         
-                            <a href="/"><FiExternalLink /></a> 
-                        </div>                               
-                    </div>
+            <div className="card border-t border-t-base-100 relative aspect-video">
+                <figure className="w-full"><img src="https://placeimg.com/1080/1920/tech" alt="Movie"/></figure>
+                <div className="absolute flex py-1 px-2 bottom-2 right-2 bg-neutral/75 gap-2">
+                    <span className="flex items-center gap-1"><AiFillStar /> 5</span>
+                    <span className="flex items-center gap-1"><AiOutlineEye /> 5</span>
+                    <span className="flex items-center gap-1"><AiOutlineFork /> 5</span>
+                    <span className="divider divider-horizontal mx-0"></span>
+                    <div className="flex items-center gap-4">
+                        <a href="/"><SiGithub /></a>         
+                        <a href="/"><FiExternalLink /></a> 
+                    </div>                               
                 </div>
             </div>
         </div>
