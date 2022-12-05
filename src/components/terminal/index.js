@@ -64,8 +64,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                     addLines([{ text: `Theme ${opt} set`}])
                 }
                 break;
-            default:
-                addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);                
+            default:         
                 addLines(commands(command));        
                 break;
         }
