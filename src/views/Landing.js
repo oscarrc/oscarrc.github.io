@@ -48,9 +48,8 @@ const Landing = () => {
       
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
-          <h2 className="divider w-three-quarter mx-auto mb-32">LATEST PROJECTS</h2>
+          <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE BEEN DOING</h2>
           <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
-            <ProjectCard />
             <ProjectCard />
             <ProjectCard />
             <ProjectCard />
@@ -58,11 +57,10 @@ const Landing = () => {
         </div>
       </section>
       
-      <section id="blog" className="flex flex-col justify-center items-center min-h-half py-4">
+      <section id="blog" className="flex flex-col justify-center items-center min-h-half py-4  mb-16">
         <div className="container">          
-          <h2 className="divider w-three-quarter mx-auto mb-32">READ THE LATEST FROM THE BLOG</h2>
-          <div className="grid grid-cols grid-cols-2 w-three-quarter gap-4 md:gap-8 p-8 mx-auto">
-            <PostCard />
+          <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE WRITING ABOUT</h2>
+          <div className="flex w-three-quarter flex-col mx-auto gap-8">
             <PostCard />
             <PostCard />
             <PostCard />
