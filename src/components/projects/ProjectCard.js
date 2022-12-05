@@ -2,7 +2,6 @@ import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
-import { getRepoInfo } from "../../utils/github";
 
 const ProjectCard = ({ project }) => {
     return (
