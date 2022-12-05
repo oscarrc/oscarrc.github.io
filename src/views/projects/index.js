@@ -1,12 +1,13 @@
-import { useEffect, useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { getFiles } from "../../utils/github";
 
 const Projects = () => {
     const [page, setPage] = useState(0);
-    const [projects, setProjects] = useState([]);
+    const [projects, setProjects] = useState(new Set());
 
     useEffect(() => {
-        setProjects(p => [...p, getFiles("gh-projects", page)])
+        getFiles("gh-projects", page).then( (projects) => setProjects(p => new Set([...p, ...projects])) );
     }, [page])
 
     return (

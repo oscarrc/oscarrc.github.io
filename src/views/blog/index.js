@@ -4,10 +4,10 @@ import { getFiles } from "../../utils/github";
 
 const Blog = () => {
     const [page, setPage] = useState(0);
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState(new Set());
 
     useEffect(() => {
-        setPosts(p => [...p, getFiles("gh-posts", page)])
+        getFiles("gh-posts", page).then( (posts) => setPosts(p => new Set([...p, ...posts])) );
     }, [page])
 
     return (
