@@ -6,7 +6,7 @@ const PostCard = ({ post }) => {
     const navigate = useNavigate();
 
     return (
-        <div role="button" onClick={ () => navigate(`/blog/${ post?.slug ? post.slug : '' }`) } className="card card-side pointer w-full bg-base-100 shadow-xl">
+        <div role="button" onClick={ () => navigate(`/blog/${ post?.slug ? post.slug : '' }`) } className="card card-side pointer w-full bg-base-100">
             <figure class="w-24 h-24">
                 <img src="https://placeimg.com/192/192/people" alt="test" />
             </figure>
@@ -15,7 +15,7 @@ const PostCard = ({ post }) => {
                     <h2 className="card-title">New movie is released!</h2>
                     <p>Click the button to watch on Jetflix app.</p>   
                 </div>                    
-                <div className="card-actions justify-end pt-4">
+                <div className="card-actions justify-end">
                     <span className="flex items-center gap-1"><AiOutlineCalendar /> 10/08/2022</span>
                     <span className="divider divider-horizontal mx-0"></span>                    
                     <span className="flex items-center gap-1"><IoIosTimer /> 5 min</span>                                       
