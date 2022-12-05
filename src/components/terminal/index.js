@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import commands from './commands';
 
-const Terminal = ({ isOpen, setOpen }) => {
+const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
     const inputRef = useRef(null);
     const isInitialzed = useRef(false);
     const termRef = useRef(null);
@@ -22,8 +22,11 @@ const Terminal = ({ isOpen, setOpen }) => {
         inputRef.current.value = "";
         
         setHistory(h => [...h, command]);
+        addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
 
-        switch(command){
+        const [ c, option ] = command.split(' ');
+
+        switch(c){
             case "exit":
                 setOpen(false);
                 break;
@@ -31,17 +34,30 @@ const Terminal = ({ isOpen, setOpen }) => {
                 setLines([]);
                 break;
             case "history":
-                addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
                 let h = [];
                 history.forEach( (e,i) => h.push({text: <>{i}. {e}</>}));
                 addLines(h);
+                break;
+            case "theme":
+                const themes = ["black", "white", "cyberpunk"];
+                if(!themes.includes(option)){
+                    option !== '-h' && addLines([{ text: `Unrecognized theme ${option}`}]);
+                    addLines([
+                        { text: 'Usage: theme <theme_name>'},
+                        { text: `Valid themes are ${themes.join(', ')}`}
+                    ])
+                }
+                else {
+                    toggleTheme(option);
+                    addLines([{ text: `Theme ${option} set`}])
+                }
                 break;
             default:
                 addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);                
                 addLines(commands(command));        
                 break;
         }
-    }, [setOpen, history])
+    }, [setOpen, history, toggleTheme])
 
     useEffect(() => {        
         const handleEnter = event => {

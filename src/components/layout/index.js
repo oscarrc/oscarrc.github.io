@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
             <main className="flex flex-col gap-32 px-6 md:px-8">
                 { children }
                 <Suspense>
-                    <Terminal isOpen={terminal} setOpen={setTerminal} />
+                    <Terminal isOpen={terminal} setOpen={setTerminal} toggleTheme={ toggleTheme } />
                 </Suspense>
             </main>
             <Footer terminal={terminal} setTerminal={setTerminal} />

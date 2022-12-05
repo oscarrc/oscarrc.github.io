@@ -16,10 +16,17 @@ const cmds = {
     ],
     help: [
         { text: <>Available commands</> },
-        { text: <>&emsp; - clear &emsp;&emsp; clears the screen </> },
-        { text: <>&emsp; - exit &emsp;&emsp; closes the terminal </> },
-        { text: <>&emsp; - help &emsp;&emsp; shows this menu </> },
-        { text: <>&emsp; - history &emsp;&emsp; shows a history of used commands </> }
+        { text: <>&emsp;- about: who am i? </> },
+        { text: <>&emsp;- blog: what I've written about? </> },
+        { text: <>&emsp;- projects: what I've made? </> },
+        { text: <>---------------------------------------------</> },
+        { text: <>&emsp;- clear: clears the screen </> },
+        { text: <>&emsp;- exit: closes the terminal </> },
+        { text: <>&emsp;- help: shows this menu </> },
+        { text: <>&emsp;- history: shows a history of used commands </> },
+        { text: <>&emsp;- theme: changes the theme </> },
+        { text: <></> },
+        { text: <>Use '&lt;command&gt; -h' to see help for any specific command</> },
     ]
 }
 

@@ -5,7 +5,7 @@ const themes = [
     },
     {
         label: "White",
-        name: "lofi"
+        name: "white"
     },
     {
         label: "Cyberpunk",
