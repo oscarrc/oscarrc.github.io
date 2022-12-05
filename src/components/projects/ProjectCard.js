@@ -2,12 +2,9 @@ import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
+import { getRepoInfo } from "../../utils/github";
 
-const ProjectCard = () => {
-    const getRepoInfo = async (user, repo) => {
-        return await fetch(`https://api.github.com/repos/${user}/${repo}`).then( res => res.json())
-    }
-
+const ProjectCard = ({ project }) => {
     return (
         <div className="bg-base">
             <div className="card-body">
