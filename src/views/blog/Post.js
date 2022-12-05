@@ -1,4 +1,4 @@
-const Post = () => {
+const Post = ({ slug, post }) => {
     return (
         <>
         </>

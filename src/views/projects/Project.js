@@ -1,4 +1,4 @@
-const Project = () => {
+const Project = ({ slug, project }) => {
     return (
         <>
         </>
