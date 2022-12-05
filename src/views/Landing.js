@@ -43,14 +43,12 @@ const Landing = () => {
             </div>
           </div>
         </div>
-        <button className="btn btn-secondary w-three-quarter mx-auto my-1 md:mt-16">Grab my resume</button>
+        <button className="btn btn-secondary w-three-quarter mx-auto my-1">Grab my resume</button>
       </section>
-
-      <span className="divider w-three-quarter mx-auto">OR</span>
-
+      
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
-          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-4">Check what I've doing lately</h2>
+          <h2 className="divider w-three-quarter mx-auto mb-32">LATEST PROJECTS</h2>
           <div className="w-three-quarter mx-auto grid grid-cols grid-cols-2 items-center justify-center gap-4">
             <ProjectCard />
           </div>
@@ -58,8 +56,8 @@ const Landing = () => {
       </section>
       
       <section id="blog" className="flex flex-col justify-center items-center min-h-half py-4">
-        <div className="container">
-          <h2 className="text-2xl lg:text-3xl font-bold text-center pb-4">Read the latest from my blog</h2>
+        <div className="container">          
+          <h2 className="divider w-three-quarter mx-auto mb-32">READ THE LATEST FROM THE BLOG</h2>
           <div className="grid grid-cols grid-cols-2 w-three-quarter gap-4 md:gap-8 p-8 mx-auto">
             <PostCard />
             <PostCard />
