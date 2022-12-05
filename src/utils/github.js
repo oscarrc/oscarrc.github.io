@@ -2,7 +2,7 @@ const getFiles = async (branch, page, limit = 10) => {
     const files = await fetch(`https://api.github.com/repos/oscarrc/oscarrc.github.io/contents?ref=${branch}`)
                         .then( async res => {
                             let temp = await res.json();
-                            return temp.filter(i => i.name.substring(i.name.length - 3) === ".md")
+                            return temp.filter(i => i.name.substring(i.name.length - 4) === ".mdx")
                         });
                         
     const pageFiles = files.slice(page, (page + 1)*limit);
