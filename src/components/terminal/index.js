@@ -24,32 +24,44 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
         setHistory(h => [...h, command]);
         addLines([{ text: command, prefix: ">", classes:"text-success mt-2" }]);
 
-        const [ c, option ] = command.split(' ');
+        const [ cmd, opt ] = command.split(' ');
 
-        switch(c){
+        switch(cmd){
             case "exit":
-                setOpen(false);
+                if(opt && opt === "-h") addLines([{ text: `Exits the terminal`}])
+                else if(opt && opt !== "-h") addLines([{ text: `Unrecognized opt ${opt}`}])
+                else setOpen(false);
                 break;
             case "clear":
-                setLines([]);
+                if(opt && opt === "-h") addLines([{ text: `Clears the screen`}])
+                else if(opt && opt !== "-h") addLines([{ text: `Unrecognized opt ${opt}`}])
+                else setLines([]);
                 break;
             case "history":
-                let h = [];
-                history.forEach( (e,i) => h.push({text: <>{i}. {e}</>}));
-                addLines(h);
+                if(opt && opt === "-h") addLines([
+                    { text: `Shows command history`},
+                    { text: `Usage: history <number> - runs command in given possition`}
+                ])
+                else if(opt && opt !== "-h" && isNaN(parseInt(opt))) addLines([{ text: `Unrecognized opt ${opt}`}])
+                else if(opt && !isNaN(parseInt(opt))) runCommand(history[parseInt(opt)])
+                else {
+                    let h = [];
+                    history.forEach( (e,i) => h.push({text: <>{i}. {e}</>}));
+                    addLines(h);
+                }
                 break;
             case "theme":
                 const themes = ["black", "white", "cyberpunk"];
-                if(!themes.includes(option)){
-                    option !== '-h' && addLines([{ text: `Unrecognized theme ${option}`}]);
+                if(!themes.includes(opt)){
+                    opt && opt !== '-h' && addLines([{ text: `Unrecognized theme ${opt}`}]);
                     addLines([
                         { text: 'Usage: theme <theme_name>'},
                         { text: `Valid themes are ${themes.join(', ')}`}
                     ])
                 }
                 else {
-                    toggleTheme(option);
-                    addLines([{ text: `Theme ${option} set`}])
+                    toggleTheme(opt);
+                    addLines([{ text: `Theme ${opt} set`}])
                 }
                 break;
             default:
