@@ -7,7 +7,7 @@ const PostCard = ({ post }) => {
 
     return (
         <div role="button" onClick={ () => navigate(`/blog/${ post?.slug ? post.slug : '' }`) } className="card card-side pointer w-full bg-base-100">
-            <figure class="w-24 h-24">
+            <figure className="w-24 h-24">
                 <img src="https://placeimg.com/192/192/people" alt="test" />
             </figure>
             <div className="card-body gap-4 p-0 pl-8">
