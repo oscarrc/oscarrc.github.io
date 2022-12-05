@@ -49,7 +49,7 @@ const Landing = () => {
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
           <h2 className="divider w-three-quarter mx-auto mb-32">LATEST PROJECTS</h2>
-          <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 items-center justify-center gap-8">
+          <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
             <ProjectCard />
             <ProjectCard />
             <ProjectCard />

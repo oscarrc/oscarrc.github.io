@@ -6,10 +6,10 @@ import { getRepoInfo } from "../../utils/github";
 
 const ProjectCard = ({ project }) => {
     return (
-        <div className="mockup-code pb-0 shadow-xl">
-            <div className="card md:card-side border-t border-t-base-100">
-                <figure><img src="https://placeimg.com/280/200/arch" className="w-full md:h-full" alt="Movie"/></figure>
-                <div className="card-body  gap-8">
+        <div className="mockup-code pb-0">
+            <div className="card border-t border-t-base-100">
+                <figure><img src="https://placeimg.com/1920/1080/arch"  alt="Movie"/></figure>
+                <div className="card-body gap-8">
                     <div className="card-content">
                         <h2 className="card-title">New movie is released!</h2>
                         <p>Click the button to watch on Jetflix app.</p>   
