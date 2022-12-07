@@ -80,6 +80,15 @@
             @apply top-12 left-0 w-full
         }
     }
+
+    .mockup-code label {
+      position: absolute;
+      top: 12px;
+      left: 6rem;
+      width: calc(100% - 112px);
+      background-color: white;
+      
+    }
 }
 
 @layer utilities {
