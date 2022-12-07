@@ -39,6 +39,8 @@ const useTypewriter = (strings, speed=100, delay=20, loop = false) => {
         }
 
         const type = () => {
+            if(!strings[index]) return;
+            
             if (letterIndex.current >= strings[index].length) {
                 direction.current = BACKWARDS;
                 pause = delay;
