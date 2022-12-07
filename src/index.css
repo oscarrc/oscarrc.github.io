@@ -59,8 +59,29 @@
         @apply bg-transparent text-accent;
     }     
 
-    .mockup-window .url {
-        width: calc(100% - 10rem);
+    .mockup-code{
+      @apply relative cursor-pointer pb-0
+    }
+
+    .mockup-code.maximized {
+      @apply left-0 top-16 fixed w-full z-20 h-view fixed cursor-default	
+    }
+
+    .mockup-code.maximized figure{
+      @apply h-half overflow-hidden
+    }
+
+    .mockup-code.maximized figure img{
+      @apply w-full
+    }
+
+    .mockup-code .info{
+      @apply absolute bottom-2 right-2 
+    }
+
+    .mockup-code.maximized .info{
+      top: calc(50vh - 3rem);
+      bottom: auto;
     }
 
     @media (max-width: theme('screens.sm')) {        

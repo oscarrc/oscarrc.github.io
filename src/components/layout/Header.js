@@ -21,13 +21,13 @@ const Header = ({ toggleTheme, currentTheme }) => {
     }, [pathname])
 
     return (
-        <header className="sticky top-0 z-10 backdrop-blur-sm">
+        <header className="sticky top-0 z-50 backdrop-blur-sm">
             <nav className="navbar">
-                <div className="flex-1 z-10">
+                <div className="flex-1">
                     <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC{typewritter}</Link>
                 </div>
                 <div className="flex-none">
-                    <ul className={`menu sm:menu-horizontal px-2 sm:px-0 ${ openMenu && 'open'}`}>
+                    <ul className={`z-50 menu sm:menu-horizontal px-2 sm:px-0 ${ openMenu && 'open'}`}>
                         {
                             menu.map((item, index) =>
                                 <li onClick={ () => setOpenMenu(false) } key={ index } className="group">
