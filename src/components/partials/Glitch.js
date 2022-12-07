@@ -1,6 +1,6 @@
 const { useRef, useEffect} = require("react");
 
-const useGlitch = (delay) => {
+const Glitch = ({children, delay, className}) => {
     const glitchRef = useRef(null);
     const glitchTimer = useRef(null);
 
@@ -12,15 +12,10 @@ const useGlitch = (delay) => {
         return () => clearInterval(glitchTimer.current);
     }, [delay])
     
-    const glitchText = (text, className) => {
-        return ( 
-            <span ref={ glitchRef } data-text={ text } className={`relative ${className ? className :  ''}`}>{text}</span>
-        )
-    }
-
-    return {
-        glitchText
-    }
+    
+    return (
+        <span ref={ glitchRef } data-text={ children } className={`relative ${className ? className :  ''}`}>{children}</span>
+    )
 }
 
-export default useGlitch;
+export default Glitch;
