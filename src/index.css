@@ -51,7 +51,7 @@
     }
 }
 
-@layer components { 
+@layer components {
     .menu-button{
         @apply bg-transparent;
     }

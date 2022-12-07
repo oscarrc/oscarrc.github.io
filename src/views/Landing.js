@@ -62,7 +62,9 @@ const Landing = () => {
           <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE WRITING ABOUT</h2>
           <div className="flex w-three-quarter flex-col mx-auto gap-8">
             <PostCard />
+            <span className="divider flex sm:hidden m-0"></span>
             <PostCard />
+            <span className="divider flex sm:hidden m-0"></span>
             <PostCard />
           </div>
         </div>
