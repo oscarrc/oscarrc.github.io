@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectCard = ({ project }) => {
     const [maximized, setMaximized] = useState(false);
+    const navigate = useNavigate();
 
     const closeWindow = (event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close") setMaximized(false);
@@ -19,7 +21,7 @@ const ProjectCard = ({ project }) => {
             document.removeEventListener("keydown", closeWindow, false)
             document.body.classList.remove("overflow-hidden")
         };
-    }, [maximized])
+    }, [maximized, navigate])
     
     return (
         <div onClick={() => setMaximized(true)} className={`transition-all transition-1000 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
