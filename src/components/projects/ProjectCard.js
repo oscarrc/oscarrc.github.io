@@ -8,7 +8,7 @@ const ProjectCard = ({ project }) => {
     const [maximized, setMaximized] = useState(false);
 
     const closeWindow = (event) => {
-        if( event.key === "Escape") setMaximized(false);
+        if( event.key === "Escape" || event.currentTarget.ariaLabel === "close") setMaximized(false);
     }
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const ProjectCard = ({ project }) => {
     return (
         <div onClick={() => setMaximized(true)} className={`transition-all transition-1000 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
             <label className="bg-secondary pl-2 text-neutral truncate">Non adipisicing incididunt aute non et mollit irure ad.</label>
-            { maximized && <button onClick={() => setMaximized(false)} className="absolute btn-primary btn-circle hover:bg-transparent right-2 top-3 btn btn-outline border-0 btn-xs"><AiOutlineClose className="h-4 w-4" /></button> }
+            { maximized && <button aria-label="close" onClick={closeWindow} className="absolute btn-primary btn-circle hover:bg-transparent right-2 top-3 btn btn-outline border-0 btn-xs"><AiOutlineClose className="h-4 w-4" /></button> }
             <div className={`card border-t border-t-base-100 relative h-full scroll ${maximized ? 'overflow-y-scroll' : 'aspect-video'}`}>
                 <figure className="w-full"><img src="https://placeimg.com/1080/1920/tech" alt="Movie"/></figure>
                 { maximized && 
