@@ -7,7 +7,7 @@ import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
   const { direction, text, typewritter } = useTypewriter(["And I do web development", "Keep scrolling to know more"], 100, 20);
-  const { glitchText } = useGlitch(4000);
+  const { glitchText } = useGlitch(5000);
 
   return (
     <>
