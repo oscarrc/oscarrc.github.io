@@ -87,7 +87,7 @@
       left: 6rem;
       width: calc(100% - 112px);
       background-color: white;
-      
+
     }
 }
 
@@ -99,11 +99,11 @@
     .glitch:before {
         content: attr(data-text);
         position: absolute;
-        left: -2px;
-        text-shadow: 1px 0 blue;
-        top: 0;
-        color: white;
-        background: black;
+        left: -1px;
+        text-shadow: 2px 0 hsla(var(--p));
+        top: 1px;
+        color: inherit;
+        background: hsla(var(--b1) / var(--tw-bg-opacity, 1));
         overflow: hidden;
         clip: rect(0, 900px, 0, 0);
         animation: glitch 2s infinite linear alternate-reverse;
