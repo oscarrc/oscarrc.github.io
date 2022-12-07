@@ -91,7 +91,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
     }, [isOpen, runCommand]);
     
     return (
-        <div ref={termRef} onClick={ () => inputRef.current.focus() } className={`mockup-code overflow-y-scroll fixed mx-4 sm:mx-16 my-16 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
+        <div ref={termRef} onClick={ () => inputRef.current.focus() } className={`z-50 mockup-code overflow-y-scroll fixed mx-4 sm:mx-16 my-16 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
             {
                 lines.map( (line, index) => 
                     <pre className={ line.classes } key={index} data-prefix={line.prefix || ""}>

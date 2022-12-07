@@ -1,4 +1,4 @@
-import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
+import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 
 import { FiExternalLink } from 'react-icons/fi';
@@ -20,11 +20,12 @@ const ProjectCard = ({ project }) => {
             document.body.classList.remove("overflow-hidden")
         };
     }, [maximized])
-    //TODO: Maximized card body colors
+    
     return (
         <div onClick={() => setMaximized(true)} className={`transition-all transition-1000 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
             <label className="bg-secondary pl-2 text-neutral truncate">Non adipisicing incididunt aute non et mollit irure ad.</label>
-            <div className={`card border-t border-t-base-100 relative h-full ${maximized ? 'overflow-y-scroll' : 'aspect-video'}`}>
+            { maximized && <button onClick={() => setMaximized(false)} className="absolute btn-primary btn-circle hover:bg-transparent right-2 top-3 btn btn-outline border-0 btn-xs"><AiOutlineClose className="h-4 w-4" /></button> }
+            <div className={`card border-t border-t-base-100 relative h-full scroll ${maximized ? 'overflow-y-scroll' : 'aspect-video'}`}>
                 <figure className="w-full"><img src="https://placeimg.com/1080/1920/tech" alt="Movie"/></figure>
                 { maximized && 
                     <div className="card-body px-6 md:px-8 items-center">

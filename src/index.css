@@ -7,7 +7,7 @@
       @apply font-mono;
     }
 
-    :root {
+    :root, .scroll {
         --scrollbarTrack: hsla(var(--b));
         --scrollbarThumb: hsla(var(--n));
         --scrollbarThumbHover: hsla(var(--p));
@@ -64,7 +64,7 @@
     }
 
     .mockup-code.maximized {
-      @apply left-0 top-16 fixed w-full z-20 h-view fixed cursor-default	
+      @apply left-0 top-0 fixed w-full z-20 h-screen fixed cursor-default
     }
 
     .mockup-code.maximized figure{
@@ -77,6 +77,11 @@
 
     .mockup-code .info{
       @apply absolute bottom-2 right-2 
+    }
+
+    .mockup-code .card-body{
+      @apply bg-base-100;
+      color: hsla(var(--bc) / var(--tw-text-opacity, 1));
     }
 
     .mockup-code.maximized .info{
@@ -109,6 +114,10 @@
       width: calc(100% - 112px);
       background-color: white;
 
+    }
+
+    .mockup-code.maximized label {      
+      width: calc(100% - 140px);
     }
 }
 

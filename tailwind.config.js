@@ -8,6 +8,7 @@ const heights = {
   'quarter': '25vh',
   'half': '50vh',
   'three-quarter': '75vh',
+  'screen': '100vh',
   'view': 'calc(100vh - 4rem)',
 }
 
@@ -71,6 +72,7 @@ module.exports = {
   daisyui: {
     themes: [
       'cyberpunk', 
+      'synthwave',
       {
         white: {
           ...require("daisyui/src/colors/themes")["[data-theme=lofi]"],
