@@ -6,7 +6,7 @@ const PostCard = ({ post }) => {
     const navigate = useNavigate();
 
     return (
-        <div role="button" onClick={ () => navigate(`/blog/${ post?.slug ? post.slug : '' }`) } className="card card-side pointer w-full bg-base-100">
+        <div role="button" onClick={ () => navigate(`/blog/${ post?.slug ? post.slug : '' }`) } className="card card-side pointer w-full">
             <div className="hidden sm:flex">
                 <figure className="w-40 h-40 aspect-square hidden md:flex">
                     <img className="h-full w-auto" src="https://placeimg.com/192/192/people" alt="test" />
