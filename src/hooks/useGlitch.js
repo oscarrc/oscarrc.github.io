@@ -1,18 +1,20 @@
-const { useState, useRef } = require("react")
+const { useState, useEffect } = require("react")
 
-const useGlitch = ({text, className}) => {
+const useGlitch = ({ delay }) => {
     const [glitched, setGlitched] = useState(false);
     
-    const glitchRef = useRef( setInterval(() => {
-        const isGlitched = Math.random() > 0.5;
-        const timeout = Math.floor(Math.random() * (5 + 1)) * 1000;
+    useEffect(()=> { 
+        setInterval(() => setGlitched(Math.random() > 0.5), delay);
+    }, [delay])
 
-        setGlitched(isGlitched);
-        setTimeout( () => setGlitched(false),  timeout)
-    }), 1000)
+    const glitchText = (text, className) => {
+        return ( 
+            <span data-text={ text } className={`relative ${glitched ? 'glitch' : ''} ${className ? className :  ''}`}>{text}</span>
+        )
+    }
 
     return {
-        glitch: <span data-text={ text } className={`relative ${glitched && '.glitch'} ${className}`}>{text}</span>
+        glitchText
     }
 }
 
