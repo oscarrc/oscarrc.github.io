@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/236.8768114e.chunk.js","mappings":"0JAOA,UAPiB,WACb,OACI,uBAGP,C","sources":["views/projects/index.js"],"sourcesContent":["const Projects = () => {\r\n    return (\r\n        <>\r\n        </>\r\n    )\r\n}\r\n\r\nexport default Projects;"],"names":[],"sourceRoot":""}

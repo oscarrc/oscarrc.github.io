@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/728.ca8a73a7.chunk.js","mappings":"0JAOA,UAPa,WACT,OACI,uBAGP,C","sources":["views/blog/index.js"],"sourcesContent":["const Blog = () => {\r\n    return (\r\n        <>\r\n        </>\r\n    )\r\n}\r\n\r\nexport default Blog;"],"names":[],"sourceRoot":""}
