@@ -1,7 +1,7 @@
 import Glitch from "../components/partials/Glitch";
 import Keyboard from "../components/partials/Keyboard";
 import Me from "../components/partials/Me";
-import Posts from "../components/blog/Posts";
+import PostList from "../components/blog/PostList";
 import ProjectGrid from "../components/projects/ProjectGrid";
 import useTypewriter from "../hooks/useTypewriter";
 
@@ -57,7 +57,7 @@ const Landing = () => {
       <section id="blog" className="flex flex-col justify-center items-center min-h-half py-4  mb-16">
         <div className="container">          
           <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE WRITING ABOUT</h2>
-          <Posts />
+          <PostList />
         </div>
       </section>   
     </>
