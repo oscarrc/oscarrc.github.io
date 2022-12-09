@@ -21,7 +21,7 @@ module.exports = {
     extend: {
       animation: {
         blink: 'blink 1s linear infinite',
-        glitch: 'noise-anim 2s infinite linear alternate-reverse'
+        glitch: 'glitch 2s infinite linear alternate-reverse'
       },
       keyframes: {
         blink: {
