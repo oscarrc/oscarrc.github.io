@@ -15,7 +15,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
     const { start, typewritter } = useTypewriter(breadcrumbs, 50, 1);
 
     useEffect(() => {
-        setbreadcrumbs( b => b[b.length - 1] !== pathname ? [...b, pathname !== "/" ? pathname : " "] : b )
+        setbreadcrumbs( b => '/' + b[b.length - 1] !== pathname ? [...b, pathname !== "/" ? pathname : " "] : b )
         start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname])
