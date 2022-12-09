@@ -4,7 +4,7 @@ import { useCallback, useEffect } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
 
-const ProjectCard = ({ project, background, maximized, onClick, onClose }) => {   
+const ProjectCard = ({ project, maximized, onClick, onClose }) => {   
     const closeWindow = useCallback((event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
             onClose && onClose();

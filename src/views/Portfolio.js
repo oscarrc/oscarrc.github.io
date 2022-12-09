@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-import ProjectGrid from "../../components/projects/ProjectGrid";
-import config from "../../config/github"
-import useGithub from "../../hooks/useGithub";
+import Projects from "../components/projects";
+import config from "../config/github"
+import useGithub from "../hooks/useGithub";
 
-const Projects = () => {
+const Portfolio = () => {
     const { getFiles, getRepoInfo } = useGithub(config.user);
     const [page, setPage] = useState(0);
     const [projects, setProjects] = useState(new Set());
@@ -14,8 +14,10 @@ const Projects = () => {
     }, [getFiles, page])
 
     return (
-        <ProjectGrid />
+        <section id="projects" className="flex flex-col justify-center items-center min-h-view">                
+            <Projects />
+        </section>
     )
 }
 
-export default Projects;
+export default Portfolio;

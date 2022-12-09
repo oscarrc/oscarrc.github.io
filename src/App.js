@@ -5,8 +5,8 @@ import Layout from "./components/layout";
 import { useLocation } from "react-router-dom";
 
 const Landing = lazy(() => import('./views/Landing'));
-const Projects = lazy(() => import('./views/projects'));
-const Blog = lazy(() => import('./views/blog'));
+const Portfolio = lazy(() => import('./views/Portfolio'));
+const Blog = lazy(() => import('./views/Blog'));
 
 function App() {
   const location = useLocation();
@@ -17,9 +17,9 @@ function App() {
       <Suspense>
         <Routes location={ background || location }>
           <Route path="/" element={ <Landing /> } />
-          <Route path="/projects">
-            <Route index element={ <Projects /> } />
-            <Route path=":slug" element={ <Projects /> } />
+          <Route path="/portfolio">
+            <Route index element={ <Portfolio /> } />
+            <Route path=":slug" element={ <Portfolio /> } />
           </Route>
           <Route path="/blog">
             <Route index element={ <Blog /> } />
