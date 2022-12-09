@@ -1,6 +1,6 @@
 import PostCard from "./PostCard";
 
-const Blog = () => {
+const Posts = () => {
     return (
         <div className="flex w-three-quarter flex-col mx-auto gap-8">
             <PostCard />
@@ -12,4 +12,4 @@ const Blog = () => {
     )
 }
 
-export default Blog;
+export default Posts;

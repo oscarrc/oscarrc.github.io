@@ -7,7 +7,7 @@ import history from '../../utils/history';
 
 const ProjectCard = ({ project, referer }) => {
     const [maximized, setMaximized] = useState(false);
-
+    
     const closeWindow = useCallback((event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
             history.push(referer);
@@ -16,7 +16,7 @@ const ProjectCard = ({ project, referer }) => {
     }, [referer])
 
     const openWindow = () => {
-        history.push(`/projects/test`);
+        history.push(`/projects/test`, {replace: true});
         setMaximized(true);
     }
 

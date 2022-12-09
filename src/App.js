@@ -17,7 +17,10 @@ function App() {
             <Route index element={ <Projects /> } />
             <Route path=":slug" element={ <Projects /> } />
           </Route>
-          <Route path="/blog" element={ <Blog /> } />
+          <Route path="/blog">
+            <Route index element={ <Blog /> } />
+            <Route path=":slug" element={ <Blog /> } />
+          </Route>
         </Routes>
       </Suspense>
     </Layout>

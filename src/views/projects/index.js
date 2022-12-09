@@ -13,8 +13,7 @@ const Projects = () => {
     }, [getFiles, page])
 
     return (
-        <>
-        </>
+        <></>
     )
 }
 
