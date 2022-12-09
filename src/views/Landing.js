@@ -3,10 +3,12 @@ import Keyboard from "../components/partials/Keyboard";
 import Me from "../components/partials/Me";
 import PostCard from "../components/blog/PostCard";
 import ProjectCard from "../components/projects/ProjectCard";
+import { useLocation } from 'react-router-dom';
 import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
   const { direction, text, typewritter } = useTypewriter(["And I do web development", "Keep scrolling to know more"], 100, 20);
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -51,9 +53,9 @@ const Landing = () => {
         <div className="container">
           <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE BEEN DOING</h2>
           <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
+            <ProjectCard referer={pathname} />
+            <ProjectCard referer={pathname} />
+            <ProjectCard referer={pathname} />
           </div>
         </div>
       </section>

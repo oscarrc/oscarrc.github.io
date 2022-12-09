@@ -13,7 +13,10 @@ function App() {
       <Suspense>
         <Routes>
           <Route path="/" element={ <Landing /> } />
-          <Route path="/projects" element={ <Projects /> } />
+          <Route path="/projects">
+            <Route index element={ <Projects /> } />
+            <Route path=":slug" element={ <Projects /> } />
+          </Route>
           <Route path="/blog" element={ <Blog /> } />
         </Routes>
       </Suspense>

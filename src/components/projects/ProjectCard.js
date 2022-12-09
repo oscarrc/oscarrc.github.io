@@ -1,30 +1,37 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
-import { useNavigate } from 'react-router-dom';
+import history from '../../utils/history';
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, referer }) => {
     const [maximized, setMaximized] = useState(false);
-    const navigate = useNavigate();
 
-    const closeWindow = (event) => {
-        if( event.key === "Escape" || event.currentTarget.ariaLabel === "close") setMaximized(false)
+    const closeWindow = useCallback((event) => {
+        if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
+            history.push(referer);
+            setMaximized(false)
+        }
+    }, [referer])
+
+    const openWindow = () => {
+        history.push(`/projects/test`);
+        setMaximized(true);
     }
 
     useEffect(() => {
         maximized && document.addEventListener("keydown", closeWindow, false);
         maximized && document.body.classList.add("overflow-hidden");
-
+        
         return () =>  {
             document.removeEventListener("keydown", closeWindow, false)
             document.body.classList.remove("overflow-hidden")
         };
-    }, [maximized, navigate])
+    }, [closeWindow, maximized])
     
     return (
-        <div onClick={() => setMaximized(true)} className={`transition-all transition-500 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
+        <div onClick={() => openWindow()} className={`transition-all transition-500 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
             <label className="bg-secondary pl-2 text-neutral truncate">Non adipisicing incididunt aute non et mollit irure ad.</label>
             { maximized && <button aria-label="close" onClick={closeWindow} className="absolute right-3 top-4 hover:text-accent"><AiOutlineClose className="h-4 w-4" /></button> }
             <div className={`card border-t border-t-base-100 relative h-full scroll ${maximized ? 'overflow-y-scroll' : 'aspect-video'}`}>
