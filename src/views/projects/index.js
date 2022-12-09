@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import ProjectGrid from "../../components/projects/ProjectGrid";
 import config from "../../config/github"
 import useGithub from "../../hooks/useGithub";
 
@@ -13,7 +14,7 @@ const Projects = () => {
     }, [getFiles, page])
 
     return (
-        <></>
+        <ProjectGrid />
     )
 }
 
