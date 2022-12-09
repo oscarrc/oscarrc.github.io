@@ -64,7 +64,7 @@
     }
 
     .mockup-code.maximized {
-      @apply left-0 top-0 fixed w-full z-20 h-screen fixed cursor-default
+      @apply z-20 fixed cursor-default left-8 right-8 sm:left-16 sm:right-16 top-16 bottom-16;
     }
 
     .mockup-code.maximized figure{
@@ -80,8 +80,7 @@
     }
 
     .mockup-code .card-body{
-      @apply bg-base-100;
-      color: hsla(var(--bc) / var(--tw-text-opacity, 1));
+      @apply overflow-y-scroll
     }
 
     .mockup-code.maximized .info{

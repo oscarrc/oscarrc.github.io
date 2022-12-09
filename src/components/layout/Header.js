@@ -21,7 +21,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
     }, [pathname])
 
     return (
-        <header className="sticky top-0 z-10 backdrop-blur-sm">
+        <header className="sticky top-0 z-50 backdrop-blur-sm">
             <nav className="navbar">
                 <div className="flex-1">
                     <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC{typewritter}</Link>
