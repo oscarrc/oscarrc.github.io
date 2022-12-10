@@ -68,7 +68,7 @@
     }
 
     .mockup-code.maximized figure{
-      @apply h-half overflow-hidden
+      @apply h-half overflow-hidden  absolute
     }
 
     .mockup-code.maximized figure img{
@@ -79,12 +79,17 @@
       @apply absolute bottom-2 right-2 
     }
 
+    .mockup-code .card {
+      @apply relative;
+    }
+
     .mockup-code .card-body{
-      @apply overflow-y-scroll
+      @apply overflow-y-scroll;
+      margin-top: 50vh;
     }
 
     .mockup-code.maximized .info{
-      top: calc(50vh - 3rem);
+      top: calc(50vh - 2.5rem);
       bottom: auto;
     }
 
