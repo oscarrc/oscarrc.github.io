@@ -1,7 +1,8 @@
 const widths = {
   'quarter': '25vw',
   'half': '50vw',
-  'three-quarter': '75vw'
+  'three-quarter': '75vw',
+  'screen': '100vw'
 }
 
 const heights = {
