@@ -5,7 +5,7 @@ import config from "../config/github"
 import useGithub from "../hooks/useGithub";
 
 const Blog = () => {
-    const { getFiles } = useGithub(config.user);
+    const { getFiles } = useGithub(config.user, config.repo);
     const [page, setPage] = useState(0);
     const [posts, setPosts] = useState(new Set());
 
