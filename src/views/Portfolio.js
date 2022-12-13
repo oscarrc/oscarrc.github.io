@@ -4,20 +4,20 @@ import { useEffect, useState } from "react";
 
 import Projects from "../components/projects";
 import config from "../config/github"
-import { evaluate } from "@mdx-js/mdx";
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import useGithub from "../hooks/useGithub";
+import useMDX from "../hooks/useMdx";
 
 const Portfolio = () => {
     const { getFiles, getRepoInfo, getMedia } = useGithub(config.user, config.repo);
+    const { parseMDX } = useMDX();
+
     const [ page, setPage ] = useState(0);
     const [ projects, setProjects ] = useState([]);
 
     useEffect(() => {
         getFiles(config.repo, "gh-projects", page).then( async (projects) => {
             const parsed = await Promise.all(projects.map(async p => {
-                const evaluated = await evaluate(p, { ...runtime, remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter] });
+                const evaluated = await parseMDX(p);
                 evaluated.info = await getRepoInfo(evaluated.repo);
                 evaluated.image = await getMedia(evaluated.image, "gh-projects");
                 return evaluated;
