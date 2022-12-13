@@ -50,14 +50,14 @@ const Landing = () => {
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
         <div className="container">
           <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE BEEN DOING</h2>
-          <Projects />
+          <Projects limit={3} />
         </div>
       </section>
       
       <section id="blog" className="flex flex-col justify-center items-center min-h-half py-4  mb-16">
         <div className="container">          
           <h2 className="divider w-three-quarter mx-auto mb-32">WHAT I'VE WRITING ABOUT</h2>
-          <Posts />
+          <Posts limit={3} />
         </div>
       </section>
     </>
