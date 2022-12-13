@@ -34,8 +34,8 @@ const ProjectCard = ({ project, maximized, onClick, onClose }) => {
                     <img className="object-cover h-full w-full" src={ project.image } alt={ project.title } />
                 </figure>
                 { maximized && 
-                    <div className="card-body px-6 md:px-8 items-center">
-                        <div className="max-w-full prose">
+                    <div className="card-body px-12 md:px-16 items-center">
+                        <div className="max-w-full prose pt-8 pb-16">
                             <Content />
                         </div>
                     </div>
