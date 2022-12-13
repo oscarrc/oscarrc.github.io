@@ -88,7 +88,6 @@
     }
 
     .mockup-code .card-body{
-      @apply overflow-y-scroll;
       margin-top: 50vh;
     }
 
