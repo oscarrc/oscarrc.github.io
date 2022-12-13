@@ -8,7 +8,7 @@ const Projects = ({ projects }) => {
     
     return (
         <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
-            { projects.map( (project, index) => {
+            { projects && projects.map( (project, index) => {
                 return <ProjectCard 
                             key={index}
                             project={ project }

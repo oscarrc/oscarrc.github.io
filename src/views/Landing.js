@@ -7,7 +7,7 @@ import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
   const { direction, text, typewritter } = useTypewriter(["And I do web development", "Keep scrolling to know more"], 100, 20);
-  
+
   return (
     <>
       <section id="home" className="flex flex-col justify-center items-center min-h-view">
