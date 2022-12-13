@@ -35,7 +35,7 @@ const ProjectCard = ({ project, maximized, onClick, onClose }) => {
                 </figure>
                 { maximized && 
                     <div className="card-body px-6 md:px-8 items-center">
-                        <div className="w-full prose">
+                        <div className="max-w-full prose">
                             <Content />
                         </div>
                     </div>
