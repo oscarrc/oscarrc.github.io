@@ -76,7 +76,11 @@
     }
 
     .mockup-code .info{
-      @apply absolute bottom-2 right-2 
+      @apply absolute bottom-2 px-2 flex flex-1 justify-between items-center w-full flex-wrap
+    }
+
+    .mockup-code .tags{
+      @apply absolute bottom-2 left-2
     }
 
     .mockup-code .card {

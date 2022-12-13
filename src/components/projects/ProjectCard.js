@@ -27,7 +27,7 @@ const ProjectCard = ({ project, maximized, onClick, onClose }) => {
     
     return (
         <div onClick={ maximizeWindow } className={`transition-all transition-500 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
-            <label className="bg-secondary pl-2 text-neutral truncate">{ project.title }</label>
+            <label className="bg-secondary pl-2 text-neutral truncate">{ `${project.title}${maximized ? ` | ${project.description}` : '' }` }</label>
             { maximized && <button aria-label="close" onClick={closeWindow} className="absolute right-3 top-4 hover:text-accent"><AiOutlineClose className="h-4 w-4" /></button> }
             <div className={`card border-t border-t-base-100 relative h-full scroll ${maximized ? 'overflow-y-scroll' : 'aspect-video'}`}>
                 <figure className="h-full w-full">
@@ -35,20 +35,25 @@ const ProjectCard = ({ project, maximized, onClick, onClose }) => {
                 </figure>
                 { maximized && 
                     <div className="card-body px-6 md:px-8 items-center">
-                        <div className="w-full">
+                        <div className="w-full prose">
                             <Content />
                         </div>
                     </div>
                 }
-                <div className="info flex py-1 px-2 bg-neutral/75 gap-2">
-                    <span className="flex items-center gap-1"><AiFillStar /> { project.info.stargazers_count }</span>
-                    <span className="flex items-center gap-1"><AiOutlineEye /> { project.info.subscribers_count }</span>
-                    <span className="flex items-center gap-1"><AiOutlineFork /> { project.info.forks_count }</span>
-                    <span className="divider divider-horizontal mx-0"></span>
-                    <div className="flex items-center gap-4">
-                        <a aria-label="Github page" onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" href={ project.info.html_url }><SiGithub /></a>                 
-                        <a aria-label="Visit site" onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" href={ project.link }><FiExternalLink /></a> 
-                    </div>                               
+                <div className="info">
+                    <div className="flex flex-1 gap-2">
+                        { maximized && project.tags.split(',').map(tag => <span key={tag} className="badge truncate">{ tag }</span> )}
+                    </div>
+                    <div className="flex py-1 px-2 bg-neutral/75 gap-2">
+                        <span className="flex items-center gap-1"><AiFillStar /> { project.info.stargazers_count }</span>
+                        <span className="flex items-center gap-1"><AiOutlineEye /> { project.info.subscribers_count }</span>
+                        <span className="flex items-center gap-1"><AiOutlineFork /> { project.info.forks_count }</span>
+                        <span className="divider divider-horizontal mx-0"></span>
+                        <div className="flex items-center gap-4">
+                            <a aria-label="Github page" onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" href={ project.info.html_url }><SiGithub /></a>                 
+                            <a aria-label="Visit site" onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" href={ project.link }><FiExternalLink /></a> 
+                        </div> 
+                    </div>                              
                 </div>
             </div>
         </div>
