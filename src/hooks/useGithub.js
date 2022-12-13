@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-const useGithub = (user) => {
+const useGithub = (user, repo) => {
     const baseUrl = `https://api.github.com/repos`;
 
     const getFiles = useCallback(async (repo, branch, page, limit = 10) => {
@@ -19,7 +19,7 @@ const useGithub = (user) => {
         return result;
     }, [baseUrl, user])
 
-    const getMedia = (media, repo, branch) => {
+    const getMedia = (media, branch) => {
         return `https://raw.githubusercontent.com/oscarrc/${repo}/${branch}/${media}`
     }
     
