@@ -1,9 +1,9 @@
-import { compile } from "@mdx-js/mdx";
+import { useCallback } from "react";
 
 const useGithub = (user) => {
     const baseUrl = `https://api.github.com/repos`;
 
-    const getFiles = async (repo, branch, page, limit = 10) => {
+    const getFiles = useCallback(async (repo, branch, page, limit = 10) => {
         const files = await fetch(`${baseUrl}/${user}/${repo}/contents?ref=${branch}`)
                             .then( async res => {
                                 const temp = await res.json();
@@ -13,14 +13,11 @@ const useGithub = (user) => {
         const pageFiles = files.slice(page, (page + 1)*limit);
         
         const result = await Promise.all(pageFiles.map( async (file) => {
-            return await fetch(file.download_url).then( async (res) => {
-                let raw = await res.text();
-                return compile(raw);
-            }); 
+            return await fetch(file.download_url).then( async (res) => await res.text()); 
         }));
         
         return result;
-    }
+    }, [baseUrl, user])
 
     const getMedia = (media, repo, branch) => {
         return `https://raw.githubusercontent.com/oscarrc/${repo}/${branch}/${media}`

@@ -3,8 +3,12 @@ import { useCallback, useEffect } from 'react';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
+import useMDX from '../../hooks/useMdx';
 
-const ProjectCard = ({ project, maximized, onClick, onClose }) => {   
+const ProjectCard = ({ project, maximized, onClick, onClose }) => {  
+    const mdx = useMDX(project);
+    const Content = mdx.default;
+
     const closeWindow = useCallback((event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
             onClose && onClose();
@@ -25,17 +29,14 @@ const ProjectCard = ({ project, maximized, onClick, onClose }) => {
     
     return (
         <div onClick={ maximizeWindow } className={`transition-all transition-500 ease-in-out mockup-code ${maximized ? 'maximized' : ''}`}>
-            <label className="bg-secondary pl-2 text-neutral truncate">Non adipisicing incididunt aute non et mollit irure ad.</label>
+            <label className="bg-secondary pl-2 text-neutral truncate">{ mdx.title }</label>
             { maximized && <button aria-label="close" onClick={closeWindow} className="absolute right-3 top-4 hover:text-accent"><AiOutlineClose className="h-4 w-4" /></button> }
             <div className={`card border-t border-t-base-100 relative h-full scroll ${maximized ? 'overflow-y-scroll' : 'aspect-video'}`}>
                 <figure className="w-full"><img src="https://placeimg.com/1080/1920/tech" alt="Movie"/></figure>
                 { maximized && 
                     <div className="card-body px-6 md:px-8 items-center">
                         <div className="w-full">
-                            Proident eu officia est id cillum aute consectetur ut. Quis laborum ea quis incididunt ullamco eiusmod aliqua fugiat tempor elit mollit reprehenderit cupidatat. Fugiat sint eiusmod eiusmod sunt.
-                            Dolor esse anim dolore Lorem. Officia sint irure proident ut anim sint velit qui excepteur. Cillum eu in sunt proident occaecat nisi. Proident dolore anim deserunt officia est ipsum ut ea aliqua.
-                            Incididunt Lorem adipisicing dolor dolor sit laborum nulla. Nisi commodo labore do ad velit sit Lorem minim. Dolore officia quis nulla cupidatat magna voluptate veniam. Est dolor amet pariatur do. Enim occaecat ad aute laborum nostrud sint voluptate sunt sit. Exercitation enim qui voluptate pariatur ut dolor ea occaecat sit minim velit. Sint minim ea reprehenderit ea non nulla minim eiusmod dolor minim.
-                            Ut veniam Lorem anim consectetur eiusmod ullamco ipsum ipsum officia officia culpa dolore. Do fugiat qui ut tempor. In eu culpa amet eiusmod in aliqua nostrud. Veniam ullamco sint exercitation nostrud dolor.
+                            <Content />
                         </div>
                     </div>
                 }
