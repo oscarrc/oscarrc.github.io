@@ -66,10 +66,10 @@
   ],
   "shortcuts" : [
     {
-      "name": "Projects",
-      "url": "/projects",
-      "description": "Oscar R.C. Web Projects",
-      "icons": [{ "src": "icons/projects.png", "sizes": "96x96" }]
+      "name": "Portfolio",
+      "url": "/portfolio",
+      "description": "Oscar R.C. Web Portfolio",
+      "icons": [{ "src": "icons/portfolio.png", "sizes": "96x96" }]
     },
     {
       "name": "Blog",
