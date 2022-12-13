@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import Layout from "./components/layout";
+import ReactGA from 'react-ga';
 import { useLocation } from "react-router-dom";
 
 const Landing = lazy(() => import('./views/Landing'));
@@ -11,6 +12,11 @@ const Blog = lazy(() => import('./views/Blog'));
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
+
+  useEffect(() => {
+    ReactGA.set({ page: location.pathname });
+    ReactGA.pageview(location.pathname);
+  }, [location.pathname]);
 
   return (
     <Layout>
