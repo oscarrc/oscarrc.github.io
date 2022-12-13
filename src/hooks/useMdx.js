@@ -1,19 +1,17 @@
 import * as runtime from "react/jsx-runtime";
 
-import { useEffect, useState } from "react";
-
 import { evaluate } from "@mdx-js/mdx";
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 
-const useMDX = (content) => {
-  const [exports, setExports] = useState({ default: runtime.Fragment });
+const useMDX = () => {
+  const parseMDX = async (data, extra) => {
+    const evaluated = await evaluate(data, { ...runtime, remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter] });
+    extra && Object.keys(extra).forEach( e => evaluated[e] = extra[e] );
+    return evaluated;
+  }
 
-  useEffect(() => {
-    evaluate(content, { ...runtime, remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter] }).then((exports) => setExports(exports));
-  }, [content]);
-
-  return exports;
+  return { parseMDX }
 }
 
 export default useMDX;
