@@ -5,7 +5,7 @@ const Post = ({ post }) => {
         <section id="post">
             <div className="container">
                 <div className="prose max-w-full">
-                    
+                    { Content && <Content /> }
                 </div>
             </div>
         </section>

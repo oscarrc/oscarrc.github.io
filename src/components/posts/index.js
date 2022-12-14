@@ -35,7 +35,7 @@ const Posts = ({ page = 0, limit = 10 }) => {
                             excerpt={post.excerpt}                   
                             image={post.image}
                             date={post.date}
-                            onClick={ () => navigate(`/blog/${post.slug}`, { state: { post }}) }
+                            onClick={ () => navigate(`/blog/${post.slug}`, { state: { post: post }} ) }
                         />
                         { index < posts.length && <span className="divider flex sm:hidden m-0"></span> }
                     </div>
