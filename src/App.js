@@ -8,10 +8,13 @@ import { useLocation } from "react-router-dom";
 const Landing = lazy(() => import('./views/Landing'));
 const Portfolio = lazy(() => import('./views/Portfolio'));
 const Blog = lazy(() => import('./views/Blog'));
+const Post = lazy(() => import('./views/Post'));
+const Error = lazy(() => import('./views/Error'));
 
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
+  const post = location.state && location.state.post;
 
   useEffect(() => {
     ReactGA.set({ page: location.pathname });
@@ -29,8 +32,9 @@ function App() {
           </Route>
           <Route path="/blog">
             <Route index element={ <Blog /> } />
-            <Route path=":slug" element={ <Blog /> } />
+            <Route path=":slug" element={ <Post post={ post } /> } />
           </Route>
+          <Route path="*" element={ <Error status={404} message="Page not found" /> } />
         </Routes>
       </Suspense>
     </Layout>
