@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkOscar_R_C_Web_Developer=self.webpackChunkOscar_R_C_Web_Developer||[]).push([[492],{6492:function(e,s,l){l.r(s);var r=l(184);s.default=function(e){var s=e.post,l=null===s||void 0===s?void 0:s.default;return(0,r.jsx)("section",{id:"post",children:(0,r.jsx)("div",{className:"container",children:(0,r.jsx)("div",{className:"prose max-w-full",children:l&&(0,r.jsx)(l,{})})})})}}}]);
+//# sourceMappingURL=492.f2e67e14.chunk.js.map
