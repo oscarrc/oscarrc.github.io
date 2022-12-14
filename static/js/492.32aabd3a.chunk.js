@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkOscar_R_C_Web_Developer=self.webpackChunkOscar_R_C_Web_Developer||[]).push([[492],{6492:function(e,s,a){a.r(s);var l=a(184);s.default=function(e){var s=e.post;null===s||void 0===s||s.default;return(0,l.jsx)("section",{id:"post",children:(0,l.jsx)("div",{className:"container",children:(0,l.jsx)("div",{className:"prose max-w-full"})})})}}}]);
+//# sourceMappingURL=492.32aabd3a.chunk.js.map
