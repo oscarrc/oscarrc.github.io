@@ -5,11 +5,11 @@ import Layout from "./components/layout";
 import ReactGA from 'react-ga';
 import { useLocation } from "react-router-dom";
 
+const Blog = lazy(() => import('./views/Blog'));
+const Error = lazy(() => import('./views/Error'));
 const Landing = lazy(() => import('./views/Landing'));
 const Portfolio = lazy(() => import('./views/Portfolio'));
-const Blog = lazy(() => import('./views/Blog'));
 const Post = lazy(() => import('./views/Post'));
-const Error = lazy(() => import('./views/Error'));
 
 function App() {
   const location = useLocation();
