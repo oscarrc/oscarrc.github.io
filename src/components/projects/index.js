@@ -15,7 +15,7 @@ const Projects = ({ page=0, limit=10 }) => {
     const [ projects, setProjects ] = useState([]);
 
     useEffect(() => {
-        getFiles(config.repo, "gh-projects", page).then( async (projects) => {
+        getFiles(config.repo, "gh-projects", page, limit).then( async (projects) => {
             const parsed = await Promise.all(projects.map(async p => {
                 const evaluated = await parseMDX(p);
                 evaluated.info = await getRepoInfo(evaluated.repo);
