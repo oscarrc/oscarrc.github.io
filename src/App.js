@@ -11,7 +11,7 @@ const Landing = lazy(() => import('./views/Landing'));
 const Portfolio = lazy(() => import('./views/Portfolio'));
 const Post = lazy(() => import('./views/Post'));
 
-function App() {
+const App = () => {
   const location = useLocation();
   const background = location.state && location.state.background;
   const post = location.state && location.state.post;
