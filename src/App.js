@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 
 import Layout from "./components/layout";
+import Loading from "./views/Loading";
 import ReactGA from 'react-ga';
 import { useLocation } from "react-router-dom";
 
@@ -23,7 +24,7 @@ const App = () => {
 
   return (
     <Layout>
-      <Suspense>
+      <Suspense fallback={<Loading />}>
         <Routes location={ background || location }>
           <Route path="/" element={ <Landing /> } />
           <Route path="/portfolio">
@@ -34,7 +35,7 @@ const App = () => {
             <Route index element={ <Blog /> } />
             <Route path=":slug" element={ <Post post={ post } /> } />
           </Route>
-          <Route path="*" element={ <Error status={404} message="Page not found" /> } />
+          <Route path="*" element={ <Error status={ location?.state?.error || 404 } message={ location?.state?.message || "Page not found" } /> } />
         </Routes>
       </Suspense>
     </Layout>
