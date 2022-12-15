@@ -11,11 +11,13 @@ import ReactGA from 'react-ga';
 import reportWebVitals from './reportWebVitals';
 import { lazy } from "react";
 
-const Blog = lazy(() => import('./views/Blog'));
 const Error = lazy(() => import('./Error'));
+
+const Blog = lazy(() => import('./views/Blog'));
 const Landing = lazy(() => import('./views/Landing'));
 const Portfolio = lazy(() => import('./views/Portfolio'));
 const Post = lazy(() => import('./views/Post'));
+const Project= lazy(() => import('./views/Project'));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createHashRouter([
@@ -33,7 +35,7 @@ const router = createHashRouter([
         children: [          
           {
             path: "/portfolio/:slug",
-            element: <div className="fixed z-100 top-0 lef-0 w-half h-half bg-black">TEST</div>
+            element: <Project />
           }
         ]
       },

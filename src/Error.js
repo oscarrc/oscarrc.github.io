@@ -8,7 +8,7 @@ import ReactGA from 'react-ga';
 
 const Error = () => {
     const error = useRouteError();
-    const { direction, text, typewritter } = useTypewriter([`Error ${error.status}: ${error.statusText}`], 100, 20);
+    const { direction, text, typewritter } = useTypewriter([`Error ${error.status || 500}: ${error.statusText || "Internal server error"}`], 100, 20);
     const location = useLocation();
 
   useEffect(() => {

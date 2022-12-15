@@ -76,7 +76,7 @@
     }
 
     .mockup-code .info{
-      @apply absolute bottom-2 px-2 flex flex-1 justify-between items-center w-full flex-wrap
+      @apply absolute bottom-2 px-2 flex flex-1 justify-end items-center w-full flex-wrap
     }
 
     .mockup-code .tags{

@@ -8,12 +8,19 @@ import useMDX from "../../hooks/useMdx";
 
 const Projects = ({ page=0, limit=10 }) => {
     const { getFiles, getRepoInfo, getMedia } = useGithub(config.user, config.repo);
+
     const { parseMDX } = useMDX();
     const { pathname } = useLocation();
-    const params = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     
     const [ projects, setProjects ] = useState([]);
+    const [ project, setProject ] = useState(null);
+
+    const maximize = (project) => {
+        setProject(project);
+        navigate(`/portfolio/${project.slug}`, { state: { background: pathname }})
+    }
 
     useEffect(() => {
         getFiles(config.repo, "gh-projects", page, limit).then( async (projects) => {
@@ -21,11 +28,12 @@ const Projects = ({ page=0, limit=10 }) => {
                 const evaluated = await parseMDX(p);
                 evaluated.info = await getRepoInfo(evaluated.repo);
                 evaluated.image = await getMedia(evaluated.image, "gh-projects");
+                evaluated.slug === slug && setProject(evaluated);
                 return evaluated;
             }))   
 
             setProjects(p => [...p, ...parsed])
-        } );
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page])
 
@@ -41,12 +49,10 @@ const Projects = ({ page=0, limit=10 }) => {
                 return <ProjectCard 
                             key={index}
                             project={ project }
-                            maximized={ false } 
-                            onClick={ () => navigate(`/portfolio/${project.slug}`, { state: { background: pathname }})}
-                            onClose={ () => { navigate(-1) } }
+                            onClick={ () => maximize(project) }
                         />
             })}
-            <Outlet />
+            <Outlet context={ project }/>
         </div>
     )
 }
