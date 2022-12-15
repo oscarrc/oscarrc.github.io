@@ -5,9 +5,9 @@ const Post = ({ post }) => {
     const Content = post?.default;
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if(!post) navigate("/404");
-    }, [post, navigate])
+    // useEffect(() => {
+    //     if(!post) navigate("/404");
+    // }, [post, navigate])
 
     return (
         <section id="post">
