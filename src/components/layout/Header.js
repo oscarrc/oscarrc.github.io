@@ -23,7 +23,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
     return (
         <header className="sticky top-0 z-50 backdrop-blur-sm">
             <nav className="navbar">
-                <div className="flex-1">
+                <div className="flex-1 truncate">
                     <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC{typewritter}</Link>
                 </div>
                 <div className="flex-none">
