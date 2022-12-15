@@ -32,6 +32,7 @@ const router = createHashRouter([
       {
         path: "/portfolio",
         element: <Portfolio />,
+        loader: (data) => { return data },
         children: [          
           {
             path: "/portfolio/:slug",
