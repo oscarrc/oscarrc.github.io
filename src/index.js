@@ -1,15 +1,15 @@
 import './index.css';
-import { createHashRouter, RouterProvider } from "react-router-dom";
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
+import { RouterProvider, createHashRouter } from "react-router-dom";
+import { StrictMode, lazy } from "react";
 
 import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import ReactGA from 'react-ga';
-
 import reportWebVitals from './reportWebVitals';
-import { lazy } from "react";
 
 const Error = lazy(() => import('./Error'));
 
@@ -27,7 +27,13 @@ const router = createHashRouter([
     children: [
       {          
         path: "/",
-        element: <Landing />
+        element: <Landing />,
+        children: [          
+          {
+            path: "/portfolio/:slug",
+            element: <Project />
+          }
+        ]
       },
       {
         path: "/portfolio",
@@ -55,9 +61,9 @@ const router = createHashRouter([
 ReactGA.initialize("G-S6PKCKN17G");
 
 root.render(
-  <React.StrictMode> 
+  <StrictMode> 
     <RouterProvider router={router} />
-  </React.StrictMode>
+  </StrictMode>
 );
 
 serviceWorkerRegistration.register();
