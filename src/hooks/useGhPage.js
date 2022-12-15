@@ -10,6 +10,8 @@ const GHPageContext = createContext();
 
 const GHPageProvider = ({ children }) => {
     const baseUrl = `https://api.github.com/repos`;
+    const [ postsFiles, setPostsFiles ] = useState([]);
+    const [ projectsFiles, setProjectsFiles ] = useState([]);
     const [ posts, setPosts ] = useState([]);
     const [ projects, setProjects ] = useState([]);
     
@@ -18,18 +20,26 @@ const GHPageProvider = ({ children }) => {
         return evaluated;
     }
 
-    const getFiles = async () => {}
-    const getMedia = async () => {}
-    const getRepoInfo = async () => {}
+    const getFiles = async () => { 
+
+    }
+
+    const getMedia = async (repo, branch, media) => {
+        return `https://raw.githubusercontent.com/oscarrc/${repo}/${branch}/${media}`
+    }
+    
+    const getRepoInfo = async (user, repo) => {
+        return await fetch(`https://api.github.com/repos/${user}/${repo}`).then( res => res.json())
+    }
 
     const getPosts = async (page = 0, limit = 10) => {
-        const pagePosts = posts.slice(page, (page + 1)*limit);
+        const pagePosts = postsFiles.slice(page, (page + 1)*limit);
 
         const result = await Promise.all(pagePosts.map( async (file) => {
             return await fetch(file.download_url).then( async (res) => await res.text()); 
         }));
 
-        const parsed = await Promise.all(posts.map(async p => {
+        const parsed = await Promise.all(result.map(async p => {
             const evaluated = await parseContent(p);
             evaluated.image = await getMedia(evaluated.image, "gh-posts");
             return evaluated;
@@ -39,7 +49,7 @@ const GHPageProvider = ({ children }) => {
     }
 
     const getProjects = async (page = 0, limit = 10) => {
-        const pageProjects = projects.slice(page, (page + 1)*limit);
+        const pageProjects = projectsFiles.slice(page, (page + 1)*limit);
 
         const result = await Promise.all(pageProjects.map( async (file) => {
             return await fetch(file.download_url).then( async (res) => await res.text()); 
@@ -51,8 +61,8 @@ const GHPageProvider = ({ children }) => {
     return (
         <GHPageContext.Provider 
             value={{
-                getPosts,
-                getProjects
+                projects,
+                posts
             }}
         >
             { children }
