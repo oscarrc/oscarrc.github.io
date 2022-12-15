@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, Outlet } from 'react-router-dom';
 
 import ProjectCard from './ProjectCard';
 import config from "../../config/github"
@@ -41,11 +41,12 @@ const Projects = ({ page=0, limit=10 }) => {
                 return <ProjectCard 
                             key={index}
                             project={ project }
-                            maximized={ params.slug === project.slug } 
+                            maximized={ false } 
                             onClick={ () => navigate(`/portfolio/${project.slug}`, { state: { background: pathname }})}
                             onClose={ () => { navigate(-1) } }
                         />
             })}
+            <Outlet />
         </div>
     )
 }

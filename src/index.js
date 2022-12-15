@@ -33,7 +33,7 @@ const router = createHashRouter([
         children: [          
           {
             path: "/portfolio/:slug",
-            element: <Portfolio />
+            element: <div className="fixed z-100 top-0 lef-0 w-half h-half bg-black">TEST</div>
           }
         ]
       },
