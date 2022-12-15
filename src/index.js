@@ -25,28 +25,25 @@ const router = createHashRouter([
     children: [
       {          
         path: "/",
-        element: <Landing />,
+        element: <Landing />
       },
       {
         path: "/portfolio",
         element: <Portfolio />,
-        children: [
+        children: [          
           {
             path: "/portfolio/:slug",
-            element: <Portfolio />,
-            location: "/"
+            element: <Portfolio />
           }
         ]
       },
       {
         path: "/blog",
-        element: <Blog />,
-        children: [
-          {
-            path: "/blog/:slug",
-            element: <Post />
-          }
-        ]
+        element: <Blog />
+      },
+      {
+        path: "/blog/:slug",
+        element: <Post />
       }
     ]
   }

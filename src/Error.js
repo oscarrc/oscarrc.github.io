@@ -1,12 +1,20 @@
-import { useRouteError } from "react-router-dom";
+import { useRouteError, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import Glitch from "./components/partials/Glitch";
 import Keyboard from "./components/partials/Keyboard";
 import useTypewriter from "./hooks/useTypewriter";
 import Layout from "./components/layout";
+import ReactGA from 'react-ga';
 
 const Error = () => {
     const error = useRouteError();
     const { direction, text, typewritter } = useTypewriter([`Error ${error.status}: ${error.statusText}`], 100, 20);
+    const location = useLocation();
+
+  useEffect(() => {
+    ReactGA.set({ page: location.pathname });
+    ReactGA.pageview(location.pathname);
+  }, [location.pathname]);
 
     return (
         <Layout>
