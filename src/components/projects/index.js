@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from "react";
+import { useMemo, useCallback, useState, Suspense } from "react";
 import { useLocation, useNavigate, useParams, Outlet, Await } from 'react-router-dom';
 
 import ProjectCard from './ProjectCard';
@@ -43,28 +43,26 @@ const Projects = ({ limit = 9, infinite }) => {
     
     const [ project, setProject ] = useState(null);
 
-    const maximize = (project) => {
+    const maximize = useCallback((project) => {
         setProject(project);
         navigate(`/portfolio/${project.slug}`, { state: { background: pathname }})
-    }
+    }, [navigate, pathname])
+
+    const children = useMemo(() => {
+        return projects?.pages.map(p => 
+            p.docs.map( (project, index) => {
+                return <ProjectCard 
+                            key={index}
+                            project={ project }
+                            onClick={ () => maximize(project) }
+                        />
+        }))
+    }, [maximize, projects?.pages])
 
     return (
         <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
             <Suspense>
-                <Await  
-                    resolve={projects}
-                    children={
-                        projects?.pages.map(p => 
-                            p.docs.map( (project, index) => {
-                                return <ProjectCard 
-                                            key={index}
-                                            project={ project }
-                                            onClick={ () => maximize(project) }
-                                        />
-                            })
-                        )
-                    }
-                />
+                <Await resolve={projects} children={children} />
             </Suspense>
             <Outlet context={{ project, setProject }}/>
         </div>

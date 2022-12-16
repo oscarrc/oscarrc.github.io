@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useMemo, useCallback } from "react";
 
 import PostCard from "./PostCard";
 import config from "../../config/github"
@@ -38,27 +38,26 @@ const Posts = ({ limit = 9, infinite}) => {
     
     const navigate = useNavigate();
 
+    const children = useMemo(() => {
+        return posts?.pages.map(p => 
+            p.docs.map( (post, index) => {
+                return <PostCard 
+                            key={index}
+                            title={post.title}
+                            excerpt={post.excerpt}                   
+                            image={post.image}
+                            date={post.date}
+                            readingTime={post.readingTime}
+                            onClick={ () => navigate(`/blog/${post.slug}`, { state: { post }} ) }
+                        />
+            })
+        )
+    }, [navigate, posts?.pages])
+
     return (
         <div className="flex w-three-quarter flex-col mx-auto gap-8">
             <Suspense>
-                <Await  
-                    resolve={posts}
-                    children={
-                        posts?.pages.map(p => 
-                            p.docs.map( (post, index) => {
-                                return <PostCard 
-                                            key={index}
-                                            title={post.title}
-                                            excerpt={post.excerpt}                   
-                                            image={post.image}
-                                            date={post.date}
-                                            readingTime={post.readingTime}
-                                            onClick={ () => navigate(`/blog/${post.slug}`, { state: { post }} ) }
-                                        />
-                            })
-                        )
-                    }
-                />
+                <Await resolve={posts} children={children} />
             </Suspense>
         </div>
     )

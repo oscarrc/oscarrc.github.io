@@ -7,6 +7,7 @@ import { StrictMode, lazy } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import App from './App';
+import Project from "./views/Project"; 
 import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import ReactGA from 'react-ga';
@@ -22,7 +23,7 @@ const Blog = lazy(() => import('./views/Blog'));
 const Landing = lazy(() => import('./views/Landing'));
 const Portfolio = lazy(() => import('./views/Portfolio'));
 const Post = lazy(() => import('./views/Post'));
-const Project= lazy(() => import('./views/Project'));
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createHashRouter([
