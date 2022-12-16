@@ -46,7 +46,7 @@ const router = createHashRouter([
         id: "portfolio",
         path: "/portfolio",
         element: <Portfolio />,
-        loader: projectsLoader(queryClient),
+        loader: projectsLoader(queryClient, 0, 9),
         children: [
           {
             path: "/portfolio/:slug",
@@ -58,7 +58,7 @@ const router = createHashRouter([
         id: "blog",
         path: "/blog",
         element: <Blog />,
-        loader: postsLoader(queryClient),
+        loader: postsLoader(queryClient, 0, 9),
       },
       {
         id: "post",
