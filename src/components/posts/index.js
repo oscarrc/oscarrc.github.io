@@ -8,7 +8,7 @@ import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 
-const fetchPosts = async (files, page, limit) => {
+const getPosts = async (files, page, limit) => {
     const posts = await Promise.all(files.docs.map(async p => {
         const evaluated = await parse(p.file);
         evaluated.slug = p.slug;
@@ -23,7 +23,7 @@ const fetchPosts = async (files, page, limit) => {
     }
 }
 
-const fetchPost = async (files, slug) => {
+const getPost = async (files, slug) => {
    const post = files.docs.find(f => f.slug === slug);    
    console.log(files, post, slug)
    const evaluated = await parse(post.file);
@@ -35,13 +35,13 @@ const fetchPost = async (files, slug) => {
 
 const postsLoader = (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", page, limit))
-    return await queryClient.fetchInfiniteQuery(["posts"], () => fetchPosts(files, page, limit)); 
+    return await queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files, page, limit)); 
 }
 
 const postLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
     const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", 0, 100))
-    return await queryClient.fetchQuery(["post", slug], () => fetchPost(files, slug));
+    return await queryClient.fetchQuery(["post", slug], () => getPost(files, slug));
 }
 
 const Posts = ({ limit = 9, infinite}) => {
@@ -49,7 +49,7 @@ const Posts = ({ limit = 9, infinite}) => {
         isFetchingNextPage, 
         fetchNextPage,
         data:posts 
-    } = useInfiniteQuery(["posts"], ({pageParam = 0}) => fetchPosts(pageParam, limit), {
+    } = useInfiniteQuery(["posts"], ({pageParam = 0}) => getPosts(pageParam, limit), {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })

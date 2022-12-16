@@ -8,7 +8,7 @@ import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 
-const fetchProjects = async (page, limit) => {
+const getProjects = async (page, limit) => {
     const files = await getFiles(config.user, config.repo, "gh-projects", page, limit);
 
     const projects = await Promise.all(files.docs.map(async p => {
@@ -26,7 +26,7 @@ const fetchProjects = async (page, limit) => {
 }
 
 const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
-    return await queryClient.fetchInfiniteQuery(["projects"], () => fetchProjects(page, limit))  
+    return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(page, limit))  
 }
 
 const Projects = ({ limit = 9, infinite }) => {
@@ -34,7 +34,7 @@ const Projects = ({ limit = 9, infinite }) => {
         isFetchingNextPage, 
         fetchNextPage,
         data:projects 
-    } = useInfiniteQuery(["projects"], ({pageParam = 0}) => fetchProjects(pageParam, limit), {
+    } = useInfiniteQuery(["projects"], ({pageParam = 0}) => getProjects(pageParam, limit), {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })
