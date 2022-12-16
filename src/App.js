@@ -1,20 +1,18 @@
-import { Outlet } from "react-router-dom";
 import { Suspense, useEffect } from "react";
 
 import Layout from "./components/layout";
 import Loading from "./views/Loading";
+import { Outlet } from "react-router-dom";
 import ReactGA from 'react-ga';
 import { useLocation } from "react-router-dom";
 
 const App = () => {
-  const location = useLocation();
-  const background = location.state && location.state.background;
-  const post = location.state && location.state.post;
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    ReactGA.set({ page: location.pathname });
-    ReactGA.pageview(location.pathname);
-  }, [location.pathname]);
+    ReactGA.set({ page: pathname });
+    ReactGA.pageview(pathname);
+  }, [pathname]);
 
   return (
       <Layout>

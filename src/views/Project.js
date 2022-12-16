@@ -6,15 +6,16 @@ import { SiGithub } from 'react-icons/si';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const Project= () => {
-    const project = useOutletContext();
+    const {project, setProject} = useOutletContext();
     const Content = project?.default;
     const navigate = useNavigate();
 
     const closeWindow = useCallback((event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
             navigate(-1);
+            setProject(null);
         }
-    }, [navigate])
+    }, [navigate, setProject])
 
     useEffect(() => {
         document.addEventListener("keydown", closeWindow, false);

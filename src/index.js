@@ -48,11 +48,13 @@ const router = createHashRouter([
       },
       {
         path: "/blog",
-        element: <Blog />
+        element: <Blog />,
+        loader: (data) => { return data },
       },
       {
         path: "/blog/:slug",
-        element: <Post />
+        element: <Post />,
+        loader: (data) => { return data }
       }
     ]
   }
