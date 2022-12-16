@@ -1,18 +1,19 @@
-import { useMemo, useCallback, useState, useEffect, Suspense } from "react";
-import { useLocation, useNavigate, useParams, Outlet, Await } from 'react-router-dom';
+import { Await, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 
 import ProjectCard from './ProjectCard';
 import config from "../../config/github";
-import { useInfiniteQuery } from "react-query";
-import { getFiles, getRepoInfo, getMedia } from "../../lib/github"
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
 
 const fetchProjects = async (page, limit) => {
     const files = await getFiles(config.user, config.repo, "gh-projects", page, limit);
 
     const projects = await Promise.all(files.docs.map(async p => {
-        const evaluated = await parse(p);
+        const evaluated = await parse(p.file);
+        evaluated.slug = p.slug;
         evaluated.info = await getRepoInfo(config.user, evaluated.repo);
         evaluated.image = await getMedia(config.repo, evaluated.image, "gh-projects");
         return evaluated;

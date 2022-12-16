@@ -19,7 +19,12 @@ const getFiles = async (user, repo, branch, page, limit = 10) => {
     const lastPage = Math.ceil((files.length / limit)) - 1;
     
     const result = await Promise.all(pageFiles.map( async (file) => {
-        return await fetch(file.download_url).then( async (res) => await res.text()); 
+        return await fetch(file.download_url).then( async (res) => {
+            return {
+                file: await res.text(),
+                slug: file.name
+            }
+        }); 
     }));
     
     return {

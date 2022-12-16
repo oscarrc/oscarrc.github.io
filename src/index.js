@@ -2,18 +2,18 @@ import './index.css';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { StrictMode, lazy } from "react";
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { postLoader, postsLoader } from './components/posts';
 
 import App from './App';
-import Project from "./views/Project"; 
-import { Suspense } from 'react';
+import Project from "./views/Project";
 import ReactDOM from 'react-dom/client';
 import ReactGA from 'react-ga';
-import reportWebVitals from './reportWebVitals';
+import { Suspense } from 'react';
 import { projectsLoader } from './components/projects';
-import { postsLoader } from './components/posts';
+import reportWebVitals from './reportWebVitals';
 
 const queryClient = new QueryClient();
 
@@ -64,7 +64,7 @@ const router = createHashRouter([
         id: "post",
         path: "/blog/:slug",
         element: <Post />,
-        loader: (data) => { return data }
+        loader: postLoader(queryClient)
       }
     ]
   }

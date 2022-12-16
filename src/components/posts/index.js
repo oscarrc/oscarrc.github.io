@@ -1,21 +1,19 @@
+import { Await, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useMemo } from "react";
+import { getFiles, getMedia } from "../../lib/github"
 
 import PostCard from "./PostCard";
 import config from "../../config/github"
-import { useNavigate, Await } from "react-router-dom";
-
-import { getFiles, getMedia } from "../../lib/github"
 import { parse } from "../../lib/mdx";
-import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
+import { useInfiniteQuery } from "react-query";
 
-const fetchPosts = async (page, limit) => {
-    const files = await getFiles(config.user, config.repo, "gh-posts", page, limit);
-
+const fetchPosts = async (files, page, limit) => {
     const posts = await Promise.all(files.docs.map(async p => {
-        const evaluated = await parse(p);
+        const evaluated = await parse(p.file);
+        evaluated.slug = p.slug;
         evaluated.image = await getMedia(config.repo, evaluated.image, "gh-posts");
-        evaluated.readingTime = Math.ceil(p.match(/\w+/g).length / 260);
+        evaluated.readingTime = Math.ceil(p.file.match(/\w+/g).length / 260);
         return evaluated;
     }))
 
@@ -25,8 +23,24 @@ const fetchPosts = async (page, limit) => {
     }
 }
 
+const fetchPost = async (files, slug) => {
+   const post = files.find(f => f.name === slug); 
+   const evaluated = await parse(post.file);
+   evaluated.slug = post.slug;
+   evaluated.image = await getMedia(config.repo, evaluated.image, "gh-posts");
+   evaluated.readingTime = Math.ceil(post.file.match(/\w+/g).length / 260);
+   return evaluated;
+}
+
 const postsLoader = (queryClient, page = 0, limit = 9) => async () => {  
-    return await queryClient.fetchInfiniteQuery(["posts"], () => fetchPosts(page, limit))  
+    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", page, limit))
+    return await queryClient.fetchInfiniteQuery(["posts"], () => fetchPosts(files, page, limit)); 
+}
+
+const postLoader = (queryClient) => async ({params}) => {
+    const { slug } = params; 
+    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts"))
+    return await queryClient.fetchInfiniteQuery(["post", slug], () => fetchPost(files, slug));
 }
 
 const Posts = ({ limit = 9, infinite}) => {
@@ -73,5 +87,5 @@ const Posts = ({ limit = 9, infinite}) => {
     )
 }
 
-export { postsLoader }
+export { postsLoader, postLoader }
 export default Posts;
