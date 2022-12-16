@@ -38,20 +38,6 @@ const Posts = ({ limit = 9, infinite}) => {
     
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     getFiles(config.repo, "gh-posts", page, limit).then( async (posts) => {
-    //         const parsed = await Promise.all(posts.map(async p => {
-    //             const evaluated = await parseMDX(p);
-    //             evaluated.image = await getMedia(evaluated.image, "gh-posts");
-    //             evaluated.readingTime = Math.ceil(p.match(/\w+/g).length / 260)
-    //             return evaluated;
-    //         }))
-
-    //         setPosts(p => [...p, ...parsed])
-    //     });
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [page])
-
     return (
         <div className="flex w-three-quarter flex-col mx-auto gap-8">
             <Suspense>
