@@ -8,9 +8,7 @@ import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 
-const getProjects = async (page, limit) => {
-    const files = await getFiles(config.user, config.repo, "gh-projects", page, limit);
-
+const getProjects = async (files) => {
     const projects = await Promise.all(files.docs.map(async p => {
         const evaluated = await parse(p.file);
         evaluated.slug = p.slug;
@@ -25,8 +23,24 @@ const getProjects = async (page, limit) => {
     }
 }
 
+const getProject = async (files, slug) => {
+    const project = files.docs.find(f => f.slug === slug);    
+    const evaluated = await parse(project.file);
+    evaluated.slug = project.slug;
+    evaluated.info = await getRepoInfo(config.user, evaluated.repo);
+    evaluated.image = await getMedia(config.repo, evaluated.image, "gh-projects");
+    return evaluated;
+}
+
 const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
-    return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(page, limit))  
+    const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
+    return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
+}
+
+const projectLoader = (queryClient) => async ({params}) => {
+    const { slug } = params; 
+    const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects", 0, 100))
+    return await queryClient.fetchQuery(["post", slug], () => getProject(files, slug));
 }
 
 const Projects = ({ limit = 9, infinite }) => {
@@ -64,8 +78,8 @@ const Projects = ({ limit = 9, infinite }) => {
     }, [maximize, projects?.pages])
 
     useEffect(() => {
-        if (hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
-    }, [hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
+        if (infinite && hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
+    }, [infinite, hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
         <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
@@ -78,5 +92,5 @@ const Projects = ({ limit = 9, infinite }) => {
     )
 }
 
-export { projectsLoader }
+export { projectsLoader, projectLoader }
 export default Projects

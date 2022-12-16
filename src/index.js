@@ -6,13 +6,13 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { StrictMode, lazy } from "react";
 import { postLoader, postsLoader } from './components/posts';
+import { projectLoader, projectsLoader } from './components/projects';
 
 import App from './App';
 import Project from "./views/Project";
 import ReactDOM from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { Suspense } from 'react';
-import { projectsLoader } from './components/projects';
 import reportWebVitals from './reportWebVitals';
 
 const queryClient = new QueryClient();
@@ -50,7 +50,8 @@ const router = createHashRouter([
         children: [
           {
             path: "/portfolio/:slug",
-            element: <Project />
+            element: <Project />,
+            loader: projectLoader(queryClient)
           }
         ]
       },

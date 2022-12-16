@@ -75,8 +75,8 @@ const Posts = ({ limit = 9, infinite}) => {
     }, [navigate, posts?.pages])
 
     useEffect(() => {
-        if (hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
-    }, [hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
+        if (infinite && hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
+    }, [infinite, hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
         <div className="flex w-three-quarter flex-col mx-auto gap-8">
