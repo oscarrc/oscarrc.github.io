@@ -4,12 +4,17 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { StrictMode, lazy } from "react";
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import ReactGA from 'react-ga';
 import reportWebVitals from './reportWebVitals';
+import { projectsLoader } from './components/projects';
+import { postsLoader } from './components/posts';
+
+const queryClient = new QueryClient();
 
 const Error = lazy(() => import('./Error'));
 
@@ -29,6 +34,12 @@ const router = createHashRouter([
         id: "landing",
         path: "/",
         element: <Landing />,
+        loader: () => {
+          return {
+            posts: postsLoader(queryClient, 0, 3),
+            projects: projectsLoader(queryClient, 0, 3)
+          }
+        },
         children: [          
           {
             path: "/portfolio/:slug",
@@ -40,8 +51,8 @@ const router = createHashRouter([
         id: "portfolio",
         path: "/portfolio",
         element: <Portfolio />,
-        loader: (data) => { return data },
-        children: [          
+        loader: projectsLoader(queryClient),
+        children: [
           {
             path: "/portfolio/:slug",
             element: <Project />
@@ -52,7 +63,7 @@ const router = createHashRouter([
         id: "blog",
         path: "/blog",
         element: <Blog />,
-        loader: (data) => { return data },
+        loader: postsLoader(queryClient),
       },
       {
         id: "post",
@@ -69,7 +80,9 @@ ReactGA.initialize("G-S6PKCKN17G");
 
 root.render(
   <StrictMode> 
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </StrictMode>
 );
 

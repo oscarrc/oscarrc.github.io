@@ -6,9 +6,15 @@ import config from "../../config/github"
 import useGithub from "../../hooks/useGithub";
 import useMDX from "../../hooks/useMdx";
 
+const projectsLoader = (queryClient, page = 0, limit = 9) => async ({ params }) => {  
+    return await queryClient.prefetchInfiniteQuery(["projects"], () => {
+        return []
+    })  
+}
+
 const Projects = ({ page=0, limit=10 }) => {
     const { getFiles, getRepoInfo, getMedia } = useGithub(config.user, config.repo);
-
+    
     const { parseMDX } = useMDX();
     const { pathname } = useLocation();
     const { slug } = useParams();
@@ -51,4 +57,5 @@ const Projects = ({ page=0, limit=10 }) => {
     )
 }
 
+export { projectsLoader }
 export default Projects
