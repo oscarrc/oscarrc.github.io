@@ -6,6 +6,12 @@ import useGithub from "../../hooks/useGithub";
 import useMDX from "../../hooks/useMdx";
 import { useNavigate } from "react-router-dom";
 
+const postsLoader = (queryClient, page = 0, limit = 10) => async ({ params }) => {
+    return await queryClient.prefetchInfiniteQuery(["posts"], () => {
+        return []
+    }) 
+}
+
 const Posts = ({ page = 0, limit = 10 }) => {
     const { getFiles, getMedia } = useGithub(config.user, config.repo);
     const { parseMDX } = useMDX();
@@ -17,6 +23,7 @@ const Posts = ({ page = 0, limit = 10 }) => {
             const parsed = await Promise.all(posts.map(async p => {
                 const evaluated = await parseMDX(p);
                 evaluated.image = await getMedia(evaluated.image, "gh-posts");
+                evaluated.readingTime = Math.ceil(p.match(/\w+/g).length / 260)
                 return evaluated;
             }))
 
@@ -35,6 +42,7 @@ const Posts = ({ page = 0, limit = 10 }) => {
                             excerpt={post.excerpt}                   
                             image={post.image}
                             date={post.date}
+                            readingTime={post.readingTime}
                             onClick={ () => navigate(`/blog/${post.slug}`, { state: { post }} ) }
                         />
                         { index < posts.length && <span className="divider flex sm:hidden m-0"></span> }
@@ -45,4 +53,5 @@ const Posts = ({ page = 0, limit = 10 }) => {
     )
 }
 
+export { postsLoader }
 export default Posts;
