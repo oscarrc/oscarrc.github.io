@@ -30,9 +30,7 @@ const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {
 }
 
 const Projects = ({ limit = 9, infinite }) => {
-    const {
-        data:projects 
-    } = useInfiniteQuery(["projects"], ({pageParam = 0}) => fetchProjects(pageParam, limit), {
+    const { data:projects } = useInfiniteQuery(["projects"], ({pageParam = 0}) => fetchProjects(pageParam, limit), {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })

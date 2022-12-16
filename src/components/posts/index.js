@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useCallback } from "react";
+import { Suspense, useMemo } from "react";
 
 import PostCard from "./PostCard";
 import config from "../../config/github"
@@ -29,9 +29,7 @@ const postsLoader = (queryClient, page = 0, limit = 9) => async () => {
 }
 
 const Posts = ({ limit = 9, infinite}) => {
-    const {
-        data:posts 
-    } = useInfiniteQuery(["posts"], ({pageParam = 0}) => fetchPosts(pageParam, limit), {
+    const { data:posts } = useInfiniteQuery(["posts"], ({pageParam = 0}) => fetchPosts(pageParam, limit), {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })
