@@ -12,8 +12,8 @@ const Post = () => {
 
     return (
         <section id="post">
-            <div className="container">
-                <div className="prose max-w-full">
+            <div className="container mx-auto">
+                <div className="prose w-three-quarter max-w-three-quarter">
                 <Suspense>
                     <Await resolve={post} children={children} />
                 </Suspense>

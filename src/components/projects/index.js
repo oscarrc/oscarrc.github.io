@@ -31,6 +31,7 @@ const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {
 
 const Projects = ({ limit = 9, infinite }) => {
     const {  
+        hasNextPage,
         isFetchingNextPage, 
         fetchNextPage,
         data:projects 
@@ -63,8 +64,8 @@ const Projects = ({ limit = 9, infinite }) => {
     }, [maximize, projects?.pages])
 
     useEffect(() => {
-        if (loadNext && !isFetchingNextPage) fetchNextPage();
-    }, [loadNext, isFetchingNextPage, fetchNextPage])
+        if (hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
+    }, [hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
         <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">

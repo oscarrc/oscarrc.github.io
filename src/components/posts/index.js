@@ -8,7 +8,7 @@ import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 
-const getPosts = async (files, page, limit) => {
+const getPosts = async (files) => {
     const posts = await Promise.all(files.docs.map(async p => {
         const evaluated = await parse(p.file);
         evaluated.slug = p.slug;
@@ -25,7 +25,6 @@ const getPosts = async (files, page, limit) => {
 
 const getPost = async (files, slug) => {
    const post = files.docs.find(f => f.slug === slug);    
-   console.log(files, post, slug)
    const evaluated = await parse(post.file);
    evaluated.slug = post.slug;
    evaluated.image = await getMedia(config.repo, evaluated.image, "gh-posts");
@@ -35,7 +34,7 @@ const getPost = async (files, slug) => {
 
 const postsLoader = (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", page, limit))
-    return await queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files, page, limit)); 
+    return await queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files)); 
 }
 
 const postLoader = (queryClient) => async ({params}) => {
@@ -46,6 +45,7 @@ const postLoader = (queryClient) => async ({params}) => {
 
 const Posts = ({ limit = 9, infinite}) => {
     const { 
+        hasNextPage,
         isFetchingNextPage, 
         fetchNextPage,
         data:posts 
@@ -75,8 +75,8 @@ const Posts = ({ limit = 9, infinite}) => {
     }, [navigate, posts?.pages])
 
     useEffect(() => {
-        if (loadNext && !isFetchingNextPage) fetchNextPage();
-    }, [loadNext, isFetchingNextPage, fetchNextPage])
+        if (hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
+    }, [hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
         <div className="flex w-three-quarter flex-col mx-auto gap-8">

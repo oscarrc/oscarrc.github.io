@@ -14,7 +14,7 @@ const getFiles = async (user, repo, branch, page, limit = 10) => {
                             const temp = await res.json();
                             return temp.filter(i => i.type !== "dir" && i.name.substring(i.name.length - 4) === ".mdx")
                         });
-                        
+                      
     const pageFiles = files.slice(page, (page + 1)*limit);
     const lastPage = Math.ceil((files.length / limit)) - 1;
     
