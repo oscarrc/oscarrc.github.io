@@ -25,7 +25,8 @@ const router = createHashRouter([
     element: <App />,
     errorElement: <Error />,
     children: [
-      {          
+      {   
+        id: "landing",       
         path: "/",
         element: <Landing />,
         children: [          
@@ -36,6 +37,7 @@ const router = createHashRouter([
         ]
       },
       {
+        id: "portfolio",
         path: "/portfolio",
         element: <Portfolio />,
         loader: (data) => { return data },
@@ -47,11 +49,13 @@ const router = createHashRouter([
         ]
       },
       {
+        id: "blog",
         path: "/blog",
         element: <Blog />,
         loader: (data) => { return data },
       },
       {
+        id: "post",
         path: "/blog/:slug",
         element: <Post />,
         loader: (data) => { return data }
@@ -59,6 +63,7 @@ const router = createHashRouter([
     ]
   }
 ])
+
 
 ReactGA.initialize("G-S6PKCKN17G");
 
