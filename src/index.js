@@ -80,9 +80,11 @@ ReactGA.initialize("G-S6PKCKN17G");
 
 root.render(
   <StrictMode> 
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <React.Suspense>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </React.Suspense>
   </StrictMode>
 );
 

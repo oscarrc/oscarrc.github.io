@@ -6,11 +6,29 @@ import useGithub from "../../hooks/useGithub";
 import useMDX from "../../hooks/useMdx";
 import { useNavigate } from "react-router-dom";
 
-const postsLoader = (queryClient, page = 0, limit = 10) => async ({ params }) => {
-    return await queryClient.prefetchInfiniteQuery(["posts"], () => {
-        return []
-    }) 
+import { getFiles, getMedia } from "../../lib/github"
+import { parse } from "../../lib/mdx";
+
+const fetchPosts = async (page, limit) => {
+    const files = await getFiles(config.user, config.repo, "gh-posts", page, limit);
+
+    const posts = await Promise.all(files.docs.map(async p => {
+        const evaluated = await parse(p);
+        evaluated.image = await getMedia(evaluated.image, "gh-posts");
+        evaluated.readingTime = Math.ceil(p.match(/\w+/g).length / 260)
+        return evaluated;
+    }))
+
+    return {
+        docs: posts,
+        pages: files.pages
+    }
 }
+
+const postsLoader = (queryClient, page = 0, limit = 9) => async () => {  
+    return await queryClient.prefetchInfiniteQuery(["posts"], () => fetchPosts(page, limit));  
+}
+
 
 const Posts = ({ page = 0, limit = 10 }) => {
     const { getFiles, getMedia } = useGithub(config.user, config.repo);

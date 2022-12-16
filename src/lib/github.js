@@ -16,12 +16,21 @@ const getFiles = async (user, repo, branch, page, limit = 10) => {
                         });
                         
     const pageFiles = files.slice(page, (page + 1)*limit);
+    const lastPage = Math.ceil(files.length / limit) - 1;
     
     const result = await Promise.all(pageFiles.map( async (file) => {
         return await fetch(file.download_url).then( async (res) => await res.text()); 
     }));
     
-    return result;
+    return {
+        docs: result,
+        pages: {
+            current: page,
+            last: (files.length / limit) - 1,
+            next: page < lastPage ? page + 1 : undefined,
+            prev: page > 0 ? page - 1 : undefined
+        }
+    };
 }
 
 export { getFiles, getRepoInfo, getMedia }
