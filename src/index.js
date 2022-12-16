@@ -7,7 +7,7 @@ import { StrictMode, lazy } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import App from './App';
-import React from 'react';
+import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import ReactGA from 'react-ga';
 import reportWebVitals from './reportWebVitals';
@@ -39,13 +39,7 @@ const router = createHashRouter([
             posts: postsLoader(queryClient, 0, 3),
             projects: projectsLoader(queryClient, 0, 3)
           }
-        },
-        children: [          
-          {
-            path: "/portfolio/:slug",
-            element: <Project />
-          }
-        ]
+        }
       },
       {
         id: "portfolio",
@@ -80,11 +74,11 @@ ReactGA.initialize("G-S6PKCKN17G");
 
 root.render(
   <StrictMode> 
-    <React.Suspense>
+    <Suspense>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
-    </React.Suspense>
+    </Suspense>
   </StrictMode>
 );
 

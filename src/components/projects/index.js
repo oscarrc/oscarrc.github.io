@@ -29,21 +29,18 @@ const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {
     return await queryClient.fetchInfiniteQuery(["projects"], () => fetchProjects(page, limit))  
 }
 
-const Projects = ({ page=0, limit=10 }) => {
-    // const { getFiles, getRepoInfo, getMedia } = useGithub(config.user, config.repo);
+const Projects = ({ limit = 9, infinite }) => {
     const {
         data:projects 
-    } = useInfiniteQuery(["projects"], ({pageParam = 0}) => fetchProjects(pageParam, 9), {
+    } = useInfiniteQuery(["projects"], ({pageParam = 0}) => fetchProjects(pageParam, limit), {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })
 
-    // const { parseMDX } = useMDX();
     const { pathname } = useLocation();
     const { slug } = useParams();
     const navigate = useNavigate();
     
-    // const [ projects, setProjects ] = useState([]);
     const [ project, setProject ] = useState(null);
 
     const maximize = (project) => {
@@ -72,7 +69,7 @@ const Projects = ({ page=0, limit=10 }) => {
                 <Await  
                     resolve={projects}
                     children={
-                        projects.pages.map(p => 
+                        projects?.pages.map(p => 
                             p.docs.map( (project, index) => {
                                 return <ProjectCard 
                                             key={index}
@@ -84,13 +81,6 @@ const Projects = ({ page=0, limit=10 }) => {
                     }
                 />
             </Suspense>
-            {/* { projects && projects.map( (project, index) => {
-                return <ProjectCard 
-                            key={index}
-                            project={ project }
-                            onClick={ () => maximize(project) }
-                        />
-            })} */}
             <Outlet context={{ project, setProject }}/>
         </div>
     )
