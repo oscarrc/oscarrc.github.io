@@ -1,5 +1,5 @@
 import { Await, Outlet, useNavigate } from 'react-router-dom';
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
 
@@ -60,13 +60,6 @@ const Projects = ({ limit = 9, infinite }) => {
 
     const { ref: next, inView: loadNext } = useInView();
     const navigate = useNavigate();
-    
-    const [ project, setProject ] = useState(null);
-
-    const maximize = useCallback((project) => {
-        setProject(project);
-        navigate(`/portfolio/${project.slug}`)
-    }, [navigate])
 
     const children = useMemo(() => {
         return projects?.pages.map(p => 
@@ -74,10 +67,10 @@ const Projects = ({ limit = 9, infinite }) => {
                 return <ProjectCard 
                             key={index}
                             project={ project }
-                            onClick={ () => maximize(project) }
+                            onClick={ () =>  navigate(`/portfolio/${project.slug}`) }
                         />
         }))
-    }, [maximize, projects?.pages])
+    }, [navigate, projects?.pages])
 
     useEffect(() => {
         if (infinite && hasNextPage && loadNext && !isFetchingNextPage) fetchNextPage();
@@ -91,7 +84,7 @@ const Projects = ({ limit = 9, infinite }) => {
                     { infinite && <aside ref={next} /> }
                 </div>
             </Suspense>
-            <Outlet context={{ project, setProject }}/>
+            <Outlet />
         </>
     )
 }

@@ -51,7 +51,7 @@ const router = createHashRouter([
           {
             path: "/portfolio/:slug",
             element: <Project />,
-            loader: () => projectLoader(queryClient)
+            loader: projectLoader(queryClient)
           }
         ]
       },
