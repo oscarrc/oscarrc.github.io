@@ -1,4 +1,4 @@
-const PostsLoader = (amount = 3) => {
+const PostsLoader = ({ amount = 3 }) => {
     return (
         <div className="flex w-three-quarter flex-col mx-auto gap-8">
             {
