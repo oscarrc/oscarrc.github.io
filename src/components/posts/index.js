@@ -73,7 +73,7 @@ const Posts = ({ limit = 9, infinite}) => {
                             image={post.image}
                             date={post.date}
                             readingTime={post.readingTime}
-                            onClick={ () => navigate(`/blog/${post.slug}`, { state: { post }} ) }
+                            onClick={ () => navigate(`/blog/${post.slug}`) }
                         />
             })
         )
