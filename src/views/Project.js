@@ -1,12 +1,13 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 import { useCallback, useEffect } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
-import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const Project= () => {
-    const {project, setProject} = useOutletContext();
+    const {project, setProject} = useOutletContext();    
+
     const Content = project?.default;
     const navigate = useNavigate();
 

@@ -1,4 +1,4 @@
-import { Await, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Await, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 
@@ -8,34 +8,28 @@ import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 
-const getProjects = async (files) => {
-    const projects = await Promise.all(files.docs.map(async p => {
-        const evaluated = await parse(p.file);
-        evaluated.slug = p.slug;
-        evaluated.info = await getRepoInfo(config.user, evaluated.repo);
-        evaluated.image = await getMedia(config.repo, evaluated.image, "gh-projects");
-        return evaluated;
-    }))
+const parseProject = async (project) => {
+    const evaluated = await parse(project.file);
+    evaluated.slug = project.slug;
+    evaluated.info = await getRepoInfo(config.user, evaluated.repo);
+    evaluated.image = await getMedia(config.user, config.repo, evaluated.image, "gh-projects");
+    return evaluated;
+}
 
-    return {
-        docs: projects,
-        pages: files.pages
-    }
+const getProjects = async (files) => {
+    const projects = await Promise.all(files.docs.map(async p => await parseProject(p)))
+    return { docs: projects, pages: files.pages }
 }
 
 const getProject = async (files, slug) => {
     const project = files.docs.find(f => f.slug === slug);  
     if(!project) return false;
-
-    const evaluated = await parse(project.file);
-    evaluated.slug = project.slug;
-    evaluated.info = await getRepoInfo(config.user, evaluated.repo);
-    evaluated.image = await getMedia(config.repo, evaluated.image, "gh-projects");
-    return evaluated;
+    return await parseProject(project);
 }
 
-const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
+const projectsLoader = async (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
+    if(!files) return [];    
     return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
 }
 
@@ -61,7 +55,6 @@ const Projects = ({ limit = 9, infinite }) => {
 
     const { ref: next, inView: loadNext } = useInView();
     const { pathname } = useLocation();
-    const { slug } = useParams();
     const navigate = useNavigate();
     
     const [ project, setProject ] = useState(null);

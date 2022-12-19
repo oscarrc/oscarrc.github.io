@@ -46,12 +46,12 @@ const router = createHashRouter([
         id: "portfolio",
         path: "/portfolio",
         element: <Portfolio />,
-        loader: projectsLoader(queryClient, 0, 9),
+        loader: () => projectsLoader(queryClient, 0, 9),
         children: [
           {
             path: "/portfolio/:slug",
             element: <Project />,
-            loader: projectLoader(queryClient)
+            loader: () => projectLoader(queryClient)
           }
         ]
       },

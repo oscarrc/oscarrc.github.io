@@ -8,40 +8,35 @@ import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "react-query";
 
-const getPosts = async (files) => {
-    const posts = await Promise.all(files.docs.map(async p => {
-        const evaluated = await parse(p.file);
-        evaluated.slug = p.slug;
-        evaluated.image = await getMedia(config.repo, evaluated.image, "gh-posts");
-        evaluated.readingTime = Math.ceil(p.file.match(/\w+/g).length / 260);
-        return evaluated;
-    }))
+const parsePost = async (post) => {
+    const evaluated = await parse(post.file);
+    evaluated.slug = post.slug;
+    evaluated.image = await getMedia(config.user, config.repo, evaluated.image, "gh-posts");
+    evaluated.readingTime = Math.ceil(post.file.match(/\w+/g).length / 260);
+    return evaluated;
+}
 
-    return {
-        docs: posts,
-        pages: files.pages
-    }
+const getPosts = async (files) => {
+    const posts = await Promise.all(files.docs.map(async p => await parsePost(p) ))
+    return { docs: posts, pages: files.pages }
 }
 
 const getPost = async (files, slug) => {
    const post = files.docs.find(f => f.slug === slug);  
    if(!post) return false;
-   
-   const evaluated = await parse(post.file);
-   evaluated.slug = post.slug;
-   evaluated.image = await getMedia(config.repo, evaluated.image, "gh-posts");
-   evaluated.readingTime = Math.ceil(post.file.match(/\w+/g).length / 260);
-   return evaluated;
+   return await parsePost(post);
 }
 
 const postsLoader = (queryClient, page = 0, limit = 9) => async () => {  
-    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", page, limit))
+    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", page, limit));
+    
+    if(!files) return [];    
     return await queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files)); 
 }
 
 const postLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
-    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts"))
+    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts"));
     const post = await queryClient.fetchQuery(["post", slug], () => getPost(files, slug));
 
     if(!post) throw new Response("Not Found", { status: 404, statusText: "Post not found" });

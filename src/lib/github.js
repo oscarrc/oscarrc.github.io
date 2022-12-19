@@ -1,7 +1,7 @@
 const baseUrl = `https://api.github.com/repos`;
 
-const getMedia = (repo, media, branch) => {
-    return `https://raw.githubusercontent.com/oscarrc/${repo}/${branch}/${media}`
+const getMedia = (user, repo, media, branch) => {
+    return `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${media}`
 }
 
 const getRepoInfo = async (user, repo) => {
