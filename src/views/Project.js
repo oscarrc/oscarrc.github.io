@@ -1,5 +1,5 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
-import { Await, useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
+import { Await, useLoaderData, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
 
 import { FiExternalLink } from 'react-icons/fi';
