@@ -4,6 +4,7 @@ import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
 
 import ProjectCard from './ProjectCard';
+import ProjectsLoader from './ProjectsLoader';
 import config from "../../config/github";
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
@@ -85,13 +86,15 @@ const Projects = ({ limit = 9, infinite }) => {
     }, [infinite, hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
-        <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
-            <Suspense>
-                <Await resolve={projects} children={children} />
+        <>
+            <Suspense fallback={ <ProjectsLoader amount={limit} /> }>        
+                <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
+                    <Await resolve={projects} children={children} />
+                    { infinite && <aside ref={next} /> }
+                </div>
             </Suspense>
-            { infinite && <aside ref={next} /> }
             <Outlet context={{ project, setProject }}/>
-        </div>
+        </>
     )
 }
 

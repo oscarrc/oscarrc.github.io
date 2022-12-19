@@ -4,6 +4,7 @@ import { getFiles, getMedia } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
 
 import PostCard from "./PostCard";
+import PostsLoader from "./PostsLoader";
 import config from "../../config/github"
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
@@ -83,12 +84,12 @@ const Posts = ({ limit = 9, infinite}) => {
     }, [infinite, hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
-        <div className="flex w-three-quarter flex-col mx-auto gap-8">
-            <Suspense>
+        <Suspense fallback={<PostsLoader amount={limit} />}>
+            <div className="flex w-three-quarter flex-col mx-auto gap-8">
                 <Await resolve={posts} children={children} />
-            </Suspense>
-            { infinite && <aside ref={next} /> }
-        </div>
+                { infinite && <aside ref={next} /> }
+            </div>
+        </Suspense>
     )
 }
 
