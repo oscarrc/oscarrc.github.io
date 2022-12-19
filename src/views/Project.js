@@ -1,15 +1,16 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 import { Await, useLoaderData, useNavigate, useOutletContext } from 'react-router-dom';
-import { Suspense, useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect, useMemo } from 'react';
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
 
 const Project= () => {
     const {project, setProject} = useOutletContext();
-    const p = useLoaderData();
-    const Content = project?.default;
+    const loadedProject = useLoaderData();
     const navigate = useNavigate();
+
+    const Content = useMemo(() => project?.default, [project?.default])
 
     const closeWindow = useCallback((event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
@@ -28,11 +29,15 @@ const Project= () => {
         };
     }, [closeWindow])
 
+    useEffect(() => {
+        if(!project) setProject(loadedProject);
+    }, [loadedProject, project, setProject])
+
     if(!Content) return;
     
     return (
         <Suspense>
-            <Await resolve={project}>
+            <Await resolve={loadedProject}>
                 <div className="transition-all transition-500 ease-in-out mockup-code maximized">
                     <label className="bg-secondary pl-2 text-neutral truncate">{project.title}  | {project.description}</label>
                     <button aria-label="close" onClick={closeWindow} className="absolute right-3 top-4 hover:text-accent"><AiOutlineClose className="h-4 w-4" /></button>
