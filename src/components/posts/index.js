@@ -1,19 +1,19 @@
 import { Await, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia } from "../../lib/github"
+import { useInfiniteQuery, useQueryClient } from "react-query";
 
 import PostCard from "./PostCard";
 import config from "../../config/github"
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
 
 const parsePost = async (post) => {
-    const evaluated = await parse(post.file);
-    evaluated.slug = post.slug;
-    evaluated.image = await getMedia(config.user, config.repo, evaluated.image, "gh-posts");
-    evaluated.readingTime = Math.ceil(post.file.match(/\w+/g).length / 260);
-    return evaluated;
+    const parsed = await parse(post.file);
+    parsed.slug = post.slug;
+    parsed.image = await getMedia(config.user, config.repo, parsed.image, "gh-posts");
+    parsed.readingTime = Math.ceil(post.file.match(/\w+/g).length / 260);
+    return parsed;
 }
 
 const getPosts = async (files) => {
@@ -28,7 +28,7 @@ const getPost = async (files, slug) => {
 }
 
 const postsLoader = (queryClient, page = 0, limit = 9) => async () => {  
-    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", page, limit));
+    const files = await queryClient.fetchQuery(["gh-posts", page, limit], () => getFiles(config.user, config.repo, "gh-posts", page, limit));
     
     if(!files) return [];    
     return await queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files)); 
@@ -36,7 +36,7 @@ const postsLoader = (queryClient, page = 0, limit = 9) => async () => {
 
 const postLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
-    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts"));
+    const files = await queryClient.fetchQuery(["gh-posts"], () => getFiles(config.user, config.repo, "gh-posts"));
     const post = await queryClient.fetchQuery(["post", slug], () => getPost(files, slug));
 
     if(!post) throw new Response("Not Found", { status: 404, statusText: "Post not found" });
@@ -44,12 +44,16 @@ const postLoader = (queryClient) => async ({params}) => {
 }
 
 const Posts = ({ limit = 9, infinite}) => {
+    const queryClient = useQueryClient();
     const { 
         hasNextPage,
-        isFetchingNextPage, 
-        fetchNextPage,
+        isFetchingNextPage,
+        fetchNextPage,        
         data:posts 
-    } = useInfiniteQuery(["posts"], ({pageParam = 0}) => getPosts(pageParam, limit), {
+    } = useInfiniteQuery(["posts", limit], async ({pageParam = 0}) => {
+        const files = await queryClient.fetchQuery(["gh-posts", pageParam, limit], () => getFiles(config.user, config.repo, "gh-posts", pageParam, limit));
+        return getPosts(files)
+    }, {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })

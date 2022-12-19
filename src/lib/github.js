@@ -16,7 +16,7 @@ const getFiles = async (user, repo, branch, page, limit) => {
                         });
                       
     const pageFiles = !isNaN(page) && limit ? files.slice(page, (page + 1)*limit) : files;
-    const lastPage = Math.ceil((files.length / limit)) - 1;
+    const lastPage = !isNaN(page) && limit ? Math.ceil((files.length / limit)) - 1 : undefined;
     
     const result = await Promise.all(pageFiles.map( async (file) => {
         return await fetch(file.download_url).then( async (res) => {
@@ -26,12 +26,14 @@ const getFiles = async (user, repo, branch, page, limit) => {
             }
         }); 
     }));
+
+    console.log(result)
     
     return {
         docs: result,
         pages: {
             current: page,
-            last: (files.length / limit) - 1,
+            last: Math.ceil((files.length / limit) - 1),
             next: page < lastPage ? page + 1 : undefined,
             prev: page > 0 ? page - 1 : undefined
         }

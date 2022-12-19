@@ -1,19 +1,19 @@
 import { Await, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
+import { useInfiniteQuery, useQueryClient } from "react-query";
 
 import ProjectCard from './ProjectCard';
 import config from "../../config/github";
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
-import { useInfiniteQuery } from "react-query";
 
 const parseProject = async (project) => {
-    const evaluated = await parse(project.file);
-    evaluated.slug = project.slug;
-    evaluated.info = await getRepoInfo(config.user, evaluated.repo);
-    evaluated.image = await getMedia(config.user, config.repo, evaluated.image, "gh-projects");
-    return evaluated;
+    const parsed = await parse(project.file);
+    parsed.slug = project.slug;
+    parsed.info = await getRepoInfo(config.user, parsed.repo);
+    parsed.image = await getMedia(config.user, config.repo, parsed.image, "gh-projects");
+    return parsed;
 }
 
 const getProjects = async (files) => {
@@ -27,15 +27,16 @@ const getProject = async (files, slug) => {
     return await parseProject(project);
 }
 
-const projectsLoader = async (queryClient, page = 0, limit = 9) => async () => {  
-    const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
+const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
+    const files = await queryClient.fetchQuery(["gh-projects", page, limit], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
+    console.log(files)
     if(!files) return [];    
     return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
 }
 
 const projectLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
-    const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects"))
+    const files = await queryClient.fetchQuery(["gh-projects"], () => getFiles(config.user, config.repo, "gh-projects"))
     const project = await queryClient.fetchQuery(["post", slug], () => getProject(files, slug));
 
     if(!project) throw new Response("Not Found", { status: 404, statusText: "Project does not exist" });
@@ -43,12 +44,16 @@ const projectLoader = (queryClient) => async ({params}) => {
 }
 
 const Projects = ({ limit = 9, infinite }) => {
+    const queryClient = useQueryClient();
     const {  
         hasNextPage,
         isFetchingNextPage, 
         fetchNextPage,
         data:projects 
-    } = useInfiniteQuery(["projects"], ({pageParam = 0}) => getProjects(pageParam, limit), {
+    } = useInfiniteQuery(["projects", limit], async ({pageParam = 0}) => {
+        const files = await queryClient.fetchQuery(["gh-projects", pageParam, limit], () => getFiles(config.user, config.repo, "gh-projects", pageParam, limit))
+        return getProjects(files)
+    }, {
         getNextPageParam: (lastPage) =>  lastPage.pages?.next ?? undefined,
         getPreviousPageParam: (firstPage) => firstPage.pages?.prev ?? undefined, 
     })
