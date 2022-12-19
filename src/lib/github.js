@@ -26,8 +26,6 @@ const getFiles = async (user, repo, branch, page, limit) => {
             }
         }); 
     }));
-
-    console.log(result)
     
     return {
         docs: result,

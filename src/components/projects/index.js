@@ -30,13 +30,13 @@ const getProject = async (files, slug) => {
 
 const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["gh-projects", page, limit], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
-    console.log(files)
     if(!files) return [];    
     return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
 }
 
 const projectLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
+    console.log(params)
     const files = await queryClient.fetchQuery(["gh-projects"], () => getFiles(config.user, config.repo, "gh-projects"))
     const project = await queryClient.fetchQuery(["post", slug], () => getProject(files, slug));
 
