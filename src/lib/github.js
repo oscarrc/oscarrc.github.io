@@ -8,14 +8,14 @@ const getRepoInfo = async (user, repo) => {
     return await fetch(`https://api.github.com/repos/${user}/${repo}`).then( res => res.json())
 }
 
-const getFiles = async (user, repo, branch, page, limit = 10) => {
+const getFiles = async (user, repo, branch, page, limit) => {
     const files = await fetch(`${baseUrl}/${user}/${repo}/contents?ref=${branch}`)
                         .then( async res => {
                             const temp = await res.json();
                             return temp.filter(i => i.type !== "dir" && i.name.substring(i.name.length - 4) === ".mdx")
                         });
                       
-    const pageFiles = files.slice(page, (page + 1)*limit);
+    const pageFiles = !isNaN(page) && limit ? files.slice(page, (page + 1)*limit) : files;
     const lastPage = Math.ceil((files.length / limit)) - 1;
     
     const result = await Promise.all(pageFiles.map( async (file) => {

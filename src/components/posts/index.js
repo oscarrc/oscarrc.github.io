@@ -24,7 +24,9 @@ const getPosts = async (files) => {
 }
 
 const getPost = async (files, slug) => {
-   const post = files.docs.find(f => f.slug === slug);    
+   const post = files.docs.find(f => f.slug === slug);  
+   if(!post) return false;
+   
    const evaluated = await parse(post.file);
    evaluated.slug = post.slug;
    evaluated.image = await getMedia(config.repo, evaluated.image, "gh-posts");
@@ -39,8 +41,11 @@ const postsLoader = (queryClient, page = 0, limit = 9) => async () => {
 
 const postLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
-    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts", 0, 100))
-    return await queryClient.fetchQuery(["post", slug], () => getPost(files, slug));
+    const files = await queryClient.fetchQuery(["files", "gh-posts"], () => getFiles(config.user, config.repo, "gh-posts"))
+    const post = await queryClient.fetchQuery(["post", slug], () => getPost(files, slug));
+
+    if(!post) throw new Response("Not Found", { status: 404, statusText: "Post not found" });
+    return post;
 }
 
 const Posts = ({ limit = 9, infinite}) => {

@@ -24,7 +24,9 @@ const getProjects = async (files) => {
 }
 
 const getProject = async (files, slug) => {
-    const project = files.docs.find(f => f.slug === slug);    
+    const project = files.docs.find(f => f.slug === slug);  
+    if(!project) return false;
+
     const evaluated = await parse(project.file);
     evaluated.slug = project.slug;
     evaluated.info = await getRepoInfo(config.user, evaluated.repo);
@@ -39,8 +41,11 @@ const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {
 
 const projectLoader = (queryClient) => async ({params}) => {
     const { slug } = params; 
-    const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects", 0, 100))
-    return await queryClient.fetchQuery(["post", slug], () => getProject(files, slug));
+    const files = await queryClient.fetchQuery(["files", "gh-projects"], () => getFiles(config.user, config.repo, "gh-projects"))
+    const project = await queryClient.fetchQuery(["post", slug], () => getProject(files, slug));
+
+    if(!project) throw new Response("Not Found", { status: 404, statusText: "Project does not exist" });
+    return project;
 }
 
 const Projects = ({ limit = 9, infinite }) => {
