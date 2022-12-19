@@ -1,4 +1,4 @@
-import { Await, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Await, Outlet, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
@@ -35,8 +35,7 @@ const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {
 }
 
 const projectLoader = (queryClient) => async ({params}) => {
-    const { slug } = params; 
-    console.log(params)
+    const { slug } = params;
     const files = await queryClient.fetchQuery(["gh-projects"], () => getFiles(config.user, config.repo, "gh-projects"))
     const project = await queryClient.fetchQuery(["post", slug], () => getProject(files, slug));
 
@@ -60,15 +59,14 @@ const Projects = ({ limit = 9, infinite }) => {
     })
 
     const { ref: next, inView: loadNext } = useInView();
-    const { pathname } = useLocation();
     const navigate = useNavigate();
     
     const [ project, setProject ] = useState(null);
 
     const maximize = useCallback((project) => {
         setProject(project);
-        navigate(`/portfolio/${project.slug}`, { state: { background: pathname }})
-    }, [navigate, pathname])
+        navigate(`/portfolio/${project.slug}`)
+    }, [navigate])
 
     const children = useMemo(() => {
         return projects?.pages.map(p => 
