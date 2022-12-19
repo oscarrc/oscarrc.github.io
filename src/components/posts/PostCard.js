@@ -1,7 +1,7 @@
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { IoIosTimer } from 'react-icons/io';
 
-const PostCard = ({ title, excerpt, image, date, onClick }) => {
+const PostCard = ({ title, excerpt, image, date, readingTime, onClick }) => { 
     return (
         <div role="button" onClick={ onClick } className="card card-side pointer w-full">
             <div className="hidden sm:flex">
@@ -17,7 +17,7 @@ const PostCard = ({ title, excerpt, image, date, onClick }) => {
                 <div className="card-actions justify-end">
                     <span className="flex items-center gap-1"><AiOutlineCalendar /> { date }</span>
                     <span className="divider divider-horizontal mx-0"></span>                    
-                    <span className="flex items-center gap-1"><IoIosTimer /> 5 min</span>                                       
+                    <span className="flex items-center gap-1"><IoIosTimer /> {readingTime} min</span>                                       
                 </div>
             </div>
         </div>

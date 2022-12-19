@@ -1,19 +1,21 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 
-const Post = ({ post }) => {
-    const Content = post?.default;
-    const navigate = useNavigate();
+import { Suspense } from "react";
+import { useMemo } from "react";
 
-    useEffect(() => {
-        if(!post) navigate("/404");
-    }, [post, navigate])
+const Post = () => {
+    const post = useLoaderData();
+    const Content = useMemo(() =>  post?.default, [post.default])
 
     return (
         <section id="post">
-            <div className="container">
-                <div className="prose max-w-full">
-                    { Content && <Content /> }
+            <div className="container mx-auto">
+                <div className="prose w-three-quarter max-w-three-quarter">
+                <Suspense>
+                    <Await resolve={post}>
+                        <Content />
+                    </Await>
+                </Suspense>
                 </div>
             </div>
         </section>
