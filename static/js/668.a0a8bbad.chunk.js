@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkOscar_R_C_Web_Developer=self.webpackChunkOscar_R_C_Web_Developer||[]).push([[668],{1668:function(e,n,s){s.r(n);var c=s(8913),i=s(184);n.default=function(){return(0,i.jsx)("section",{id:"blog",className:"flex flex-col justify-center items-center min-h-view",children:(0,i.jsx)(c.ZP,{infinite:!0})})}}}]);
-//# sourceMappingURL=668.a0a8bbad.chunk.js.map
