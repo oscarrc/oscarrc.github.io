@@ -10,7 +10,7 @@ import { motion } from "framer-motion"
 
 const Terminal = lazy(() => import("../terminal"));
 
-const Layout = () => {    
+const Layout = ({ children }) => {    
     const [terminal, setTerminal] = useState(false);
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "black");
     const { pathname } = useLocation();
@@ -32,23 +32,23 @@ const Layout = () => {
     return (
         <>
             <Header toggleTheme={ toggleTheme } currentTheme={ theme } />
-            <main className="flex flex-col gap-32 px-6 md:px-8 py-8">                
-                <Suspense fallback={<Loading /> }>
-                    <motion.div
-                        key={pathname}
-                        initial="initial"
-                        animate="in"
-                        variants={pageVariants}
-                        transition={pageTransition}
-                    >                    
-                        <Outlet />
-                        <ScrollRestoration />
-                    </motion.div>
+            <motion.main 
+                className="flex flex-col gap-32 px-6 md:px-8 py-8"                
+                key={pathname}
+                initial="initial"
+                animate="in"
+                variants={pageVariants}
+                transition={pageTransition}
+            
+            >                
+                <Suspense fallback={<Loading /> }>                
+                    { children || <Outlet /> }
+                    <ScrollRestoration />
                 </Suspense>
                 <Suspense>
                     <Terminal isOpen={terminal} setOpen={setTerminal} toggleTheme={ toggleTheme } />
                 </Suspense>
-            </main>
+            </motion.main>
             <Footer terminal={terminal} setTerminal={setTerminal} />
         </>
     )
