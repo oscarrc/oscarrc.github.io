@@ -73,7 +73,6 @@ module.exports = {
   daisyui: {
     themes: [
       'cyberpunk', 
-      'synthwave',
       {
         white: {
           ...require("daisyui/src/colors/themes")["[data-theme=lofi]"],

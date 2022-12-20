@@ -10,10 +10,6 @@ const themes = [
     {
         label: "Cyberpunk",
         name: "cyberpunk"
-    },
-    {
-        label: "Synthwave",
-        name: "synthwave"
     }
 ]
 
