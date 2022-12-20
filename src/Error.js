@@ -3,10 +3,10 @@ import { useLocation, useRouteError } from "react-router-dom";
 import Glitch from "./components/partials/Glitch";
 import Keyboard from "./components/partials/Keyboard";
 import Layout from "./components/layout";
+import { Link } from "react-router-dom";
 import ReactGA from 'react-ga';
 import { useEffect } from "react";
 import useTypewriter from "./hooks/useTypewriter";
-import { Link } from "react-router-dom";
 
 const Error = () => {
     const error = useRouteError();
