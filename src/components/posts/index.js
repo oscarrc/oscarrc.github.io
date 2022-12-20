@@ -84,7 +84,7 @@ const Posts = ({ limit = 9, infinite}) => {
     }, [infinite, hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
-        <Suspense fallback={<PostsLoader amount={limit} />}>
+        <Suspense fallback={<PostsLoader amount={3} />}>
             <div className="flex w-three-quarter flex-col mx-auto gap-8">
                 <Await resolve={posts} children={children} />
                 { infinite && <aside ref={next} /> }
