@@ -30,8 +30,8 @@ const windowVariants = {
 
 const windowTransition = {
   type: 'tween',
-  ease: 'linear',
-  duration: 0.5
+  ease: 'easeInOut',
+  duration: 0.1
 }; 
 
 export { pageVariants, pageTransition, windowVariants, windowTransition }

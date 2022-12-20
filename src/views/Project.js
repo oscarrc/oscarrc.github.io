@@ -1,10 +1,11 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 import { Await, useLoaderData, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
-import { motion } from "framer-motion";
+import { windowTransition, windowVariants } from "../config/animation";
+
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
-import { windowTransition, windowVariants } from "../config/animation";
+import { motion } from "framer-motion";
 
 const Project= () => {
     const project = useLoaderData();
@@ -38,6 +39,7 @@ const Project= () => {
                     key={project.slug}
                     initial="initial"
                     animate="in"
+                    exit="out"
                     variants={windowVariants}
                     transition={windowTransition}
                 >

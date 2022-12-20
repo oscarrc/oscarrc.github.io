@@ -3,6 +3,7 @@ import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
 
+import { AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard';
 import ProjectsLoader from './ProjectsLoader';
 import config from "../../config/github";
@@ -87,7 +88,7 @@ const Projects = ({ limit = 9, infinite }) => {
                     <Await resolve={projects} children={children} />
                     { infinite && <aside ref={next} /> }
                 </div>
-            </Suspense>
+            </Suspense>          
             <Outlet />
         </>
     )
