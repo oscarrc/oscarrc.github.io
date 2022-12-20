@@ -1,11 +1,13 @@
-import { Await, Outlet, useNavigate } from 'react-router-dom';
+import { Await, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
+import { windowTransition, windowVariants } from "../../config/animation";
 
 import ProjectCard from './ProjectCard';
 import ProjectsLoader from './ProjectsLoader';
 import config from "../../config/github";
+import { motion } from "framer-motion"
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
 
@@ -61,6 +63,7 @@ const Projects = ({ limit = 9, infinite }) => {
 
     const { ref: next, inView: loadNext } = useInView();
     const navigate = useNavigate();
+    const { slug } = useParams();
 
     const children = useMemo(() => {
         return projects?.pages.map(p => 
@@ -88,7 +91,15 @@ const Projects = ({ limit = 9, infinite }) => {
                     { infinite && <aside ref={next} /> }
                 </div>
             </Suspense>
-            <Outlet />
+            <motion.div
+                key={slug}
+                initial="initial"
+                animate="in"
+                variants={windowVariants}
+                transition={windowTransition}
+            >
+                <Outlet />
+            </motion.div>
         </>
     )
 }

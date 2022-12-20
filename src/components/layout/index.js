@@ -10,7 +10,7 @@ import { motion } from "framer-motion"
 
 const Terminal = lazy(() => import("../terminal"));
 
-const Layout = ({ children }) => {    
+const Layout = () => {    
     const [terminal, setTerminal] = useState(false);
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "black");
     const { pathname } = useLocation();
