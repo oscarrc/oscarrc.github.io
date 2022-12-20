@@ -8,17 +8,20 @@ const Post = () => {
     const Content = useMemo(() =>  post?.default, [post.default])
 
     return (
-        <section id="post">
-            <div className="container mx-auto">
-                <div className="prose w-three-quarter max-w-three-quarter">
-                <Suspense>
-                    <Await resolve={post}>
-                        <Content />
-                    </Await>
-                </Suspense>
-                </div>
-            </div>
-        </section>
+        <Suspense>
+            <Await resolve={post}>
+                <section id="post">
+                    <div className="container">
+                        <figure className="w-full max-h-half overflow-hidden mb-4">
+                            <img src={post.image} alt={post.title} />
+                        </figure>
+                        <div className="prose mx-auto w-three-quarter max-w-three-quarter">
+                            <Content />
+                        </div>
+                    </div>
+                </section>
+            </Await>
+        </Suspense>
     )
 }
 
