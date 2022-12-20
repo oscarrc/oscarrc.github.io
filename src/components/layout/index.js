@@ -1,11 +1,12 @@
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { pageTransition, pageVariants } from "../../config/animation";
 
 import Footer from "./Footer";
 import Header from "./Header";
+import Loading from "../../views/Loading";
 import ReactGA from 'react-ga';
 import { motion } from "framer-motion"
-import { useLocation } from "react-router-dom";
 
 const Terminal = lazy(() => import("../terminal"));
 
@@ -32,15 +33,18 @@ const Layout = ({ children }) => {
         <>
             <Header toggleTheme={ toggleTheme } currentTheme={ theme } />
             <main className="flex flex-col gap-32 px-6 md:px-8 py-8">                
-                <motion.div
-                    key={pathname}
-                    initial="initial"
-                    animate="in"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                >                    
-                    { children }
-                </motion.div>
+                <Suspense fallback={<Loading /> }>
+                    <motion.div
+                        key={pathname}
+                        initial="initial"
+                        animate="in"
+                        variants={pageVariants}
+                        transition={pageTransition}
+                    >                    
+                        <Outlet />
+                        <ScrollRestoration />
+                    </motion.div>
+                </Suspense>
                 <Suspense>
                     <Terminal isOpen={terminal} setOpen={setTerminal} toggleTheme={ toggleTheme } />
                 </Suspense>
