@@ -1,4 +1,4 @@
-import { Await, Outlet, useNavigate } from 'react-router-dom';
+import { Await, Outlet, defer, useNavigate } from 'react-router-dom';
 import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
@@ -31,7 +31,10 @@ const getProject = async (files, slug) => {
 const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["gh-projects", page, limit], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
     if(!files) return [];    
-    return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
+    else{
+        const projects = queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
+        return defer({projects})
+    }
 }
 
 const projectLoader = (queryClient) => async ({params}) => {

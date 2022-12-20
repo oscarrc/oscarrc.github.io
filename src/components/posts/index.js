@@ -1,4 +1,4 @@
-import { Await, useNavigate } from "react-router-dom";
+import { Await, defer, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
@@ -32,7 +32,10 @@ const postsLoader = (queryClient, page = 0, limit = 9) => async () => {
     const files = await queryClient.fetchQuery(["gh-posts", page, limit], () => getFiles(config.user, config.repo, "gh-posts", page, limit));
     
     if(!files) return [];    
-    return await queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files)); 
+    else{
+        const posts = queryClient.fetchInfiniteQuery(["posts"], () => getPosts(files)); 
+        return defer({posts})
+    }
 }
 
 const postLoader = (queryClient) => async ({params}) => {

@@ -59,7 +59,7 @@ const router = createHashRouter([
         id: "blog",
         path: "/blog",
         element: <Blog />,
-        loader: postsLoader(queryClient, 0, 9),
+        loader: () => postsLoader(queryClient, 0, 9)
       },
       {
         id: "post",
