@@ -1,22 +1,14 @@
-import { useLocation, useRouteError } from "react-router-dom";
-
 import Glitch from "./components/partials/Glitch";
 import Keyboard from "./components/partials/Keyboard";
 import Layout from "./components/layout";
 import { Link } from "react-router-dom";
-import ReactGA from 'react-ga';
-import { useEffect } from "react";
+import { useRouteError } from "react-router-dom";
 import useTypewriter from "./hooks/useTypewriter";
 
 const Error = () => {
     const error = useRouteError();
     const { direction, text, typewritter } = useTypewriter([`Error ${error.status || 500}: ${error.statusText || "Internal server error"}`], 100, 20);
-    const { pathname } = useLocation();
-    console.log(error)
-    useEffect(() => {
-      ReactGA.set({ page: pathname });
-      ReactGA.pageview(pathname);
-    }, [pathname]);
+    console.log(error)   
 
     return (
         <Layout>
