@@ -7,8 +7,8 @@
       @apply font-mono;
     }
 
-    :root, .scroll {
-        --scrollbarTrack: hsla(var(--b));
+    :root {
+        --scrollbarTrack: hsla(var(--b1));
         --scrollbarThumb: hsla(var(--n));
         --scrollbarThumbHover: hsla(var(--p));
     }
