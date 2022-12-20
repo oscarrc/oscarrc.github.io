@@ -1,4 +1,4 @@
-import { Await, Outlet, defer, useNavigate } from 'react-router-dom';
+import { Await, Outlet, useNavigate } from 'react-router-dom';
 import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
 import { useInfiniteQuery, useQueryClient } from "react-query";
@@ -31,10 +31,7 @@ const getProject = async (files, slug) => {
 const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["gh-projects", page, limit], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
     if(!files) return [];    
-    else{
-        const projects = queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))  
-        return defer({projects})
-    }
+    return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))
 }
 
 const projectLoader = (queryClient) => async ({params}) => {
@@ -49,6 +46,7 @@ const projectLoader = (queryClient) => async ({params}) => {
 const Projects = ({ limit = 9, infinite }) => {
     const queryClient = useQueryClient();
     const {  
+        isLoading,
         hasNextPage,
         isFetchingNextPage, 
         fetchNextPage,
@@ -69,7 +67,10 @@ const Projects = ({ limit = 9, infinite }) => {
             p.docs.map( (project, index) => {
                 return <ProjectCard 
                             key={index}
-                            project={ project }
+                            title={project.title}
+                            image={project.image}
+                            link={project.link}
+                            info={project.info}
                             onClick={ () =>  navigate(`/portfolio/${project.slug}`) }
                         />
         }))
@@ -81,7 +82,7 @@ const Projects = ({ limit = 9, infinite }) => {
 
     return (
         <>  
-            <Suspense fallback={ <ProjectsLoader amount={limit} /> }>        
+            <Suspense fallback={ <ProjectsLoader amount={3} /> }>        
                 <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
                     <Await resolve={projects} children={children} />
                     { infinite && <aside ref={next} /> }
