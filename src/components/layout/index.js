@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
+
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -20,7 +21,7 @@ const Layout = ({ children }) => {
     return (
         <>
             <Header toggleTheme={ toggleTheme } currentTheme={ theme } />
-            <main className="flex flex-col gap-32 px-6 md:px-8">
+            <main className="flex flex-col gap-32 px-6 md:px-8 py-8">
                 { children }
                 <Suspense>
                     <Terminal isOpen={terminal} setOpen={setTerminal} toggleTheme={ toggleTheme } />

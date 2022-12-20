@@ -12,10 +12,10 @@ const Post = () => {
             <Await resolve={post}>
                 <section id="post">
                     <div className="container">
-                        <figure className="w-full max-h-half overflow-hidden mb-4">
-                            <img src={post.image} alt={post.title} />
-                        </figure>
                         <div className="prose mx-auto w-three-quarter max-w-three-quarter">
+                            <figure className="w-full overflow-hidden mb-4">
+                                <img src={post.image} alt={post.title} />
+                            </figure>
                             <Content />
                         </div>
                     </div>
