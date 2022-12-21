@@ -34,4 +34,22 @@ const windowTransition = {
   duration: 0.1
 }; 
 
-export { pageVariants, pageTransition, windowVariants, windowTransition }
+const elementVariants = {
+  initial: {
+    opacity: 0
+  },
+  in: {
+    opacity: 1
+  },
+  out: {
+    opacity: 0
+  }
+};
+
+const elementTransition = {
+  type: 'tween',
+  ease: 'easeIn',
+  duration: 0.2
+}; 
+
+export { elementVariants, elementTransition, pageVariants, pageTransition, windowVariants, windowTransition }
