@@ -1,22 +1,20 @@
 import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
-import { AnimatePresence, motion } from 'framer-motion';
 import { elementTransition, elementVariants } from "../../config/animation";
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
+import { motion } from 'framer-motion';
 
 const ProjectCard = ({ title, image, link, info, onClick }) => {
     const maximizeWindow = () => onClick && onClick();
 
     return (
-        <AnimatePresence>
             <motion.div 
                 className="transition-all transition-500 ease-in-out mockup-code"
                 onClick={ maximizeWindow } 
                 key={title}
                 initial="initial"
                 animate="in"
-                exit="out"
                 variants={elementVariants}
                 transition={elementTransition}
             >
@@ -39,7 +37,6 @@ const ProjectCard = ({ title, image, link, info, onClick }) => {
                     </div>
                 </div>
             </motion.div>
-        </AnimatePresence>
     )
 }
 
