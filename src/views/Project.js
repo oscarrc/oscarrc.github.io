@@ -35,7 +35,7 @@ const Project= () => {
         <Suspense>
             <Await resolve={project}>
                 <motion.article 
-                    className="transition-all border border-neutral transition-500 ease-in-out mockup-code maximized"
+                    className="border border-neutral mockup-code maximized"
                     key={project.slug}
                     initial="initial"
                     animate="in"

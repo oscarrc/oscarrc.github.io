@@ -10,7 +10,7 @@ const ProjectCard = ({ title, image, link, info, onClick }) => {
 
     return (
             <motion.div 
-                className="transition-all transition-500 ease-in-out mockup-code"
+                className="mockup-code"
                 onClick={ maximizeWindow } 
                 key={title}
                 initial="initial"
