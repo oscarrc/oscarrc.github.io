@@ -1,9 +1,21 @@
+import { elementTransition, elementVariants } from "../../config/animation";
+
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { IoIosTimer } from 'react-icons/io';
+import { motion } from 'framer-motion';
 
 const PostCard = ({ title, excerpt, image, date, readingTime, onClick }) => { 
     return (
-        <div role="button" onClick={ onClick } className="card card-side pointer w-full">
+        <motion.div 
+            className="card card-side pointer w-full"
+            role="button" 
+            onClick={ onClick } 
+            key={title}
+            initial="initial"
+            animate="in"
+            variants={elementVariants}
+            transition={elementTransition}
+        >
             <div className="hidden sm:flex">
                 <figure className="w-40 h-40 aspect-square hidden md:flex overflow-hidden">
                     <img className="object-cover h-full w-full" src={image} alt={`${title}`} />
@@ -20,7 +32,7 @@ const PostCard = ({ title, excerpt, image, date, readingTime, onClick }) => {
                     <span className="flex items-center gap-1"><IoIosTimer /> {readingTime} min</span>                                       
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

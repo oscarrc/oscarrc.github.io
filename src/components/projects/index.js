@@ -87,7 +87,7 @@ const Projects = ({ limit = 9, infinite }) => {
                     <Await resolve={projects} children={children} />
                     { infinite && <aside ref={next} /> }
                 </div>
-            </Suspense>
+            </Suspense>          
             <Outlet />
         </>
     )

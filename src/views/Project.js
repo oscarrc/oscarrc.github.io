@@ -1,6 +1,8 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
+import { AnimatePresence, motion } from "framer-motion";
 import { Await, useLoaderData, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
+import { windowTransition, windowVariants } from "../config/animation";
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
@@ -32,7 +34,15 @@ const Project= () => {
     return (
         <Suspense>
             <Await resolve={project}>
-                <div className="transition-all border border-neutral transition-500 ease-in-out mockup-code maximized">
+                <motion.article 
+                    className="border border-neutral mockup-code maximized"
+                    key={project.slug}
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={windowVariants}
+                    transition={windowTransition}
+                >
                     <label className="bg-secondary pl-2 text-neutral truncate">{project.title}  | {project.description}</label>
                     <button aria-label="close" onClick={closeWindow} className="absolute right-3 top-4 hover:text-accent"><AiOutlineClose className="h-4 w-4" /></button>
                     <div className="card border-t border-t-base-100 relative h-full scroll overflow-y-scroll scroll">
@@ -60,7 +70,7 @@ const Project= () => {
                             </div>                              
                         </div>
                     </div>
-                </div>
+                </motion.article>
             </Await>
         </Suspense>
     )

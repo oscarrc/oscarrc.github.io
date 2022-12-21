@@ -1,26 +1,75 @@
-import { ScrollRestoration, useLocation } from "react-router-dom";
-import { Suspense, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { RouterProvider, createHashRouter } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { postLoader, postsLoader } from './components/posts';
+import { projectLoader, projectsLoader } from './components/projects';
 
 import Layout from "./components/layout";
-import Loading from "./views/Loading";
-import { Outlet } from "react-router-dom";
-import ReactGA from 'react-ga';
+
+const queryClient = new QueryClient();
+
+const Error = lazy(() => import('./Error'));
+
+const Blog = lazy(() => import('./views/Blog'));
+const Landing = lazy(() => import('./views/Landing'));
+const Portfolio = lazy(() => import('./views/Portfolio'));
+const Post = lazy(() => import('./views/Post'));
+const Project = lazy(() => import('./views/Project'));
+
 
 const App = () => {
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    ReactGA.set({ page: pathname });
-    ReactGA.pageview(pathname);
-  }, [pathname]);
+  const router = createHashRouter([
+    {
+      element: <Layout />,
+      errorElement: <Error />,
+      children: [
+        {   
+          id: "landing",
+          path: "/",
+          element: <Landing />,
+          loader: () => {
+            return {
+              posts: postsLoader(queryClient, 0, 3),
+              projects: projectsLoader(queryClient, 0, 3)
+            }
+          }
+        },
+        {
+          id: "portfolio",
+          path: "/portfolio",
+          element: <Portfolio />,
+          loader: () => projectsLoader(queryClient, 0, 9),
+          children: [
+            {
+              path: "/portfolio/:slug",
+              element: <Project />,
+              loader: projectLoader(queryClient)
+            }
+          ]
+        },
+        {
+          id: "blog",
+          path: "/blog",
+          element: <Blog />,
+          loader: () => postsLoader(queryClient, 0, 9)
+        },
+        {
+          id: "post",
+          path: "/blog/:slug",
+          element: <Post />,
+          loader: postLoader(queryClient)
+        }
+      ]
+    }
+  ])
 
   return (
-      <Layout>
-        <Suspense fallback={<Loading />}>
-          <Outlet />
-          <ScrollRestoration />
-        </Suspense>
-      </Layout>
+      <Suspense>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </Suspense>
   );
 }
 
