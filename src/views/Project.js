@@ -1,11 +1,11 @@
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
-import { AnimatePresence, motion } from "framer-motion";
 import { Await, useLoaderData, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { windowTransition, windowVariants } from "../config/animation";
 
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
+import { motion } from "framer-motion";
 
 const Project= () => {
     const project = useLoaderData();

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
+import { ScrollRestoration, useLocation } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { pageTransition, pageVariants } from "../../config/animation";
 
