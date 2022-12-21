@@ -1,12 +1,13 @@
+import { AnimatePresence, motion } from "framer-motion"
 import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { pageTransition, pageVariants } from "../../config/animation";
 
+import AnimatedOutlet from "./AnimatedOutlet"
 import Footer from "./Footer";
 import Header from "./Header";
 import Loading from "../../views/Loading";
 import ReactGA from 'react-ga';
-import { motion } from "framer-motion"
 
 const Terminal = lazy(() => import("../terminal"));
 
@@ -32,23 +33,26 @@ const Layout = ({ children }) => {
     return (
         <>
             <Header toggleTheme={ toggleTheme } currentTheme={ theme } />
-            <motion.main 
-                className="flex flex-col gap-32 px-6 md:px-8 py-8"                
-                key={pathname}
-                initial="initial"
-                animate="in"
-                variants={pageVariants}
-                transition={pageTransition}
-            
-            >                
-                <Suspense fallback={<Loading /> }>                
-                    { children || <Outlet /> }
-                    <ScrollRestoration />
-                </Suspense>
-                <Suspense>
-                    <Terminal isOpen={terminal} setOpen={setTerminal} toggleTheme={ toggleTheme } />
-                </Suspense>
-            </motion.main>
+            <AnimatePresence mode="wait">
+                <motion.main 
+                    className="flex flex-col gap-32 px-6 md:px-8 py-8"                
+                    key={pathname}
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={pageVariants}
+                    transition={pageTransition}
+                
+                >                
+                    <Suspense fallback={<Loading /> }>                
+                        { children || <AnimatedOutlet /> }
+                        <ScrollRestoration />
+                    </Suspense>
+                    <Suspense>
+                        <Terminal isOpen={terminal} setOpen={setTerminal} toggleTheme={ toggleTheme } />
+                    </Suspense>
+                </motion.main>
+            </AnimatePresence>
             <Footer terminal={terminal} setTerminal={setTerminal} />
         </>
     )

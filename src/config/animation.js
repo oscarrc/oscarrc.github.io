@@ -13,7 +13,7 @@ const pageVariants = {
 const pageTransition = {
     type: 'tween',
     ease: 'linear',
-    duration: 0.5
+    duration: 0.2
 }; 
 
 const windowVariants = {
