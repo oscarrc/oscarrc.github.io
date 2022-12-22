@@ -28,7 +28,7 @@ const getProject = async (files, slug) => {
     return await parseProject(project);
 }
 
-const projectsLoader = async (queryClient, page = 0, limit = 9) => async () => {  
+const projectsLoader = (queryClient, page = 0, limit = 9) => async () => {  
     const files = await queryClient.fetchQuery(["gh-projects", page, limit], () => getFiles(config.user, config.repo, "gh-projects", page, limit))
     if(!files) return [];    
     return await queryClient.fetchInfiniteQuery(["projects"], () => getProjects(files))
