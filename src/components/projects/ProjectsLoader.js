@@ -1,6 +1,16 @@
+import { elementTransition, elementVariants } from "../../config/animation";
+
+import { motion } from "framer-motion";
+
 const ProjectsLoader = ({amount = 3}) => {
     return (
-        <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
+        <motion.div 
+            className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8"            
+            initial="initial"
+            animate="in"
+            variants={elementVariants}
+            transition={elementTransition}
+        >
             {
                 [...Array(amount).keys()].map( (i) => {
                     return (
@@ -11,7 +21,7 @@ const ProjectsLoader = ({amount = 3}) => {
                     )
                 })
             } 
-        </div>       
+        </motion.div>       
     )
 }
 

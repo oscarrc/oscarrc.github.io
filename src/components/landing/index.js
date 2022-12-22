@@ -14,8 +14,8 @@ const aboutLoader = async (queryClient) => {
 }
 
 const About = () => {
-    const {about} = useLoaderData();
-    const Content = about?.default;
+    const data = useLoaderData();
+    const Content = data.about?.default;
     const components = {
         ul: ({ children }) => <ul className="ml-8 grid gird-cols-1 sm:grid-cols-2 overflow-hidden">{children}</ul>,
         ol: ({ children }) => <ol className="ml-8 grid gird-cols-1 sm:grid-cols-2 overflow-hidden">{children}</ol>,
@@ -25,7 +25,7 @@ const About = () => {
     return (
         <Suspense>
             <div className="flex flex-col relative gap-4 prose max-w-full about">
-                <Await resolve={about} children={<Content components={components} />} />
+                <Await resolve={data} children={<Content components={components} />} />
             </div>
         </Suspense>
     );

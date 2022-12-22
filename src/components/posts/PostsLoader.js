@@ -1,6 +1,16 @@
+import { elementTransition, elementVariants } from "../../config/animation";
+
+import { motion } from "framer-motion";
+
 const PostsLoader = ({ amount = 3 }) => {
     return (
-        <div className="flex w-three-quarter flex-col mx-auto gap-8">
+        <motion.div 
+            className="flex w-three-quarter flex-col mx-auto gap-8"
+            initial="initial"
+            animate="in"
+            variants={elementVariants}
+            transition={elementTransition}
+        >
             {
                 [...Array(amount).keys()].map( (i) => {
                     return (
@@ -24,7 +34,7 @@ const PostsLoader = ({ amount = 3 }) => {
                     )
                 })
             }
-        </div>
+        </motion.div>
     )
 }
 

@@ -85,9 +85,10 @@ const Projects = ({ limit = 9, infinite }) => {
             <Suspense fallback={ <ProjectsLoader amount={3} /> }>        
                 <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
                     <Await resolve={projects} children={children} />
-                    { infinite && <aside ref={next} /> }
                 </div>
-            </Suspense>          
+            </Suspense>
+            { (isLoading || isFetchingNextPage) && <ProjectsLoader amount={3} /> }
+            { infinite && <aside ref={next} /> }          
             <Outlet />
         </>
     )
