@@ -1,6 +1,6 @@
-import { Await, Outlet, useNavigate } from 'react-router-dom';
-import { Suspense, useEffect, useMemo } from "react";
+import { Outlet, useNavigate } from 'react-router-dom';
 import { getFiles, getMedia, getRepoInfo } from "../../lib/github"
+import { useEffect, useMemo } from "react";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 
 import ProjectCard from './ProjectCard';
@@ -63,6 +63,7 @@ const Projects = ({ limit = 9, infinite }) => {
     const navigate = useNavigate();
 
     const children = useMemo(() => {
+        if(!projects?.pages) return;
         return projects?.pages.map(p => 
             p.docs.map( (project, index) => {
                 return <ProjectCard 
@@ -81,12 +82,10 @@ const Projects = ({ limit = 9, infinite }) => {
     }, [infinite, hasNextPage, loadNext, isFetchingNextPage, fetchNextPage])
 
     return (
-        <>  
-            <Suspense fallback={ <ProjectsLoader amount={3} /> }>        
-                <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
-                    <Await resolve={projects} children={children} />
-                </div>
-            </Suspense>
+        <>        
+            <div className="w-three-quarter mx-auto grid grid-cols grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center justify-center gap-8">
+                { children }
+            </div>
             { (isLoading || isFetchingNextPage) && <ProjectsLoader amount={3} /> }
             { infinite && <aside ref={next} /> }          
             <Outlet />

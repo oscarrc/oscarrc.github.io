@@ -1,6 +1,5 @@
-import { Await, useNavigate } from "react-router-dom";
-import { Suspense, useEffect, useMemo } from "react";
 import { getFiles, getMedia } from "../../lib/github"
+import { useEffect, useMemo } from "react";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 
 import PostCard from "./PostCard";
@@ -8,6 +7,7 @@ import PostsLoader from "./PostsLoader";
 import config from "../../config/github"
 import { parse } from "../../lib/mdx";
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 const parsePost = async (post) => {
     const parsed = await parse(post.file);
@@ -64,6 +64,8 @@ const Posts = ({ limit = 9, infinite}) => {
     const navigate = useNavigate();
 
     const children = useMemo(() => {
+        if(!posts?.pages) return;
+
         return posts?.pages.map(p => 
             p.docs.map( (post, index) => {
                 return <PostCard 
@@ -85,11 +87,9 @@ const Posts = ({ limit = 9, infinite}) => {
 
     return (
         <>
-            <Suspense fallback={<PostsLoader amount={3} />}>
-                <div className="flex w-three-quarter flex-col mx-auto gap-8">
-                    <Await key="children" resolve={posts} children={children} />
-                </div>
-            </Suspense>
+            <div className="flex w-three-quarter flex-col mx-auto gap-8">
+                { children }
+            </div>
             { (isLoading || isFetchingNextPage) && <PostsLoader key="loader" amount={3} /> }
             { infinite && <aside ref={next} /> }
         </>
