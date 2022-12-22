@@ -8,6 +8,11 @@ const getRepoInfo = async (user, repo) => {
     return await fetch(`https://api.github.com/repos/${user}/${repo}`).then( res => res.json())
 }
 
+const getFile = async (user, repo, branch, filename) => {
+    const file = await fetch(`https://raw.githubusercontent.com/${user}/${repo}/${branch}/${filename}`);
+    return await file.text();
+}
+
 const getFiles = async (user, repo, branch, page, limit) => {
     const files = await fetch(`${baseUrl}/${user}/${repo}/contents?ref=${branch}`)
                         .then( async res => {
@@ -38,4 +43,4 @@ const getFiles = async (user, repo, branch, page, limit) => {
     };
 }
 
-export { getFiles, getRepoInfo, getMedia }
+export { getFiles, getFile, getRepoInfo, getMedia }

@@ -145,6 +145,14 @@
         animation: glitch 2s infinite linear alternate-reverse;
     }
 
+    .prose.about p, .prose.about li{
+      @apply m-0 leading-6
+    }
+
+    .prose.about h2{
+      @apply m-0 py-2
+    }
+
     @keyframes glitch {
         0% {
           clip: rect(44px, 9999px, 44px, 0);
