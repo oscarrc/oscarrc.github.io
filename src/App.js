@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { RouterProvider, createHashRouter, defer } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { postLoader, postsLoader } from './components/posts';
 import { projectLoader, projectsLoader } from './components/projects';
@@ -17,6 +17,11 @@ const Portfolio = lazy(() => import('./views/Portfolio'));
 const Post = lazy(() => import('./views/Post'));
 const Project = lazy(() => import('./views/Project'));
 
+const landingLoader = (queryClient) => async () => ({
+  posts: await postsLoader(queryClient, 0, 3),
+  projects: await projectsLoader(queryClient, 0, 3),
+  about: await aboutLoader(queryClient)
+})
 
 const App = () => {
 
@@ -29,11 +34,7 @@ const App = () => {
           id: "landing",
           path: "/",
           element: <Landing />,
-          loader: async () => ({
-            posts: await postsLoader(queryClient, 0, 3),
-            projects: await projectsLoader(queryClient, 0, 3),
-            about: await aboutLoader(queryClient)
-          })
+          loader: landingLoader(queryClient)
         },
         {
           id: "portfolio",
