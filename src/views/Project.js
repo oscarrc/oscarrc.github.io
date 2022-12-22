@@ -35,7 +35,7 @@ const Project= () => {
         <Suspense>
             <Await resolve={project}>
                 <motion.article 
-                    className="border border-neutral mockup-code maximized"
+                    className="border border-neutral mockup-code maximized shadow-lg"
                     key={project.slug}
                     initial="initial"
                     animate="in"
@@ -45,7 +45,7 @@ const Project= () => {
                 >
                     <label className="bg-secondary pl-2 text-neutral truncate">{project.title}  | {project.description}</label>
                     <button aria-label="close" onClick={closeWindow} className="absolute right-3 top-4 hover:text-accent"><AiOutlineClose className="h-4 w-4" /></button>
-                    <div className="card border-t border-t-base-100 relative h-full scroll overflow-y-scroll scroll">
+                    <div className="card border-t border-t-base-100 bg-base-100 relative h-full scroll overflow-y-scroll scroll">
                         <figure className="h-full w-full">
                             <img className="object-cover h-full w-full" src={ project.image } alt={ project.title } />
                         </figure>
