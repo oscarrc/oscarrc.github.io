@@ -50,24 +50,24 @@ const Project= () => {
                             <img className="object-cover h-full w-full" src={ project.image } alt={ project.title } />
                         </figure>
                         <div className="card-body px-12 md:px-16 items-center">
+                            <div className="info">
+                                <div className="flex flex-1 gap-2">
+                                    { project.tags.split(',').map(tag => <span key={tag} className="badge truncate">{ tag }</span> )}
+                                </div>
+                                <div className="flex py-1 px-2 bg-neutral/75 gap-2">
+                                    <span className="flex items-center gap-1"><AiFillStar /> { project.info.stargazers_count }</span>
+                                    <span className="flex items-center gap-1"><AiOutlineEye /> { project.info.subscribers_count }</span>
+                                    <span className="flex items-center gap-1"><AiOutlineFork /> { project.info.forks_count }</span>
+                                    <span className="divider divider-horizontal mx-0"></span>
+                                    <div className="flex items-center gap-4">
+                                        <a aria-label="Github page" target="_BLANK" rel="noreferrer noopener" href={ project.info.html_url }><SiGithub /></a>                 
+                                        <a aria-label="Visit site" target="_BLANK" rel="noreferrer noopener" href={ project.link }><FiExternalLink /></a> 
+                                    </div> 
+                                </div>                              
+                            </div>
                             <div className="max-w-full prose pt-8 pb-16">
                                 <Content />
                             </div>
-                        </div>
-                        <div className="info">
-                            <div className="flex flex-1 gap-2">
-                                { project.tags.split(',').map(tag => <span key={tag} className="badge truncate">{ tag }</span> )}
-                            </div>
-                            <div className="flex py-1 px-2 bg-neutral/75 gap-2">
-                                <span className="flex items-center gap-1"><AiFillStar /> { project.info.stargazers_count }</span>
-                                <span className="flex items-center gap-1"><AiOutlineEye /> { project.info.subscribers_count }</span>
-                                <span className="flex items-center gap-1"><AiOutlineFork /> { project.info.forks_count }</span>
-                                <span className="divider divider-horizontal mx-0"></span>
-                                <div className="flex items-center gap-4">
-                                    <a aria-label="Github page" target="_BLANK" rel="noreferrer noopener" href={ project.info.html_url }><SiGithub /></a>                 
-                                    <a aria-label="Visit site" target="_BLANK" rel="noreferrer noopener" href={ project.link }><FiExternalLink /></a> 
-                                </div> 
-                            </div>                              
                         </div>
                     </div>
                 </motion.article>
