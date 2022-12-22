@@ -17,7 +17,8 @@ const About = () => {
     const {about} = useLoaderData();
     const Content = about?.default;
     const components = {
-        ul: ({ children }) => <ul className="ml-8 grid grid-cols-2 overflow-hidden">{children}</ul>,
+        ul: ({ children }) => <ul className="ml-8 grid gird-cols-1 sm:grid-cols-2 overflow-hidden">{children}</ul>,
+        ol: ({ children }) => <ol className="ml-8 grid gird-cols-1 sm:grid-cols-2 overflow-hidden">{children}</ol>,
         li: ({ children }) => <li className="list-none">&gt; {children}</li>
     }
     
