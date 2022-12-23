@@ -13,7 +13,7 @@ const Post = () => {
         <Suspense>
             <Await resolve={post}>
                 <section id="post">
-                    <div className="container">
+                    <div className="container mx-auto">
                         <div className="prose mx-auto w-three-quarter max-w-three-quarter flex flex-col">
                             <div className="flex ml-auto">
                                 <span className="flex items-center gap-1"><AiOutlineCalendar /> { post?.date }</span>
