@@ -22,7 +22,7 @@ const Post = () => {
                             </div>
                             <h2>{post?.title}</h2>
                             <p>{post?.excerpt}</p>
-                            <figure className="w-full overflow-hidden mb-4">
+                            <figure className="w-full overflow-hidden mb-4 max-h-half">
                                 <img src={post?.image} alt={post?.title} />
                             </figure>
                             { Content && <Content /> }
