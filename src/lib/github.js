@@ -13,13 +13,18 @@ const getFile = async (user, repo, branch, filename) => {
     return await file.text();
 }
 
-const getFiles = async (user, repo, branch, page, limit) => {
-    const files = await fetch(`${baseUrl}/${user}/${repo}/contents?ref=${branch}`)
+const getFileList = async (user, repo, branch) => {
+    const files = await fetch(`${baseUrl}/${user}/${repo}/contents?ref=${branch}`) 
                         .then( async res => {
                             const temp = await res.json();
                             return temp.filter(i => i.type !== "dir" && i.name.substring(i.name.length - 4) === ".mdx")
                         });
-                      
+
+    return files;
+}
+
+const getFiles = async (user, repo, branch, page, limit) => {
+    const files = await getFileList(user, repo, branch);                      
     const pageFiles = !isNaN(page) && limit ? files.slice(page, (page + 1)*limit) : files;
     const lastPage = !isNaN(page) && limit ? Math.ceil((files.length / limit)) - 1 : undefined;
     
@@ -43,4 +48,4 @@ const getFiles = async (user, repo, branch, page, limit) => {
     };
 }
 
-export { getFiles, getFile, getRepoInfo, getMedia }
+export { getFiles, getFile, getFileList, getRepoInfo, getMedia }
