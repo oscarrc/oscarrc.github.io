@@ -1,11 +1,8 @@
-import { getFile, getFileList } from "../../lib/github";
-
 import { config } from "../../config/github";
+import { getFile } from "../../lib/github";
 
 const project = async ({ queryClient, options }) => {
     const parsedOptions = options.split(" ");
-    const files = await queryClient.fetchQuery(["ls", "gh-projects"], getFileList(config.user, config.repo, "gh-projects"));
-
     const help = [
         { text: `Retrieves and shows the specified project.`},
         { text: `Usage: project <slug>`},
@@ -17,13 +14,17 @@ const project = async ({ queryClient, options }) => {
         { text: `Use 'ls projects' to get a list of available slugs.`}
     ]
 
+    const getFile = async (filename) => {
+        const file = await queryClient.fetchQuery(["project", filename], getFile(config.user, config.repo, "gh-projects", filename));
+        if(!file) return notFound;
+        return file
+    }
+
     if(parsedOptions.length > 1 || parsedOptions[0] === "-h"){
         return [ ...(parsedOptions.length > 1 && { text: "Unrecognized Option" }), ...help ];
     }
 
-    if(!files.map(f => f.name).includes(parsedOptions[0])) return notFound;
-
-    return await queryClient.fetchQuery([parsedOptions[0]], getFile(config.user, config.repo, "gh-projects", parsedOptions[0]));
+    return await getFile(parsedOptions[0]);
 }
 
 export default project;

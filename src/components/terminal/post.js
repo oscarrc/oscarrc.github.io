@@ -1,10 +1,8 @@
-import { getFile, getFileList } from "../../lib/github";
-
 import { config } from "../../config/github";
+import { getFile } from "../../lib/github";
 
 const post = async ({ queryClient, options }) => {
     const parsedOptions = options.split(" ");
-    const files = await queryClient.fetchQuery(["ls", "gh-projects"], getFileList(config.user, config.repo, "gh-posts"));
     const help = [
         { text: `Retrieves and shows the specified post.`},
         { text: `Usage: post <slug>`},
@@ -16,13 +14,17 @@ const post = async ({ queryClient, options }) => {
         { text: `Use 'ls posts' to get a list of available slugs.`}
     ];
 
+    const getFile = async (filename) => {
+        const file = await queryClient.fetchQuery(["post", filename], getFile(config.user, config.repo, "gh-posts", filename));
+        if(!file) return notFound;
+        return file
+    }
+
     if(parsedOptions.length > 1 || parsedOptions[0] === "-h"){
         return [ ...(parsedOptions.length > 1 && { text: "Unrecognized Option" }), ...help ];
     }
 
-    if(!files.map(f => f.name).includes(parsedOptions[0])) return notFound;
-
-    return await queryClient.fetchQuery([parsedOptions[0]], getFile(config.user, config.repo, "gh-posts", parsedOptions[0]));
+    return await getFile(parsedOptions[0]);
 }
 
 export default post;
