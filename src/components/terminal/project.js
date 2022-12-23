@@ -14,17 +14,17 @@ const project = async ({ queryClient, options }) => {
         { text: `Use 'ls projects' to get a list of available slugs.`}
     ]
 
-    const getFile = async (filename) => {
+    const parseFile = async (filename) => {
         const file = await queryClient.fetchQuery(["project", filename], getFile(config.user, config.repo, "gh-projects", filename));
         if(!file) return notFound;
-        return file
+        return file.split("\n").map(l => ({ text: l }))
     }
 
     if(parsedOptions.length > 1 || parsedOptions[0] === "-h"){
         return [ ...(parsedOptions.length > 1 && { text: "Unrecognized Option" }), ...help ];
     }
 
-    return await getFile(parsedOptions[0]);
+    return await parseFile(parsedOptions[0]);
 }
 
 export default project;
