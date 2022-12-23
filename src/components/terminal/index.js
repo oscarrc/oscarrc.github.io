@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import commands from './commands';
+import { useQueryClient } from 'react-query';
 
 const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
+    const queryClient = useQueryClient();
     const inputRef = useRef(null);
     const isInitialzed = useRef(false);
     const termRef = useRef(null);
