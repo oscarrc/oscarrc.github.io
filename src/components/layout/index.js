@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
             <Header toggleTheme={ toggleTheme } currentTheme={ theme } />
             <AnimatePresence mode="wait">
                 <motion.main 
-                    className="flex flex-col gap-32 px-6 md:px-8 py-8"                
+                    className="flex flex-col gap-32 px-6 md:px-8 my-16"                
                     key={pathname}
                     initial="initial"
                     animate="in"
