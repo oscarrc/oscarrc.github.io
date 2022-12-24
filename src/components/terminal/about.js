@@ -19,7 +19,9 @@ const about = async (queryClient, options) => {
     }
 
     if(options.length > 1 || options[0] === "-h"){
-        return [ ...(options.length > 1 && { text: "Unrecognized Option" }), ...help ];
+        let result = [...help];
+        if(options.length > 1) result[0] = { text: `Unrecognized option ${options.join(" ")}` };
+        return result;
     }
 
     return await parseFile(options[0]);

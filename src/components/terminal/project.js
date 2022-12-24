@@ -15,14 +15,16 @@ const project = async (queryClient, options) => {
 
     const parseFile = async (filename) => {
         const file = await queryClient.fetchQuery(["project", filename], () => getFile(config.user, config.repo, "gh-projects", filename));
-        if(!file) return notFound;
+        if(!file || file.includes("404")) return notFound;
         return file.split("\n").map(l => ({ text: l }))
     }
 
     if(options.length > 1 || options[0] === "-h"){
-        return [ ...(options.length > 1 && { text: "Unrecognized Option" }), ...help ];
+        let result = [...help];
+        if(options.length > 1) result[0] = { text: `Unrecognized option ${options.join(" ")}` };
+        return result;
     }
-
+    
     return await parseFile(options[0]);
 }
 
