@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkOscar_R_C_Web_Developer=self.webpackChunkOscar_R_C_Web_Developer||[]).push([[743],{3743:function(e,s,r){r.r(s);var c=r(6167),a=r(184);s.default=function(){return(0,a.jsxs)("section",{id:"projects",className:"flex flex-col gap-16",children:[(0,a.jsx)("h2",{className:"divider w-three-quarter mx-auto",children:"WHAT I'VE BEEN DOING"}),(0,a.jsx)(c.ZP,{infinite:!0})]})}}}]);
+//# sourceMappingURL=743.6f171b06.chunk.js.map
