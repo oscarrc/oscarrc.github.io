@@ -19,56 +19,75 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
         });
     }
 
-    const getCommand = async (cmd) => {
-        try{
-            return (await import(`./${cmd}`)).default;
-        }catch{
-            runCommand("error");
-        }
-        
-    }
-
     const runCommand = useCallback(async (input) => { 
-        inputRef.current.value = "";
-        
-        input !== "error" && setHistory(h => [...h, input]);
-        input !== "error" && addLines([{ text: input, prefix: ">", classes:"text-success mt-2" }]);
-
-        const parsed = input.split(" ")
+        const parsed = input.split(" ");
         const cmd = parsed[0];
         const opt = parsed.slice(1, input.length);
-        const action = await getCommand(cmd);        
-        let output;
-        
+        let action;
+        let lines;
+
+        inputRef.current.value = "";
+        console.log(cmd, "AA")
+        if(input !== "error"){
+            setHistory(h => [...h, input]);
+            !["clear", "exit"].includes(input) && addLines([{ text: input, prefix: ">", classes:"text-success mt-2" }]);
+        }
+
         switch(cmd){
-            case "ls":
-            case "posts":
-            case "projects":
-                output = await action(queryClient, opt);
-                break;
-            case "theme":
-                output = await action(toggleTheme, opt);
-                break;
-            case "history":
-                output = await action(history, opt);
-                break;
             case "exit":
                 if(opt.length === 1 && opt.includes("-h")) addLines([{ text: `Exits the terminal`}])
                 else if(opt.length > 1) addLines([{ text: `Unrecognized opt ${opt.join(' ')}`}])
                 else setOpen(false);
                 break;
             case "clear":
-                if(opt && opt === "-h") addLines([{ text: `Clears the screen`}])
-                else if(opt && opt !== "-h") addLines([{ text: `Unrecognized opt ${opt}`}])
+                if(opt.length === 1 && opt.includes("-h")) addLines([{ text: `Clears the screen`}])
+                else if(opt.length) addLines([{ text: `Unrecognized opt ${opt}`}])
                 else setLines([]);
                 break;
+            case "history":
+                if(opt.length === 1 && opt.includes("-h")) addLines([
+                    { text: `Shows command history`},
+                    { text: `Usage: history <number> - runs command in given possition`}
+                ])
+                else if(opt.length > 1 || (opt[0] && isNaN(parseInt(opt[0])))) addLines([{ text: `Unrecognized opt ${opt}`}])
+                else if(opt.length === 1 && !isNaN(parseInt(opt[0]))) runCommand(history[parseInt(opt)])
+                else {
+                    let h = [];
+                    history.forEach( (e,i) => h.push({text: <>{i}. {e}</>}));
+                    addLines(h);
+                }
+                break;
+            case "theme":
+                const themes = ["black", "white", "cyberpunk"];
+                if(!themes.includes(opt)){
+                    opt && opt !== '-h' && addLines([{ text: `Unrecognized theme ${opt}`}]);
+                    addLines([
+                        { text: 'Usage: theme <theme_name>'},
+                        { text: `Valid themes are ${themes.join(', ')}`}
+                    ])
+                }
+                else {
+                    toggleTheme(opt);
+                    addLines([{ text: `Theme ${opt} set`}])
+                }
+                break;
+            case "ls":
+            case "post":
+            case "project":
+            case "about":
+                action = (await import(`./${cmd}`)).default;
+                lines = await action(queryClient, opt);
+                addLines(lines);
+                break;
             default:
-                output = action;
+                try { 
+                    action = await import(`./${cmd}`);
+                    addLines(action.default);
+                }
+                catch { runCommand("error") }
                 break;
         }
-
-        addLines(output)
-    }, [setOpen, history, toggleTheme])
+    }, [setOpen, history, queryClient, toggleTheme])
 
     useEffect(() => {        
         const handleEnter = event => {

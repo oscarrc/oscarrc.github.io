@@ -1,8 +1,7 @@
 import config from "../../config/github";
 import { getFileList } from "../../lib/github";
 
-const ls = async ({ queryClient, options }) => {
-    console.log(options)
+const ls = async (queryClient, options) => {    
     const branch = `gh-${options[0]}`;
     const help = [
         { text: `List available specified content`},
@@ -17,7 +16,7 @@ const ls = async ({ queryClient, options }) => {
             ...help
         ];
     }else{
-        const files = await queryClient.fetchQuery(["ls", branch], getFileList(config.user, config.repo, branch));
+        const files = await queryClient.fetchQuery(["ls", branch], () => getFileList(config.user, config.repo, branch));
         return files.map(f => ({text: f.name}));
     }
 }
