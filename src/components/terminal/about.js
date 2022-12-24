@@ -1,4 +1,4 @@
-import { config } from "../../config/github";
+import config from "../../config/github";
 import { getFile } from "../../lib/github";
 
 const about = async ({ queryClient, options }) => {

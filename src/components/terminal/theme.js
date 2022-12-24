@@ -1,15 +1,14 @@
-import themes from "daisyui/src/colors/themes";
+import themes from "../../config/themes";
 
 const theme = (toggle, options) => {
     const availableThemes = themes.map(t => t.name);
-    const parsedOptions = options.split(" ");
     let result = []
 
-    if(!availableThemes.includes(parsedOptions[0]) && parsedOptions[0] !== "-h") result.push({ text: `Unrecognized theme ${parsedOptions[0]}`})
-    if(parsedOptions[0] === "-h") result = [...result, { text: 'Usage: theme <theme_name>'}, { text: `Valid themes are ${themes.join(', ')}`}]
+    if(!availableThemes.includes(options[0]) && options[0] !== "-h") result.push({ text: `Unrecognized theme ${options[0]}`})
+    else if(options[0] === "-h") result = [...result, { text: 'Usage: theme <theme_name>'}, { text: `Valid themes are ${availableThemes.join(', ')}`}]
     else {
-        toggle(parsedOptions[0]);
-        result.push({ text: `Theme ${parsedOptions[0]} set`})
+        toggle(options[0]);
+        result.push({ text: `Theme ${options[0]} set`})
     }
 
     return result;
