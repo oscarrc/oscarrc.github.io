@@ -16,7 +16,7 @@ That was a pretty simple aproach. I've started with a CRA app and React Router, 
 
 For the content, I use the [Github API](https://docs.github.com/en/rest/repos/contents) to fetch a list of files in the repo, sanitizing to only show mdx files. These files are then parsed with [@mdx/js](https://github.com/mdx-js/mdx) in order to convert the markdown to a React component, and with the help of remark and rehype plugins I parse the frontmatter metadata. As simple as that!
 
-~~~javascript
+~~~js
 const parse = async (data) => {
     const evaluated = await evaluate(data, { 
         ...runtime, 
