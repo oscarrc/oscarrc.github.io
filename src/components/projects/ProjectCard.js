@@ -1,6 +1,7 @@
 import { AiFillStar, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 import { elementTransition, elementVariants } from "../../config/animation";
 
+import { BiUnlink } from 'react-icons/bi';
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
 import { motion } from 'framer-motion';
@@ -31,7 +32,9 @@ const ProjectCard = ({ title, image, link, info, onClick }) => {
                             <span className="divider divider-horizontal mx-0"></span>
                             <div className="flex items-center gap-4">
                                 <a aria-label="Github page" onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" href={ info.html_url }><SiGithub /></a>                 
-                                <a aria-label="Visit site" onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" href={ link }><FiExternalLink /></a> 
+                                <a className={`${!link && 'cursor-not-allowed'}`} aria-label={link ? "Visit site" : "No link available"} onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" { ...(link && {href: link}) } >
+                                    { link ? <FiExternalLink /> : <BiUnlink /> }
+                                </a> 
                             </div> 
                         </div>                              
                     </div>

@@ -5,6 +5,7 @@ import { Await, useLoaderData, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { windowTransition, windowVariants } from "../config/animation";
 
+import { BiUnlink } from 'react-icons/bi';
 import { FiExternalLink } from 'react-icons/fi';
 import { SiGithub } from 'react-icons/si';
 import { motion } from "framer-motion";
@@ -66,7 +67,9 @@ const Project= () => {
                                     <span className="divider divider-horizontal mx-0"></span>
                                     <div className="flex items-center gap-4">
                                         <a aria-label="Github page" target="_BLANK" rel="noreferrer noopener" href={ project.info.html_url }><SiGithub /></a>                 
-                                        <a aria-label="Visit site" target="_BLANK" rel="noreferrer noopener" href={ project.link }><FiExternalLink /></a> 
+                                        <a className={`${!project.link && 'cursor-not-allowed'}`} aria-label={project.link ? "Visit site" : "No link available"} onClick={ e => e.stopPropagation() } target="_BLANK" rel="noreferrer noopener" { ...(project.link && {href: project.link}) } >
+                                            { project.link ? <FiExternalLink /> : <BiUnlink /> }
+                                        </a> 
                                     </div> 
                                 </div>                              
                             </div>
