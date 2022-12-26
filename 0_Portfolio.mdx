@@ -1,10 +1,30 @@
 ---
-title: How I made and host my portfolio on Github pages
-excerpt: This is the story of how I've made my portfolio using React and mdx, how I've hosted it in Github and how I can add content to it.
+title: How I made and hosted my portfolio on Github pages
+excerpt: This is the story of how I've made my portfolio using React and mdx, how I've hosted it on Github and how I can add content to it.
 image: media/portfolio.png
 date: 14/12/2022
 ---
 
 ## Why I made this
 
-Well, Github pages is a great hosting for static pages, but I wanted to add content to my page on a regular basis, so Jeckyll wasn't an option.
+Well, Github pages is a great hosting for static pages, but I wanted to add content to my page on a regular basis, so I wanted something more dynamic than Jeckyl that's why I've decided to make a React app who fetches the content from mdx files stored in a Github repo. This way, adding content is as simple as commiting a new file to a repo, no re-builds and no re-deploys needed.
+
+
+## How I've made it?
+
+That was a pretty simple aproach. I've started with a CRA app and React Router, using [Tailwind CSS](https://tailwindcss.com) and [DaisyUI](https://daisyui.com) to quickstart the styling.
+
+For the content, I use the [Github API](https://docs.github.com/en/rest/repos/contents) to fetch a list of files in the repo, sanitizing to only show mdx files. These files are then parsed with [@mdx/js](https://github.com/mdx-js/mdx) in order to convert the markdown to a React component, and with the help of remark and rehype plugins I parse the frontmatter metadata. As simple as that!
+
+~~~javascript
+const parse = async (data) => {
+    const evaluated = await evaluate(data, { 
+        ...runtime, 
+        remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter], 
+        rehypePlugins: [[rehypeHighlight, {detect: true}]] 
+    });
+    return evaluated;
+}
+~~~
+
+I hope you like this new version of my portfolio. 
