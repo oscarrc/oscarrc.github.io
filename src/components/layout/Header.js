@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import Cursor from '../partials/Cursor';
+import brand from "../../config/brand";
 import menu from "../../config/menu";
 import themes from '../../config/themes';
 import { useLocation } from 'react-router-dom'
@@ -24,7 +25,7 @@ const Header = ({ toggleTheme, currentTheme }) => {
         <header className="sticky top-0 z-50 backdrop-blur-sm">
             <nav className="navbar">
                 <div className="flex-1 truncate mr-4">
-                    <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; Oscar RC{typewritter}</Link>
+                    <Link to="/" className="hover:bg-transparent btn btn-ghost normal-case font-mono text-xl">&gt; {brand.brand}{typewritter}</Link>
                 </div>
                 <div className="flex-none">
                     <ul className={`menu sm:menu-horizontal px-2 sm:px-0 ${ openMenu && 'open'}`}>
