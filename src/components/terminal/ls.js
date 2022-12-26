@@ -10,9 +10,9 @@ const ls = async (queryClient, options) => {
         { text: `Use 'ls -h' to show this help`}
     ];
     
-    if(options.length > 1 || options[0] === "-h" || !["posts", "projects"].includes(options[0])){
+    if(options.length > 1 || (options[0] === "-h" || !["posts", "projects"].includes(options[0])) ){
         return [
-            ...(!["posts", "projects"].includes(options[0]) && { text: "Unrecognized option", classes: "text-error" }),
+            ...(!["posts", "projects"].includes(options[0]) && [{ text: `Unrecoginized option ${options.join(" ")}`, classes: "text-error" }]),
             ...help
         ];
     }else{

@@ -19,10 +19,11 @@ const post = async (queryClient, options) => {
         return file.split("\n").map(l => ({ text: l }))
     }
 
-    if(options.length > 1 || options[0] === "-h"){
-        let result = [...help];
-        if(options.length > 1) result[0] = { text: `Unrecognized option ${options.join(" ")}` };
-        return result;
+    if(options.length > 1 || options[0] === "-h" || options[0][0] === "-"){
+        return [
+            ...((options.length > 1 || options[0] !== "-h") && [{ text: `Unrecoginized option ${options.join(" ")}`, classes: "text-error" }]),
+            ...help
+        ];
     }
 
     return await parseFile(options[0]);

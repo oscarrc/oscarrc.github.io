@@ -27,7 +27,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
         let lines;
 
         inputRef.current.value = "";
-        console.log(cmd, "AA")
+        
         if(input !== "error"){
             setHistory(h => [...h, input]);
             !["clear", "exit"].includes(input) && addLines([{ text: input, prefix: ">", classes:"text-success mt-2" }]);
