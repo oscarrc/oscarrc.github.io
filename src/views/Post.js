@@ -1,3 +1,5 @@
+import "../styles/highlight.css";
+
 import { Await, useLoaderData } from "react-router-dom";
 
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -8,6 +10,9 @@ import { useMemo } from "react";
 const Post = () => {
     const post = useLoaderData();
     const Content = useMemo(() =>  post?.default, [post?.default])
+    const components = {
+        a: ({ children, href }) => <a href={href} target="_BLANK" rel="noreferrer noopener">{children}</a>
+    }
 
     return (
         <Suspense>
@@ -25,7 +30,7 @@ const Post = () => {
                             <figure className="w-full overflow-hidden mb-4 max-h-half">
                                 <img src={post?.image} alt={post?.title} />
                             </figure>
-                            { Content && <Content /> }
+                            { Content && <Content components={components} /> }
                         </div>
                     </div>
                 </section>

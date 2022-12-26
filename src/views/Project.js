@@ -1,3 +1,5 @@
+import "../styles/highlight.css";
+
 import { AiFillStar, AiOutlineClose, AiOutlineEye, AiOutlineFork } from 'react-icons/ai';
 import { Await, useLoaderData, useNavigate } from 'react-router-dom';
 import { Suspense, useCallback, useEffect, useMemo } from 'react';
@@ -12,6 +14,9 @@ const Project= () => {
     const navigate = useNavigate();
 
     const Content = useMemo(() => project?.default, [project?.default])
+    const components = {
+        a: ({ children, href }) => <a href={href} target="_BLANK" rel="noreferrer noopener">{children}</a>
+    }
 
     const closeWindow = useCallback((event) => {
         if( event.key === "Escape" || event.currentTarget.ariaLabel === "close"){
@@ -66,7 +71,7 @@ const Project= () => {
                                 </div>                              
                             </div>
                             <div className="max-w-full prose pt-8 pb-16">
-                                <Content />
+                                { Content && <Content components={components} /> }
                             </div>
                         </div>
                     </div>
