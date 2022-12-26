@@ -92,7 +92,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
     useEffect(() => {        
         const handleEnter = event => {
             if (event.code === "Enter" || event.code === "NumpadEnter") {
-              event.preventDefault();            
+              event.preventDefault();
               runCommand(inputRef.current.value);
             }
         };
@@ -108,7 +108,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
 
         return () => document.removeEventListener("keydown", handleEnter);
     }, [isOpen, runCommand]);
-    
+
     return (
         <div ref={termRef} onClick={ () => inputRef.current.focus() } className={`z-30 mockup-code fixed mx-4 sm:mx-16 my-16 pt-12 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
             <div className="overflow-y-scroll h-full w-full">
