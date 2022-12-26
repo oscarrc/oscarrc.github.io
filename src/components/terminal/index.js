@@ -114,7 +114,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
 
     return (
         <div onClick={ () => inputRef.current.focus() } className={`z-30 mockup-code fixed mx-4 sm:mx-16 my-16 pt-12 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
-            <div ref={termRef} className="overflow-y-scroll h-full w-full">
+            <div ref={termRef} className="overflow-y-scroll overflow-x-hidden h-full w-full">
                 {
                     lines.map( (line, index) => 
                         <pre className={ line.classes } key={index} data-prefix={line.prefix || ""}>
