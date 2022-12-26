@@ -115,12 +115,12 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                 {
                     lines.map( (line, index) => 
                         <pre className={ line.classes } key={index} data-prefix={line.prefix || ""}>
-                            <code className="inline-block whitespace-normal	max-w-full break-all pr-6">{ line.text }</code>
+                            <code className="inline-block whitespace-normal	max-w-full mr-8 break-words">{ line.text }</code>
                         </pre>
                     )
                 }
                 <pre className="mt-4 mb-2" data-prefix="$">
-                    <code className="inline-block whitespace-normal	max-w-full break-all pr-6">
+                    <code className="inline-block whitespace-normal	max-w-full mr-8 break-words">
                         <input aria-label="command prompt" ref={ inputRef } className="input active:outline-transparent focus:outline-transparent bg-transparent border-none p-0 h-6 rounded-none" type="text" />
                     </code>
                 </pre>
