@@ -75,12 +75,16 @@
       @apply w-full
     }
 
-    .mockup-code .info{
+    .mockup-code:not(.maximized) .info{
       @apply absolute bottom-2 px-2 flex flex-1 justify-end items-center w-full flex-wrap
     }
 
+    .mockup-code.maximized .info{
+      @apply lg:absolute lg:bottom-2 px-2 flex flex-1 flex-col lg:flex-row gap-4 justify-center lg:justify-end  items-center w-full flex-wrap
+    }
+
     .mockup-code .tags{
-      @apply absolute bottom-2 left-2
+      @apply justify-center lg:justify-start
     }
 
     .mockup-code .card {

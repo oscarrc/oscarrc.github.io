@@ -56,7 +56,7 @@ const Project= () => {
                         </figure>
                         <div className="card-body px-12 md:px-16 items-center">
                             <div className="info">
-                                <div className="flex flex-1 gap-2">
+                                <div className="tags flex flex-1 gap-2">
                                     { project.tags.split(',').map(tag => <span key={tag} className="badge truncate">{ tag }</span> )}
                                 </div>
                                 <div className="flex py-1 px-2 bg-neutral/75 gap-2">
