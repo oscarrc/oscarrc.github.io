@@ -7,7 +7,7 @@ const ls = async (queryClient, options) => {
         { text: `List available specified content`},
         { text: `Usage: ls <content>`},
         { text: `Valid contents are 'posts' and 'projects'`},
-        { text: `Use 'ls -h' to show this help`}
+        { text: <>Use '<em>ls -h</em>' to show this help</>}
     ];
     
     if(options.length > 1 || (options[0] === "-h" || !["posts", "projects"].includes(options[0])) ){

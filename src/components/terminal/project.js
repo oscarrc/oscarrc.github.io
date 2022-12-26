@@ -5,12 +5,12 @@ const project = async (queryClient, options) => {
     const help = [
         { text: `Retrieves and shows the specified project.`},
         { text: `Usage: project <slug>`},
-        { text: `Use 'ls projects' to get a list of available slugs.`},
-        { text: `Use 'projects -h' to show this help`}
+        { text: `Use 'ls projects' to get a list of available slugs.`},       
+        { text: <>Use '<em>projects -h</em>' to show this help</> }
     ];
     const notFound = [
         { text: `Project with slug ${options[0]} does not exist.`},
-        { text: `Use 'ls projects' to get a list of available slugs.`}
+        { text: <>Use '<em>ls projects</em>' to get a list of available slugs.</>}
     ]
 
     const parseFile = async (filename) => {

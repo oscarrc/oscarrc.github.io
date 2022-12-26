@@ -5,7 +5,7 @@ const about = async (queryClient, options) => {
     const help = [
         { text: `Shows info about the developer`},
         { text: `Usage: about`},
-        { text: `Use 'about -h' to show this help`}
+        { text: <>Use '<em>about -h</em>' to show this help</>}
     ];
     const notFound = [
         { text: `Post with slug ${options[0]} does not exist.`},
