@@ -18,6 +18,11 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
         });
     }
 
+    const handleForm = (e) => {
+        e.preventDefault();
+        runCommand(inputRef.current.value);
+    }
+
     const runCommand = useCallback(async (input) => { 
         const parsed = input.split(" ");
         const cmd = parsed[0];
@@ -88,24 +93,14 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
         }
     }, [setOpen, history, queryClient, toggleTheme])
 
-    useEffect(() => {        
-        const handleEnter = event => {
-            if (event.code === "Enter" || event.code === "NumpadEnter") {
-              event.preventDefault();
-              runCommand(inputRef.current.value);
-            }
-        };
-
+    useEffect(() => {  
         isOpen && inputRef.current.focus();
         isOpen ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden');
-        isOpen ? document.addEventListener("keydown", handleEnter) : document.removeEventListener("keydown", handleEnter);
         
         if(isOpen && !isInitialzed.current){ 
             runCommand("welcome");
             isInitialzed.current = true;
         }
-
-        return () => document.removeEventListener("keydown", handleEnter);
     }, [isOpen, runCommand]);
 
     useEffect(() => {        
@@ -114,7 +109,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
 
     return (
         <div onClick={ () => inputRef.current.focus() } className={`z-30 mockup-code fixed mx-4 sm:mx-16 my-16 pt-12 transition-all inset-0 duration-250 ease-in-out origin-bottom-right ${isOpen ? 'scale-1 translate-y-0 translate-x-0' : 'scale-0 translate-y-8 translate-x-8'} shadow-lg`}>
-            <div ref={termRef} className="overflow-y-scroll overflow-x-hidden h-full w-full">
+            <form onSubmit={handleForm} ref={termRef} className="overflow-y-scroll overflow-x-hidden h-full w-full">
                 {
                     lines.map( (line, index) => 
                         <pre className={ line.classes } key={index} data-prefix={line.prefix || ""}>
@@ -127,7 +122,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                         <input aria-label="command prompt" ref={ inputRef } className="input active:outline-transparent focus:outline-transparent bg-transparent border-none p-0 h-6 rounded-none" type="text" />
                     </code>
                 </pre>
-            </div>
+            </form>
         </div>
     )
 }

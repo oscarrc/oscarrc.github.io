@@ -84,7 +84,7 @@
     }
 
     .mockup-code .tags{
-      @apply justify-center lg:justify-start
+      @apply justify-center lg:justify-start flex-wrap
     }
 
     .mockup-code .card {
