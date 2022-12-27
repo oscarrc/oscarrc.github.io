@@ -63,6 +63,10 @@
       @apply relative cursor-pointer pb-0
     }
 
+    .mockup-code .prompt{
+      width: calc(100% - 32px);
+    }
+
     .mockup-code.maximized {
       @apply z-20 fixed cursor-default left-4 right-4 sm:left-16 sm:right-16 top-16 bottom-16;
     }
