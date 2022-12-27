@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useQueryClient } from 'react-query';
+import folders from "../../config/folders";
+import themes from "../../config/themes";
 
 const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
     const queryClient = useQueryClient();
@@ -68,17 +70,17 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                     { text: `Usage: cd <dir> - changes the working directory to the given dir`},
                     { text: <>Use: <em>cd ..</em> to go up one level</>}
                 ])
-                if(opt.length === 1 && ["posts", "projects"].includes(opt[0])) setDir(opt[0]);
+                if(opt.length === 1 && folders.includes(opt[0])) setDir(opt[0]);
                 else if(opt.length === 1 && opt[0] === "..") setDir("");
                 else addLines([{ text: "No such directory exists"}]);
                 break;
             case "theme":
-                const themes = ["black", "white", "cyberpunk"];
-                if(!themes.includes(opt)){
+                const available = themes.map(t => t.name);
+                if(!available.includes(opt)){
                     opt && opt !== '-h' && addLines([{ text: `Unrecognized theme ${opt}`}]);
                     addLines([
                         { text: 'Usage: theme <theme_name>'},
-                        { text: `Valid themes are ${themes.join(', ')}`}
+                        { text: `Valid themes are ${available.join(', ')}`}
                     ])
                 }
                 else {
