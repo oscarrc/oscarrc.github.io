@@ -76,7 +76,8 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                 break;
             case "theme":
                 const available = themes.map(t => t.name);
-                if(!available.includes(opt)){
+                
+                if(!available.includes(opt.join(" "))){
                     opt && opt !== '-h' && addLines([{ text: `Unrecognized theme ${opt}`}]);
                     addLines([
                         { text: 'Usage: theme <theme_name>'},
