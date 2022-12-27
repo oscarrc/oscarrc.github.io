@@ -1,6 +1,6 @@
 const help = [
     { text: <>Available commands</> },
-    { text: <>&emsp;- <strong>about</strong>: who am i? </> },
+    { text: <>&emsp;- <strong>whoami</strong>: who am i? </> },
     { text: <>&emsp;- <strong>post</strong>: retrieve and read one of my articles </> },
     { text: <>&emsp;- <strong>project</strong>: retrieve and take a look to any of my projects </> },
     { text: <>&emsp;- <strong>ls</strong>: list available content from posts or projects </> },

@@ -78,7 +78,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
             case "ls":
             case "post":
             case "project":
-            case "about":
+            case "whoami":
                 action = (await import(`./${cmd}`)).default;
                 lines = await action(queryClient, opt);
                 addLines(lines);
