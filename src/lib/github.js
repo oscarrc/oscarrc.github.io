@@ -17,7 +17,12 @@ const getFileList = async (user, repo, branch) => {
     const files = await fetch(`${baseUrl}/${user}/${repo}/contents?ref=${branch}`) 
                         .then( async res => {
                             const temp = await res.json();
-                            return temp.filter(i => i.type !== "dir" && i.name.substring(i.name.length - 4) === ".mdx")
+                            const filtered = temp.filter(i => i.type !== "dir" && i.name.substring(i.name.length - 4) === ".mdx")
+                            return filtered.sort((a, b) => {
+                                if(a.name > b.name) return -1;
+                                if(a.name < b.name) return 1;
+                                return 0;
+                            })
                         });
 
     return files;
