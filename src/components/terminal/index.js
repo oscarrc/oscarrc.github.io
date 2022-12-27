@@ -90,7 +90,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
             case "cat":
             case "whoami":
                 action = (await import(`./${cmd}`)).default;
-                lines = await action(queryClient, opt);
+                lines = await action(queryClient, dir, opt);
                 addLines(lines);
                 break;
             default:
@@ -101,7 +101,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                 catch { runCommand("error") }
                 break;
         }
-    }, [setOpen, history, queryClient, toggleTheme])
+    }, [setOpen, history, queryClient, dir, toggleTheme])
 
     useEffect(() => {  
         isOpen && inputRef.current.focus();

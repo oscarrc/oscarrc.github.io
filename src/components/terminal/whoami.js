@@ -1,7 +1,7 @@
 import config from "../../config/github";
 import { getFile } from "../../lib/github";
 
-const whoami = async (queryClient, options) => {   
+const whoami = async (queryClient, dir, options) => {   
     const help = [
         { text: `Shows info about the developer`},
         { text: `Usage: whoami`},

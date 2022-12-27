@@ -1,7 +1,7 @@
 import config from "../../config/github";
 import { getFile } from "../../lib/github";
 
-const project = async (queryClient, options) => {
+const project = async (queryClient, dir, options) => {
     const help = [
         { text: `Shows the content of the specified file.`},
         { text: `Usage: cat <file path>`},

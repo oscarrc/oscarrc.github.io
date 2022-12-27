@@ -1,7 +1,7 @@
 import config from "../../config/github";
 import { getFileList } from "../../lib/github";
 
-const ls = async (queryClient, options) => {    
+const ls = async (queryClient, dir, options) => {    
     const branch = `gh-${options[0]}`;
     const help = [
         { text: `List available content`},
