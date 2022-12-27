@@ -9,6 +9,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
     const termRef = useRef(null);
     const [ history, setHistory ] = useState([]);
     const [ lines, setLines ] = useState([]);
+    const [ dir, setDir ] = useState("");
 
     const addLines = (lines) => {
         lines.forEach((line, index) => {
@@ -61,6 +62,16 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                     addLines(h);
                 }
                 break;
+            case "cd":
+                if(opt.length === 1 && opt.includes("-h")) addLines([
+                    { text: `Changes the working directory`},
+                    { text: `Usage: cd <dir> - changes the working directory to the given dir`},
+                    { text: <>Use: <em>cd ..</em> to go up one level</>}
+                ])
+                if(opt.length === 1 && ["posts", "projects"].includes(opt[0])) setDir(opt[0]);
+                else if(opt.length === 1 && opt[0] === "..") setDir("");
+                else addLines([{ text: "No such directory exists"}]);
+                break;
             case "theme":
                 const themes = ["black", "white", "cyberpunk"];
                 if(!themes.includes(opt)){
@@ -76,8 +87,7 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                 }
                 break;
             case "ls":
-            case "post":
-            case "project":
+            case "cat":
             case "whoami":
                 action = (await import(`./${cmd}`)).default;
                 lines = await action(queryClient, opt);
@@ -113,13 +123,19 @@ const Terminal = ({ isOpen, setOpen, toggleTheme }) => {
                 {
                     lines.map( (line, index) => 
                         <pre className={ line.classes } key={index} data-prefix={line.prefix || ""}>
-                            <code className="inline-block whitespace-normal	max-w-full mr-8 break-words">{ line.text }</code>
+                            <code className="prompt inline-block whitespace-normal break-words">{ line.text }</code>
                         </pre>
                     )
                 }
-                <pre className="mt-4 mb-2" data-prefix="$">
-                    <code className="inline-block whitespace-normal	max-w-full mr-8 break-words">
-                        <input aria-label="command prompt" ref={ inputRef } className="input active:outline-transparent focus:outline-transparent bg-transparent border-none p-0 h-6 rounded-none" type="text" />
+                <pre className="mt-4 mb-2" data-prefix={`$`}>
+                    <code className="prompt inline-flex inline-block whitespace-normal break-words">
+                        { dir && 
+                            <div className="-ml-3 opacity-50 mr-1">
+                                {dir}
+                                <span className="ml-1">&gt;</span>
+                            </div> 
+                        }
+                        <input aria-label="command prompt" ref={ inputRef } className="input flex-1 active:outline-transparent focus:outline-transparent bg-transparent border-none p-0 h-6 rounded-none" type="text" />
                     </code>
                 </pre>
             </form>

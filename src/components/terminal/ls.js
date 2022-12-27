@@ -11,7 +11,7 @@ const ls = async (queryClient, options) => {
     ];
 
     if(!options.length || !options) return [{ text: "posts" },{ text: "projects" }];    
-    if(options[0] === "-h") return help;
+    if(options.length === 1 && options[0] === "-h") return help;
     
     if(["posts", "projects"].includes(options[0]) && options.length === 1 ) {
         const files = await queryClient.fetchQuery(["ls", branch], () => getFileList(config.user, config.repo, branch));
