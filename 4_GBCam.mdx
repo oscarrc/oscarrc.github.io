@@ -1,0 +1,20 @@
+---
+title: GBCam
+description: A Lo-Fi camera designed for those nostalgic 90s kids. Take photos with a limited shades of green palette, with a pixelated look and share them.
+image: media/gbcam.png
+repo: tactylophone
+tags: React, TailwindCSS, Canvas
+link: https://gbcam.oscarrc.me
+---
+
+## GBCam. A Lo-Fi camera for 90s kids
+
+GB Cam is a Game Boy Camera clone made with React and canvas. It can take pictures (and video) with the same look as Game Boy Camera did but it allows the user to swap between different palettes.
+
+The dithering is applied ussing an [arbitrary palette dithering algorithm](https://bisqwit.iki.fi/story/howto/dither/jy/) and the palette is converted by simply comparing each pixel color the closest one in the palette.
+
+GB Cam has implemented all the functions of the original like brightness and constrast adjustment, image flipping, palette variations and dithering factor, as well as 18 built-in frames for the picture.
+
+To make this posible, access to user's media device is required to the draw the video feed into a canvas matching Game Boy and Camera resolutions. The UI is saved in SVG filse in order to avoid artifacts when drawn.
+
+As always it is built as a PWA and packed as an Android TWA app using [Bubblewrap](/#/blog/1_PWA_to_TWA.mdx).
