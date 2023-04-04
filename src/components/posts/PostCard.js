@@ -18,7 +18,7 @@ const PostCard = ({ title, excerpt, image, date, readingTime, onClick }) => {
         >
             <div className="hidden sm:flex">
                 <figure className="w-40 h-40 aspect-square hidden md:flex overflow-hidden">
-                    <img className="object-cover object-top	h-full w-full" src={image} alt={`${title}`} />
+                    <img className="object-cover h-full w-full" src={image} alt={`${title}`} />
                 </figure>
             </div>
             <div className="card-body gap-4 p-0 pl-0 sm:pl-8">

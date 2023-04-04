@@ -22,7 +22,7 @@ const ProjectCard = ({ title, image, link, info, onClick }) => {
                 <label className="bg-secondary pl-2 text-neutral truncate">{title}</label>
                 <div className="card border-t border-t-base-100 relative h-full scroll aspect-video">
                     <figure className="h-full w-full">
-                        <img className="object-cover h-full w-full" src={ image } alt={ title } />
+                        <img className="object-cover object-top h-full w-full" src={ image } alt={ title } />
                     </figure>
                     <div className="info">
                         <div className="flex py-1 px-2 bg-neutral/75 gap-2">
