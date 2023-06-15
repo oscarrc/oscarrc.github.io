@@ -5,6 +5,7 @@ import Me from "../components/landing/Me";
 import Posts from "../components/posts";
 import Projects from "../components/projects";
 import brand from "../config/brand";
+import social from "../config/social";
 import useTypewriter from "../hooks/useTypewriter";
 
 const Landing = () => {
@@ -33,7 +34,7 @@ const Landing = () => {
             <About />
           </div>
         </div>
-        <button className="btn btn-secondary w-three-quarter mx-auto mt-8">Grab my resume</button>
+        <a href={ social.filter(e => e.label === "LinkedIn")?.[0]?.url || "#" } target="_BLANK" rel="noreferrer" className="btn btn-secondary w-three-quarter mx-auto mt-8">Grab my resume</a>
       </section>
       
       <section id="projects" className="flex flex-col justify-center items-center min-h-half">
