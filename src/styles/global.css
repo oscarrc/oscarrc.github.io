@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "catpuccin-mocha";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-field: 0.25rem;
+  --size-selector: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+  --color-primary: #b4befe;
+  --color-primary-content: #181825;
+  --color-secondary: #313244;
+  --color-secondary-content: #cdd6f4;
+  --color-accent: #f5e0dc;
+  --color-accent-content: #181825;
+  --color-neutral: #7f849c;
+  --color-neutral-content: #181825;
+  --color-success: #a6e3a1;
+  --color-success-content: #1e1e2e;
+  --color-warning: #f9e2af;
+  --color-warning-content: #1e1e2e;
+  --color-error: #f38ba8;
+  --color-error-content: #1e1e2e;
+  --color-info: #89dceb;
+  --color-info-content: #181825;
+  --color-base-100: #1e1e2e;
+  --color-base-200: #181825;
+  --color-base-300: #11111b;
+  --color-base-content: #cdd6f4;
+}
+
+@plugin "daisyui/theme" {
+  name: "catpuccin-latte";
+  default: false;
+  prefersdark: false;
+  color-scheme: light;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-field: 0.25rem;
+  --size-selector: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+  --color-primary: #7287fd;
+  --color-primary-content: #e6e9ef;
+  --color-secondary: #ccd0da;
+  --color-secondary-content: #4c4f69;
+  --color-accent: #dc8a78;
+  --color-accent-content: #e6e9ef;
+  --color-neutral: #8c8fa1;
+  --color-neutral-content: #e6e9ef;
+  --color-success: #40a02b;
+  --color-success-content: #eff1f5;
+  --color-warning: #df8e1d;
+  --color-warning-content: #eff1f5;
+  --color-error: #d20f39;
+  --color-error-content: #eff1f5;
+  --color-info: #04a5e5;
+  --color-info-content: #e6e9ef;
+  --color-base-100: #eff1f5;
+  --color-base-200: #e6e9ef;
+  --color-base-300: #dce0e8;
+  --color-base-content: #4c4f69;
+}
+
+@theme {
+  --font-nerd: "0xProtoMono", sans-serif;
+}
+
+@layer base {
+  html {
+    @apply font-nerd;
+  }
+}
+
+/* 0xProtoNerdFont Regular */
+@font-face {
+  font-family: "0xProto";
+  src: url("fonts/0xProtoNerdFont-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "0xProto";
+  src: url("fonts/0xProtoNerdFont-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "0xProto";
+  src: url("fonts/0xProtoNerdFont-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* 0xProtoNerdFontMono */
+@font-face {
+  font-family: "0xProtoMono";
+  src: url("fonts/0xProtoNerdFontMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "0xProtoMono";
+  src: url("fonts/0xProtoNerdFontMono-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "0xProtoMono";
+  src: url("fonts/0xProtoNerdFontMono-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* 0xProtoNerdFontPropo */
+@font-face {
+  font-family: "0xProtoPropo";
+  src: url("fonts/0xProtoNerdFontPropo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "0xProtoPropo";
+  src: url("fonts/0xProtoNerdFontPropo-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "0xProtoPropo";
+  src: url("fonts/0xProtoNerdFontPropo-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}

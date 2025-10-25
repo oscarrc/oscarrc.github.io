@@ -1,0 +1,29 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<header class="space-y-4">
+  <div class="navbar bg-primary/50 shadow-sm rounded-lg p-0 min-h-0">
+    <div class="flex-1">
+      <a class="btn btn-primary text-xl">0xRC</a>
+    </div>
+    <div class="join">
+      <button class="btn btn-ghost btn-square">
+        <Icon name="search" class="text-2xl font-bold" />
+      </button>
+      <button class="btn btn-ghost btn-square">
+        <Icon name="help" class="text-2xl font-bold" />
+      </button>
+      <button
+        class="btn btn-ghost btn-square block sm:hidden"
+      >
+        <Icon name="menu" class="text-xl font-bold" />
+      </button>
+    </div>
+  </div>
+  <nav class="font-thin text-sm hidden sm:block">
+    [ <a href="/" class="underline">Home</a> ] [ <a href="/" class="underline"
+      >Projects</a
+    > ] [ <a href="/" class="underline">Blog</a> ]
+  </nav>
+</header>

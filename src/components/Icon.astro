@@ -1,0 +1,14 @@
+---
+import icons from '../config/icons.ts';
+
+export interface Props {
+  name: keyof typeof icons;
+  class?: string;
+}
+
+const { name, class: className = "" } = Astro.props;
+
+const icon = icons[name];
+---
+
+<span class={className} set:html={icon}></span>
