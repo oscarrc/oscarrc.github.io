@@ -1,0 +1,82 @@
+---
+import { Image } from "astro:assets";
+import type { FrontmatterImage } from "@/types";
+
+interface Props {
+  title?: string;
+  avatar?: FrontmatterImage;
+}
+const { title, avatar } = Astro.props;
+---
+
+<section class="card md:card-side bg-transparent gap-8 max-w-full overflow-hidden rounded-none">
+  {
+    avatar && (
+      <figure class="w-64 h-64 flex-shrink-0 rounded-none p-0">
+        <Image 
+          priority 
+          src={avatar.src} 
+          alt={avatar.alt} 
+          class="object-cover"
+        />
+      </figure>
+    )
+  }
+  <div class="card-body p-0 gap-8 min-w-0 flex-1">
+    <h2 class="card-title flex-col items-start overflow-hidden">
+      {title}
+      <span class="truncate">
+        {
+          Array.from(Array(title?.length).keys())
+            .map(() => "-")
+            .join("")
+        }
+      </span>
+    </h2>
+    <slot />
+    <div class="flex flex-col space-y-2">
+      <div class="flex flex-wrap gap-2">
+        <div
+          class="size-8 rounded border border-base-content/20 bg-primary"
+          title="Primary"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-secondary"
+          title="Secondary"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-accent"
+          title="Accent"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-neutral"
+          title="Neutral"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-success"
+          title="Success"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-warning"
+          title="Warning"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-error"
+          title="Error"
+        >
+        </div>
+        <div
+          class="size-8 rounded border border-base-content/20 bg-info"
+          title="Info"
+        >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

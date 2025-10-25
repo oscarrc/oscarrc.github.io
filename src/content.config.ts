@@ -1,16 +1,17 @@
 import { defineCollection, z } from "astro:content";
 
-import brand from "@/config/brand";
+import config from "@/site.config";
 import { glob } from "astro/loaders";
 
 const homeCollection = defineCollection({
-  loader: glob({ pattern: ['home.md', 'home.mdx'], base: './src/content' }),
+  loader: glob({ pattern: ['*.md', '*.mdx'], base: './src/content/home' }),
   schema: ({ image }) =>
     z.object({
+      title: z.string().default(config.description),
       avatar: z
         .object({
           src: image(),
-          alt: z.string().optional().default(brand.name),
+          alt: z.string().optional().default(config.name),
         })
         .optional(),
       github: z.string().optional(),

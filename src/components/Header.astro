@@ -1,5 +1,8 @@
 ---
 import Icon from "./Icon.astro";
+import config from "@/site.config";
+
+const { links } = config;
 ---
 
 <header class="space-y-4">
@@ -21,9 +24,11 @@ import Icon from "./Icon.astro";
       </button>
     </div>
   </div>
-  <nav class="font-thin text-sm hidden sm:block">
-    [ <a href="/" class="underline">Home</a> ] [ <a href="/" class="underline"
-      >Projects</a
-    > ] [ <a href="/" class="underline">Blog</a> ]
+  <nav class="font-thin text-sm hidden sm:flex justify-end gap-2">
+    {
+      Object.entries(links).map(([key, url]) => (
+        <>[ <a href={url} class="underline capitalize">{key}</a> ] </>
+      ))
+    }
   </nav>
 </header>

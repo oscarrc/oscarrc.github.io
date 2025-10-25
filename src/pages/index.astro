@@ -1,7 +1,29 @@
 ---
+import AboutCard from "@/components/AboutCard.astro";
+import GithubCalendar from "@/components/GithubCalendar.astro";
+import config from "@/site.config";
 import Layout from "@/layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+const home = await getCollection("home");
+const github = config.github;
+
+let AboutContent;
+let aboutAvatar;
+let aboutTitle;
+
+if (home.length > 0) {
+  const homeEntry = home[0];
+  const { Content } = await render(homeEntry);
+  AboutContent = Content;
+  aboutTitle = homeEntry.data.title;
+  aboutAvatar = homeEntry.data.avatar;
+}
 ---
 
 <Layout>
-  <h1>Astro</h1>
+  <AboutCard title={aboutTitle} avatar={aboutAvatar}>
+    {AboutContent && <AboutContent />}
+  </AboutCard>
+  {github && <GithubCalendar username={github} />}
 </Layout>
