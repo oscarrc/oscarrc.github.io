@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { FrontmatterImage } from "@/types";
+import { range } from "@/utils/array";
 
 interface Props {
   title?: string;
@@ -9,7 +10,7 @@ interface Props {
 const { title, avatar } = Astro.props;
 ---
 
-<section class="card md:card-side bg-transparent gap-8 max-w-full overflow-hidden rounded-none">
+<article class="card md:card-side bg-transparent gap-8 max-w-full overflow-hidden rounded-none">
   {
     avatar && (
       <figure class="w-64 h-64 flex-shrink-0 rounded-none p-0">
@@ -22,12 +23,12 @@ const { title, avatar } = Astro.props;
       </figure>
     )
   }
-  <div class="card-body p-0 gap-8 min-w-0 flex-1">
+  <div class="card-body p-0 gap-6 min-w-0 flex-1">
     <h2 class="card-title flex-col items-start overflow-hidden">
       {title}
       <span class="truncate">
         {
-          Array.from(Array(title?.length).keys())
+          range(title?.length || 0)
             .map(() => "-")
             .join("")
         }
@@ -79,4 +80,4 @@ const { title, avatar } = Astro.props;
       </div>
     </div>
   </div>
-</section>
+</article>

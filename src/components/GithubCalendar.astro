@@ -16,14 +16,11 @@ import type {
   GitHubActivityDay,
   GitHubActivityWeek,
 } from '../types'
+import { range } from '@/utils/array'
 
 interface Props {
   username: string
   year?: number
-}
-
-const range = (n: number) => {
-  return [...Array(n).keys()]
 }
 
 const validateActivities = (activities: Array<GitHubActivityDay>) => {

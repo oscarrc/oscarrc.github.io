@@ -1,0 +1,29 @@
+---
+import config from "@/site.config";
+import Icon from "./Icon.astro";
+
+const { name, socials } = config;
+---
+
+<footer
+  class="footer footer-horizontal footer-center text-base-content rounded gap-8"
+>
+  <nav>
+    <div class="grid grid-flow-col gap-8">
+      {
+        Object.entries(socials).map(([key, url]) => (
+          <a href={url} target="_blank" rel="noopener noreferrer" name={`${key} ${name}`}>
+            <Icon name={key as any} class="text-4xl" />
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+  <aside>
+    <p>
+      {name} © {new Date().getFullYear()} :: Last updated on {
+        new Date().toLocaleDateString()
+      }
+    </p>
+  </aside>
+</footer>

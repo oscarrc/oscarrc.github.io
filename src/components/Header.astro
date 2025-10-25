@@ -2,13 +2,13 @@
 import Icon from "./Icon.astro";
 import config from "@/site.config";
 
-const { links } = config;
+const { brand, links } = config;
 ---
 
 <header class="space-y-4">
   <div class="navbar bg-primary/50 shadow-sm rounded-lg p-0 min-h-0">
     <div class="flex-1">
-      <a class="btn btn-primary text-xl">0xRC</a>
+      <a class="btn btn-primary text-xl">{brand}</a>
     </div>
     <div class="join">
       <button class="btn btn-ghost btn-square">
@@ -17,9 +17,7 @@ const { links } = config;
       <button class="btn btn-ghost btn-square">
         <Icon name="help" class="text-2xl font-bold" />
       </button>
-      <button
-        class="btn btn-ghost btn-square block sm:hidden"
-      >
+      <button class="btn btn-ghost btn-square block sm:hidden">
         <Icon name="menu" class="text-xl font-bold" />
       </button>
     </div>
@@ -27,7 +25,13 @@ const { links } = config;
   <nav class="font-thin text-sm hidden sm:flex justify-end gap-2">
     {
       Object.entries(links).map(([key, url]) => (
-        <>[ <a href={url} class="underline capitalize">{key}</a> ] </>
+        <>
+          [{" "}
+          <a href={url} class="underline capitalize" name={key}>
+            {key}
+          </a>{" "}
+          ]{" "}
+        </>
       ))
     }
   </nav>

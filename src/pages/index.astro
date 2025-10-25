@@ -4,6 +4,7 @@ import GithubCalendar from "@/components/GithubCalendar.astro";
 import config from "@/site.config";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
+import Section from "@/components/Section.astro";
 
 const home = await getCollection("home");
 const github = config.github;
@@ -22,8 +23,16 @@ if (home.length > 0) {
 ---
 
 <Layout>
-  <AboutCard title={aboutTitle} avatar={aboutAvatar}>
-    {AboutContent && <AboutContent />}
-  </AboutCard>
-  {github && <GithubCalendar username={github} />}
+  <Section class="flex flex-col gap-16">
+    <AboutCard title={aboutTitle} avatar={aboutAvatar}>
+      {AboutContent && <AboutContent />}
+    </AboutCard>
+    {github && <GithubCalendar username={github} />}
+  </Section>
+  <Section title="Personal Projects">
+    <p>Coming soon...</p>
+  </Section>
+  <Section title="Latest post">
+    <p>Coming soon...</p>
+  </Section>
 </Layout>

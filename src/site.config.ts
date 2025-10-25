@@ -1,12 +1,13 @@
 export default {
-  name: '0xRC',
+  brand: '0xRC',
+  name: 'Oscar R.C.',
   description: 'Oscar R.C. | Software Architect & Full-Stack Developer',
   github: 'oscarrc',
-  social: {
-    github: 'oscarrc',
-    linkedin: 'oscarrc',
-    instagram: 'oscarrc',
-    kofi: 'oscarrc',
+  socials: {
+    github: 'https://github.com/oscarrc',
+    linkedin: 'https://www.linkedin.com/in/oscarrc-web/',
+    instagram: 'https://www.instagram.com/oscarrc_web/',
+    kofi: 'https://ko-fi.com/oscarrc',
   },
   links: {
     home: '/',
