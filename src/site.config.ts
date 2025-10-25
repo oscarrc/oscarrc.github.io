@@ -10,7 +10,7 @@ export default {
     kofi: 'https://ko-fi.com/oscarrc',
   },
   links: {
-    home: '/',
+    about: '/about/',
     projects: '/projects/',
     blog: '/blog/',
   }
