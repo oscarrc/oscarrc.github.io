@@ -10,11 +10,12 @@ interface Props {
 const { post } = Astro.props;
 
 const { remarkPluginFrontmatter } = await render(post);
+const { minutesRead } = remarkPluginFrontmatter;
+
 const description =
   remarkPluginFrontmatter.description || post.data.description;
 
 const tags = post.data.tags;
-const cover = post.data.cover;
 const author = post.data.author;
 const series = post.data.series;
 
@@ -33,15 +34,20 @@ const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`;
     <h1 class="text-2xl font-semibold">
       <a href={articleLink}>## {post.data.title}</a>
     </h1>
-    <div class="flex items-center gap-2 text-primary/50 text-sm">
+    <div class="flex items-center gap-2 text-neutral text-sm">
       <time>
         <Icon name="calendar" />
         {date}
       </time>
+      <span>|</span>
+      <time>
+        <Icon name="clock" />
+        {minutesRead}
+      </time>
       {
         author && (
           <>
-            <span>·</span>
+            <span>|</span>
             <span>
               <Icon name="user" />
               {author}
@@ -70,7 +76,7 @@ const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`;
     )
   }
   <div class="flex gap-2 mt-2">
-    <a class="btn btn-primary btn-outline btn-sm" href={articleLink}>
+    <a class="btn btn-outline btn-sm" href={articleLink}>
       Read
       <Icon name="chevronRight" />
     </a>
