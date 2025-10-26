@@ -55,13 +55,13 @@ if (home.length > 0) {
   </Section>
   <Section title="Personal Projects" class="flex flex-col gap-8">
     {projects.map((project) => <ProjectCard project={project} />)}
-    <SectionButton title="View all projects" href="/projects" />
+    <SectionButton href="/projects">View all projects</SectionButton>
   </Section>
   <Section>
     {github && <GithubCalendar username={github} year={2025} />}
   </Section>
   <Section title="Latest Posts" class="flex flex-col gap-8">
     {posts.map((post) => <PostCard post={post} />)}
-    <SectionButton title="View all posts" href="/posts" />
+    <SectionButton href="/posts">View all posts</SectionButton>
   </Section>
 </Layout>

@@ -1,0 +1,23 @@
+---
+import SectionButton from "@/components/SectionButton.astro";
+import Typewritter from "@/components/Typewritter.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+  <div
+    class="flex-1 flex flex-col gap-4 items-center text-center justify-center p-4"
+  >
+    <pre
+      class="text-primary leading-tight whitespace-pre font-mono">
+███████╗  ██████╗   ██████╗
+ ██╔════╝ ██╔═══██╗ ██╔═══██║
+ ███████╗ ██║   ██║ ██║   ██║
+      ██║ ██║   ██║ ██║   ██║
+ ██████╔╝ ╚██████╔╝ ╚██████╔╝
+╚═════╝   ╚═════╝   ╚═════╝
+    </pre>
+    <Typewritter class="text-primary"> Internal Server Error </Typewritter>
+    <SectionButton href="/">Go back home</SectionButton>
+  </div>
+</Layout>
