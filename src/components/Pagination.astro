@@ -1,0 +1,43 @@
+---
+import IconChevronsLeft from "~/icons/chevrons-left.svg";
+import IconChevronsRight from "~/icons/chevrons-right.svg";
+import Icon from "./Icon.astro";
+import SectionButton from "./SectionButton.astro";
+
+interface Props {
+  prevLink?: string;
+  prevText?: string;
+  nextLink?: string;
+  nextText?: string;
+}
+
+const { prevLink, prevText, nextLink, nextText } = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex w-full mt-8 mb-4",
+    {
+      "justify-between": !!prevLink && !!nextLink,
+      "justify-start": !!prevLink && !nextLink,
+      "justify-end": !prevLink && !!nextLink,
+    },
+  ]}
+>
+  {
+    prevLink && (
+      <SectionButton href={prevLink} aria-label="Previous Page">
+        <Icon name="chevronLeft" class="mr-2"/>
+        {prevText || "Previous"}
+      </SectionButton>
+    )
+  }
+  {
+    nextLink && (
+      <SectionButton href={nextLink} aria-label="Next Page">
+        {nextText || "Next"}
+        <Icon name="chevronRight" class="ml-2" />
+      </SectionButton>
+    )
+  }
+</div>

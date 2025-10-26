@@ -1,17 +1,31 @@
 ---
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import Pagination from "@/components/Pagination.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import { getSortedCollection } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const sortedProjects = await getSortedCollection("projects");
-  return paginate(sortedProjects, { pageSize: siteConfig.pageSize });
+  const projects = await getSortedCollection("projects");
+  return paginate(projects, { pageSize: siteConfig.pageSize });
 }) satisfies GetStaticPaths;
 
+const { page } = Astro.props;
+const projects = page.data;
 ---
 
 <Layout>
   <Breadcrumbs />
+  <Section class="flex flex-col gap-8">
+    {projects.map((project) => <ProjectCard project={project} />)}
+    <Pagination
+      prevLink={page.url.prev}
+      prevText="Newer Projects"
+      nextLink={page.url.next}
+      nextText="Older Projects"
+    />
+  </Section>
 </Layout>

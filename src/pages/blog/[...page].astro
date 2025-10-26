@@ -1,17 +1,25 @@
 ---
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PostCard from "@/components/PostCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import { getSortedCollection } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const sortedPosts = await getSortedCollection("posts");
-  return paginate(sortedPosts, { pageSize: siteConfig.pageSize });
+  const posts = await getSortedCollection("posts");
+  return paginate(posts, { pageSize: siteConfig.pageSize });
 }) satisfies GetStaticPaths;
 
+const { page } = Astro.props;
+const posts = page.data;
 ---
 
 <Layout>
   <Breadcrumbs />
+  <Section class="flex flex-col gap-8">
+    {posts.map((post) => <PostCard post={post} />)}
+  </Section>
 </Layout>

@@ -171,12 +171,14 @@
   font-display: swap;
 }
 
-@layer components {
+@layer utilities {  
   .btn-sm{
     font-weight: normal;
     --size: calc(var(--size-field, 0.25rem) * 6);
   }
+}
 
+@layer components {
   .path li:before {
     content: "/";
   }

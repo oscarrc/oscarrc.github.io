@@ -16,5 +16,5 @@ export default {
     projects: '/projects/',
     blog: '/blog/',
   },
-  pageSize: 10,
+  pageSize: 5,
 }

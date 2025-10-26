@@ -7,21 +7,21 @@ const error = "Internal Server Error";
 ---
 
 <Layout>
-  <div
-    class="flex-1 flex flex-col gap-4 items-center text-center justify-center p-4"
-  >
-    <pre
-      class="text-primary leading-tight whitespace-pre font-mono">
+  <div class="flex flex-col flex-1 items-center justify-around p-4">
+    <div class="flex flex-col gap-4 items-center justify-center">
+      <pre
+        class="text-primary leading-tight whitespace-pre font-mono">
 ███████╗  ██████╗   ██████╗
- ██╔════╝ ██╔═══██╗ ██╔═══██║
- ███████╗ ██║   ██║ ██║   ██║
-      ██║ ██║   ██║ ██║   ██║
- ██████╔╝ ╚██████╔╝ ╚██████╔╝
+██╔════╝ ██╔═══██╗ ██╔═══██║
+███████╗ ██║   ██║ ██║   ██║
+     ██║ ██║   ██║ ██║   ██║
+██████╔╝ ╚██████╔╝ ╚██████╔╝
 ╚═════╝   ╚═════╝   ╚═════╝
     </pre>
-    <Typewritter class="text-primary" length={error.length}>
-      {error}
-    </Typewritter>
+      <Typewritter class="text-primary" length={error.length}>
+        {error}
+      </Typewritter>
+    </div>
     <SectionButton href="/">Go back home</SectionButton>
   </div>
 </Layout>
