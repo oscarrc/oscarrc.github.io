@@ -4,7 +4,8 @@ description: A comprehensive web-based controller, editor, and sequencer for the
 cover: 
   src: '@/content/projects/nts-web/cover.png'
   alt: 'NTS-web Korg NTS-1 controller'
-repo: nts-web
+repo: oscarrc/nts-web
+url: https://nts-web.oscarrc.me
 tags: [React, Web MIDI, TailwindCSS, Electron, Android, PWA, Music Technology]
 draft: false
 published: 01/23/2021

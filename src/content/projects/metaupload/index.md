@@ -4,7 +4,8 @@ description: A decentralized file sharing service built with React and IPFS, ena
 cover: 
   src: '@/content/projects/metaupload/cover.png'
   alt: 'Metaupload decentralized file sharing'
-repo: metaupload
+repo: oscarrc/metaupload
+url: https://metaupload.oscarrc.me
 tags: [React, IPFS, PWA, Web3, Decentralized]
 draft: false
 published: 12/16/2021

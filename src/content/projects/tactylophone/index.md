@@ -4,7 +4,8 @@ description: A monophonic square wave synthesizer built with vanilla JavaScript 
 cover: 
   src: '@/content/projects/tactylophone/cover.png'
   alt: 'Tactylophone synthesizer interface'
-repo: tactylophone
+repo: oscarrc/tactylophone
+url: https://tactylophone.oscarrc.me
 tags: [HTML5, CSS3, JavaScript, Web Audio API, PWA, Android, Music Technology]
 draft: false
 published: 01/31/2023

@@ -4,7 +4,9 @@ description: A modern Omegle-style random video chat platform built with the MER
 cover: 
   src: '@/content/projects/omay-live/cover.png'
   alt: 'Omay.live video chat platform'
-repo: omay.live
+repo: oscarrc/omay.live
+url: https://omay.live
+active: false
 tags: [React, TailwindCSS, Socket.io, Node.js, MongoDB, MERN Stack, Video Chat]
 draft: false
 published: 02/06/2024

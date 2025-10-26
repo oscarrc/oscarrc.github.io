@@ -4,7 +4,9 @@ description: A comprehensive full-stack music streaming PWA built with Angular a
 cover: 
   src: '@/content/projects/tunrly/cover.png'
   alt: 'Tunrly music app'
-repo: tunrly-pwa
+repo: oscarrc/tunrly-pwa
+url: https://tunrly.com
+active: false
 tags: [Angular, Node JS, MongoDB, Express, Mongoose, Bootstrap, PWA]
 draft: false
 published: 02/22/2022

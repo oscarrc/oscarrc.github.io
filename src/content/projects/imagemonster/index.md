@@ -4,7 +4,8 @@ description: An AI-powered background removal tool that processes images entirel
 cover: 
   src: '@/content/projects/imagemonster/cover.png'
   alt: 'ImageMonster AI background removal interface'
-repo: image-monster
+repo: oscarrc/image-monster
+url: https://imagemonster.oscarrc.me
 tags: [React, TypeScript, TailwindCSS, daisyUI, Transformers.js, AI, Machine Learning]
 draft: false
 published: 03/05/2025

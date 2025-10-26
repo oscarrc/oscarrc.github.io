@@ -47,6 +47,29 @@ const projectsCollection = defineCollection({
         })
         .optional(),
       repo: z.string().optional(),
+      url: z.string().url().optional(),
+      active: z.boolean().optional().default(true),
+    }),
+})
+
+const postsCollection = defineCollection({
+  loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: './src/content/posts' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      published: z.coerce.date(),
+      updated: z.coerce.date().optional(),
+      draft: z.boolean().optional().default(false),
+      description: z.string().optional(),
+      author: z.string().optional(),
+      series: z.string().optional(),
+      tags: z.array(z.string()).optional().default([]),
+      cover: z
+        .strictObject({
+          src: image(),
+          alt: z.string(),
+        })
+        .optional(),
     }),
 })
 
@@ -54,4 +77,5 @@ export const collections = {
   home: homeCollection,
   skills: skillsCollection,
   projects: projectsCollection,
+  posts: postsCollection,
 };

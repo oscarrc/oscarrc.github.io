@@ -4,7 +4,8 @@ description: A nostalgic Game Boy Camera clone built with React and Canvas, feat
 cover: 
   src: '@/content/projects/gbcam/cover.png'
   alt: 'GBCam Game Boy Camera interface'
-repo: gbcam
+repo: oscarrc/gbcam
+url: https://gbcam.oscarrc.me
 tags: [React, TailwindCSS, Canvas, PWA, Android, Nostalgia, Image Processing]
 draft: false
 published: 04/01/2023

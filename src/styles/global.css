@@ -147,3 +147,10 @@
   font-weight: 400;
   font-style: italic;
 }
+
+@layer utilities {
+ .btn-sm{
+   font-weight: normal;
+   --size: calc(var(--size-field, 0.25rem) * 6);
+ }
+}

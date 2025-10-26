@@ -7,15 +7,27 @@ import Layout from "@/layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
 import Section from "@/components/Section.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import PostCard from "@/components/PostCard.astro";
+import SectionButton from "@/components/SectionButton.astro";
 
 const home = await getCollection("home");
 const projects = (await getCollection("projects"))
+  .filter((project) => !project.data.draft)
   .sort(
     (a, b) =>
       new Date(b.data.published).getTime() -
-      new Date(a.data.published).getTime()
+      new Date(a.data.published).getTime(),
   )
-  .slice(0, 4);
+  .slice(0, 3);
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort(
+    (a, b) =>
+      new Date(b.data.published).getTime() -
+      new Date(a.data.published).getTime(),
+  )
+  .slice(0, 3);
 
 const github = config.github;
 
@@ -41,15 +53,15 @@ if (home.length > 0) {
   <Section>
     <SkillsSection />
   </Section>
-  <Section title="Personal Projects">
-    {
-      projects.map((project) => <ProjectCard project={project} />)
-    }
+  <Section title="Personal Projects" class="flex flex-col gap-8">
+    {projects.map((project) => <ProjectCard project={project} />)}
+    <SectionButton title="View all projects" href="/projects" />
   </Section>
   <Section>
     {github && <GithubCalendar username={github} year={2025} />}
   </Section>
-  <Section title="Latest post">
-    <p>Coming soon...</p>
+  <Section title="Latest Posts" class="flex flex-col gap-8">
+    {posts.map((post) => <PostCard post={post} />)}
+    <SectionButton title="View all posts" href="/posts" />
   </Section>
 </Layout>
