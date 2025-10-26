@@ -13,7 +13,7 @@ const { title, avatar } = Astro.props;
 <article class="card md:card-side bg-transparent gap-8 max-w-full overflow-hidden rounded-none">
   {
     avatar && (
-      <figure class="w-64 h-64 flex-shrink-0 rounded-none p-0">
+      <figure class="w-64 h-64 flex-shrink-0 rounded-none p-0 self-end md:self-auto">
         <Image 
           priority 
           src={avatar.src} 
@@ -24,7 +24,7 @@ const { title, avatar } = Astro.props;
     )
   }
   <div class="card-body p-0 gap-6 min-w-0 flex-1">
-    <h2 class="card-title flex-col items-start overflow-hidden text-primary">
+    <h1 class="card-title flex-col items-start overflow-hidden text-primary">
       {title}
       <span class="truncate">
         {
@@ -33,7 +33,7 @@ const { title, avatar } = Astro.props;
             .join("")
         }
       </span>
-    </h2>
+    </h1>
     <slot />
     <div class="flex flex-col space-y-2">
       <div class="flex flex-wrap gap-2">

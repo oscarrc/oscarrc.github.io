@@ -1,7 +1,9 @@
 export default {
   brand: '0xRC',
   name: 'Oscar R.C.',
-  description: 'Oscar R.C. | Software Architect & Full-Stack Developer',
+  site: 'https://oscarrc.me',
+  title: 'Oscar R.C. | Software Architect & Full-Stack Developer',
+  description: 'Welcome to my personal website! I am Oscar R.C., a passionate Software Architect and Full-Stack Developer. Explore my projects, blog posts, and get in touch!',
   github: 'oscarrc',
   socials: {
     github: 'https://github.com/oscarrc',

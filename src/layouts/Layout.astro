@@ -3,6 +3,15 @@ import { ClientRouter } from "astro:transitions";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import "@/styles/global.css";
+import siteConfig from "@/site.config";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteConfig.title, description = siteConfig.description } =
+  Astro.props;
 ---
 
 <html lang="en">
@@ -10,7 +19,8 @@ import "@/styles/global.css";
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <title>Astro</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <ClientRouter />
   </head>
   <body>

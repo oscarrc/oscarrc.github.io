@@ -31,9 +31,9 @@ const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`;
 
 <article class="w-full flex flex-col gap-4 py-4">
   <div class="flex flex-col gap-1">
-    <h1 class="text-2xl font-semibold">
+    <h3 class="text-2xl font-semibold">
       <a href={articleLink}>## {post.data.title}</a>
-    </h1>
+    </h3>
     <div class="flex items-center gap-2 text-neutral text-sm">
       <time>
         <Icon name="calendar" />

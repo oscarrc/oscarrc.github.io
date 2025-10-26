@@ -1,14 +1,14 @@
 ---
 import Icon from "./Icon.astro";
-import config from "@/site.config";
+import siteConfig from "@/site.config";
 
-const { brand, links } = config;
+const { brand, links } = siteConfig;
 ---
 
 <header class="space-y-4">
   <div class="navbar bg-primary/50 shadow-sm rounded-lg p-0 min-h-0">
     <div class="flex-1">
-      <a class="btn btn-primary text-xl">{brand}</a>
+      <a href="/" class="btn btn-primary text-xl">{brand}</a>
     </div>
     <div class="join">
       <button class="btn btn-ghost btn-square">

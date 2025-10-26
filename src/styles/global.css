@@ -88,6 +88,7 @@
   src: url("/fonts/0xProtoNerdFont-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -95,6 +96,7 @@
   src: url("/fonts/0xProtoNerdFont-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -102,6 +104,7 @@
   src: url("/fonts/0xProtoNerdFont-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
 
 /* 0xProtoNerdFontMono */
@@ -110,6 +113,7 @@
   src: url("/fonts/0xProtoNerdFontMono-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -117,6 +121,7 @@
   src: url("/fonts/0xProtoNerdFontMono-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -124,6 +129,7 @@
   src: url("/fonts/0xProtoNerdFontMono-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
 
 /* 0xProtoNerdFontPropo */
@@ -132,6 +138,7 @@
   src: url("/fonts/0xProtoNerdFontPropo-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -139,6 +146,7 @@
   src: url("/fonts/0xProtoNerdFontPropo-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -146,6 +154,7 @@
   src: url("/fonts/0xProtoNerdFontPropo-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
 
 @layer utilities {

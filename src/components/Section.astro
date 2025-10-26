@@ -12,8 +12,8 @@ const { title, class: className = "" } = Astro.props;
 <section class={className}>
   {
     title && (
-      <h2 class="flex flex-col text-primary text-2xl font-bold">
-        # {title}
+      <h2 class="flex flex-col text-primary text-2xl">
+        > {title}
         <span class="truncate">
           {range(title ? title.length + 3 : 0)
             .map(() => "-")
