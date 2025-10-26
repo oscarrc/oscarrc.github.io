@@ -1,0 +1,99 @@
+{
+  "skills": [
+    {
+      "skill": "HTML5",
+      "level": 9,
+      "category": "Languages"
+    },
+    {
+      "skill": "CSS3",
+      "level": 9,
+      "category": "Languages"
+    },
+    {
+      "skill": "Javascript",
+      "level": 8,
+      "category": "Languages"
+    },
+    {
+      "skill": "Typescript",
+      "level": 7,
+      "category": "Languages"
+    },
+    {
+      "skill": "PHP",
+      "level": 6,
+      "category": "Languages"
+    },
+    {
+      "skill": "Python",
+      "level": 7,
+      "category": "Languages"
+    },
+    {
+      "skill": "Node.js",
+      "level": 8,
+      "category": "Frameworks"
+    },
+    {
+      "skill": "React.js",
+      "level": 8,
+      "category": "Frameworks"
+    },
+    {
+      "skill": "Next.js",
+      "level": 7,
+      "category": "Frameworks"
+    },
+    {
+      "skill": "Astro.js",
+      "level": 6,
+      "category": "Frameworks"
+    },
+    {
+      "skill": "React Native",
+      "level": 5,
+      "category": "Frameworks"
+    },
+    {
+      "skill": "MongoDB",
+      "level": 7,
+      "category": "Databases"
+    },
+    {
+      "skill": "PostgreSQL",
+      "level": 6,
+      "category": "Databases"
+    },
+    {
+      "skill": "SQL / MySQL",
+      "level": 7,
+      "category": "Databases"
+    },
+    {
+      "skill": "Redis",
+      "level": 5,
+      "category": "Databases"
+    },
+    {
+      "skill": "AWS",
+      "level": 6,
+      "category": "Infrastructure"
+    },
+    {
+      "skill": "GCP",
+      "level": 4,
+      "category": "Infrastructure"
+    },
+    {
+      "skill": "Docker",
+      "level": 7,
+      "category": "Infrastructure"
+    },
+    {
+      "skill": "Linux VPS",
+      "level": 8,
+      "category": "Infrastructure"
+    }
+  ]
+}

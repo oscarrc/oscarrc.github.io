@@ -1,58 +1,11 @@
 ---
-import {
-  differenceInCalendarDays,
-  eachDayOfInterval,
-  formatISO,
-  getDay,
-  nextDay,
-  parseISO,
-  subWeeks,
-  getYear,
-  isValid,
-} from 'date-fns'
-import type {
-  WeekdayIndex,
-  GitHubActivityApiResponse,
-  GitHubActivityDay,
-  GitHubActivityWeek,
-} from '../types'
+import { parseISO, getYear } from 'date-fns'
 import { range } from '@/utils/array'
+import { fetchData, groupByWeeks, groupByMonths } from '@/utils/github'
 
 interface Props {
   username: string
   year?: number
-}
-
-const validateActivities = (activities: Array<GitHubActivityDay>) => {
-  if (activities.length === 0) {
-    throw new Error('Activity data must not be empty.')
-  }
-  for (const { date, count } of activities) {
-    if (!isValid(parseISO(date))) {
-      throw new Error(`Activity date '${date}' is not a valid ISO 8601 date string.`)
-    }
-    if (count < 0) {
-      throw new RangeError(`Activity count must not be negative, found ${count}.`)
-    }
-  }
-}
-
-const fetchData = async (
-  username: string,
-  year: number | 'last',
-): Promise<GitHubActivityApiResponse> => {
-  const apiUrl = 'https://github-contributions-api.jogruber.de/v4/'
-  const response = await fetch(`${apiUrl}${username}?y=${String(year)}`)
-  const data = (await response.json()) as GitHubActivityApiResponse
-
-  if (!response.ok) {
-    const message = data.error || 'Unknown error'
-    throw Error(`Fetching GitHub contribution data for "${username}" failed: ${message}`)
-  }
-
-  validateActivities(data.contributions)
-
-  return data
 }
 
 const contributionClasses = [
@@ -62,82 +15,6 @@ const contributionClasses = [
   'bg-primary/75',
   'bg-primary/100'
 ]
-
-const fillHoles = (activities: Array<GitHubActivityDay>): Array<GitHubActivityDay> => {
-  const calendar = new Map<string, GitHubActivityDay>(activities.map((a) => [a.date, a]))
-  const firstActivity = activities[0] as GitHubActivityDay
-  const lastActivity = activities[activities.length - 1] as GitHubActivityDay
-
-  return eachDayOfInterval({
-    start: parseISO(firstActivity.date),
-    end: parseISO(lastActivity.date),
-  }).map((day) => {
-    const date = formatISO(day, { representation: 'date' })
-    if (calendar.has(date)) {
-      return calendar.get(date) as GitHubActivityDay
-    }
-    return {
-      date,
-      count: 0,
-      level: 0,
-    }
-  })
-}
-
-const groupByWeeks = (
-  activities: Array<GitHubActivityDay>,
-  weekStart: WeekdayIndex = 0, // 0 = Sunday
-): Array<GitHubActivityWeek> => {
-  const normalizedActivities = fillHoles(activities)
-  const firstActivity = normalizedActivities[0] as GitHubActivityDay
-  const firstDate = parseISO(firstActivity.date)
-
-  const firstCalendarDate =
-    getDay(firstDate) === weekStart
-      ? firstDate
-      : subWeeks(nextDay(firstDate, weekStart), 1)
-
-  const paddedActivities = [
-    ...(Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(
-      undefined,
-    ) as Array<GitHubActivityDay>),
-    ...normalizedActivities,
-  ]
-  const numberOfWeeks = Math.ceil(paddedActivities.length / 7)
-
-  return [...Array(numberOfWeeks).keys()].map((weekIndex) =>
-    paddedActivities.slice(weekIndex * 7, weekIndex * 7 + 7),
-  )
-}
-
-const groupByMonths = (weeks: Array<GitHubActivityWeek>): Array<{ month: string; weeks: Array<GitHubActivityWeek> }> => {
-  const monthGroups: Array<{ month: string; weeks: Array<GitHubActivityWeek> }> = []
-  let currentMonth = ''
-  let currentWeeks: Array<GitHubActivityWeek> = []
-
-  weeks.forEach((week) => {
-    const firstActivity = week.find((activity) => activity !== undefined)
-    if (!firstActivity) return
-
-    const month = new Date(firstActivity.date).toLocaleString('en-US', { month: 'short' })
-    
-    if (month !== currentMonth) {
-      if (currentWeeks.length > 0) {
-        monthGroups.push({ month: currentMonth, weeks: currentWeeks })
-      }
-      currentMonth = month
-      currentWeeks = [week]
-    } else {
-      currentWeeks.push(week)
-    }
-  })
-
-  if (currentWeeks.length > 0) {
-    monthGroups.push({ month: currentMonth, weeks: currentWeeks })
-  }
-
-  return monthGroups
-}
 
 const { username, year = 'last' } = Astro.props
 
@@ -153,7 +30,7 @@ const activities = data.contributions
 const firstActivity = activities[0]
 const activityYear = getYear(parseISO(firstActivity.date))
 const weeks = groupByWeeks(activities, weekStart);
-const monthGroups = groupByMonths(weeks);
+const months = groupByMonths(weeks);
 
 const labels = {
   totalCount: `{{count}} contributions in ${year === 'last' ? 'the last year' : '{{year}}'}`,
@@ -170,17 +47,17 @@ const labels = {
 >
   <div class="w-full overflow-x-auto py-2">
     <div class="flex gap-2 min-w-max">
-      {monthGroups.map(({ month, weeks }) => (
+      {months.map(({ month, weeks }) => (
         <div class="flex flex-col gap-2 w-fit">
           <!-- Month Label -->
           <h3 class="text-sm font-medium text-base-content/80 text-center truncate max-w-full">
             {month}
           </h3>
           
-          <div class="flex gap-1">
-            {weeks.map((week, weekIndex) => (
+          <div class="flex gap-1 justify-end">
+            {weeks.map((week) => (
               <div class="flex flex-col gap-1">
-                {week.map((activity, dayIndex) => {
+                {week.map((activity) => {
                   if (!activity) {
                     return (
                       <div 

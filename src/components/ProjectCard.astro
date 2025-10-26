@@ -1,0 +1,50 @@
+---
+import type { Collation } from "@/types";
+import { render, type CollectionEntry } from "astro:content";
+import Icon from "./Icon.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+
+const { remarkPluginFrontmatter } = await render(project);
+const description =
+  remarkPluginFrontmatter.description || project.data.description;
+
+const tags = project.data.tags;
+const date = new Date(project.data.published).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const samePage = Astro.url.pathname === `/projects/${project.id}`;
+const articleLink = samePage ? `#${project.id}` : `/projects/${project.id}`;
+---
+
+<article class="w-full flex flex-col gap-4 py-4">
+  <div class="flex flex-col gap-1">
+    <h1 class="text-2xl font-semibold">
+      <a href={articleLink}># {project.data.title}</a>
+    </h1>
+    <time class="text-primary/50 text-sm">{date}</time>
+  </div>
+  {description && <p class="text-accent">{description}</p>}
+  {
+    tags && (
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <a href={`/tags/${tag}`} class="badge badge-soft badge-primary">{tag}</a>
+        ))}
+      </div>
+    )
+  }
+  <div class="flex mt-2">
+    <a class="btn btn-outline btn-sm" href={articleLink}>
+      {samePage ? "Continue" : "Read"}
+      <Icon name="chevronRight" />
+    </a>
+  </div>
+</article>

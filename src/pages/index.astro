@@ -1,12 +1,22 @@
 ---
 import AboutCard from "@/components/AboutCard.astro";
 import GithubCalendar from "@/components/GithubCalendar.astro";
+import SkillsSection from "@/components/SkillsSection.astro";
 import config from "@/site.config";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
 import Section from "@/components/Section.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
 
 const home = await getCollection("home");
+const projects = (await getCollection("projects"))
+  .sort(
+    (a, b) =>
+      new Date(b.data.published).getTime() -
+      new Date(a.data.published).getTime()
+  )
+  .slice(0, 4);
+
 const github = config.github;
 
 let AboutContent;
@@ -27,10 +37,17 @@ if (home.length > 0) {
     <AboutCard title={aboutTitle} avatar={aboutAvatar}>
       {AboutContent && <AboutContent />}
     </AboutCard>
-    {github && <GithubCalendar username={github} />}
+  </Section>
+  <Section>
+    <SkillsSection />
   </Section>
   <Section title="Personal Projects">
-    <p>Coming soon...</p>
+    {
+      projects.map((project) => <ProjectCard project={project} />)
+    }
+  </Section>
+  <Section>
+    {github && <GithubCalendar username={github} year={2025} />}
   </Section>
   <Section title="Latest post">
     <p>Coming soon...</p>

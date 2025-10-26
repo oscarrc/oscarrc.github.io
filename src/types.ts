@@ -1,3 +1,5 @@
+import type { CollectionEntry, DataEntryMap } from "astro:content"
+
 export interface FrontmatterImage {
   alt: string
   src: {
@@ -30,4 +32,11 @@ export interface GitHubActivityApiResponse {
   }
   contributions: GitHubActivityDay[]
   error?: string
+}
+
+export interface Collation<CollectionType extends keyof DataEntryMap> {
+  title: string
+  url: string
+  titleSlug: string
+  entries: CollectionEntry<CollectionType>[]
 }

@@ -1,0 +1,105 @@
+---
+import { getCollection } from "astro:content";
+
+const skillsCollection = await getCollection("skills");
+const skills = skillsCollection[0].data.skills;
+
+// Group skills by category
+const skillsByCategory = skills.reduce(
+  (acc, skill) => {
+    const category = skill.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(skill);
+    return acc;
+  },
+  {} as Record<
+    string,
+    Array<{ skill: string; level: number; category: string }>
+  >
+);
+
+// Sort skills within each category by level (descending)
+Object.keys(skillsByCategory).forEach((category) => {
+  skillsByCategory[category].sort((a, b) => b.level - a.level);
+});
+
+// Function to get color based on level
+const getLevelColor = (level: number) => {
+  if (level >= 9) return "bg-primary";
+  if (level >= 7) return "bg-primary/75";
+  if (level >= 5) return "bg-primary/50";
+  if (level >= 2) return "bg-primary/25";
+  return "bg-base-300";
+};
+---
+
+<div class="skills-section font-mono text-sm">
+  <div class="w-full overflow-x-auto py-2">
+    <div class="flex gap-4 min-w-max">
+      {
+        Object.entries(skillsByCategory).map(([category, categorySkills]) => (
+          <div class="category-section flex flex-col gap-2 w-fit">
+            <h3 class="text-sm font-medium text-base-content/80 text-left truncate max-w-full">
+              {category}
+            </h3>
+            <div
+              class="grid gap-x-4 gap-y-1"
+              style="grid-template-columns: auto 1fr;"
+            >
+              {categorySkills.map(({ skill, level }) => (
+                <>
+                  <span class="skill-name text-xs text-base-content/70 text-right">
+                    {skill}:
+                  </span>
+                  <div class="flex gap-1">
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <div
+                        class={`w-3 h-3 rounded-sm transition-all duration-200 hover:scale-110 cursor-pointer border border-base-content/10 hover:border-base-content/20 ${
+                          i < level ? getLevelColor(level) : "bg-base-300"
+                        }`}
+                        title={`${skill}: ${level}/10`}
+                      />
+                    ))}
+                  </div>
+                </>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .skills-section {
+    font-family: "0xProtoMono", monospace;
+  }
+
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    padding: 0.25rem 0;
+  }
+
+  .skill-item:hover {
+    transform: translateX(4px);
+  }
+
+  .skill-name {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .category-section {
+    padding: 0;
+  }
+
+  .category-section h3 {
+    margin-bottom: 1rem;
+  }
+</style>
