@@ -1,13 +1,19 @@
 ---
 interface Props {
+  length: number;
   class?: string;
 }
 
-const { class: className = "" } = Astro.props;
+const { class: className = "", length = 5 } = Astro.props;
+const animationDuration = length * 0.05;
+const animationSteps = length;
 ---
 
-<span
-  class={`overflow-hidden whitespace-nowrap border-r border-r-8 animate-typing px-2 max-w-max ${className}`}
->
-  <slot />
-</span>
+<div class="flex items-start">
+  <span
+    class={`overflow-hidden whitespace-nowrap border-r border-r-8 px-1 max-w-max ${className}`}
+    style={`animation: typing ${animationDuration}s steps(${animationSteps}, end), caret 500ms step-end infinite;`}
+  >
+    <slot />
+  </span>
+</div>

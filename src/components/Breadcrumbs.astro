@@ -1,0 +1,36 @@
+---
+import Typewritter from "./Typewritter.astro";
+
+const currentPath = Astro.url.pathname;
+const crumbs = currentPath
+  .split("/")
+  .filter((crumb) => crumb !== "")
+  .map((crumb, index, array) => {
+    const path = "/" + array.slice(0, index + 1).join("/");
+    return { name: decodeURIComponent(crumb), path };
+  });
+---
+
+<div class="badge badge-soft badge-primary text-left px-1 justify-start items-start">
+  <Typewritter length={currentPath.length}>
+    <div class="p-0 overflow-hidden">
+      <ul class="path flex gap-1">
+        {
+          crumbs.map((crumb, index) => (
+            <li>
+              {index < crumbs.length - 1 ? (
+                [
+                  <a class="capitalize" href={crumb.path}>
+                    {crumb.name}
+                  </a>,
+                ]
+              ) : (
+                <span class="capitalize">{crumb.name}</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Typewritter>
+</div>

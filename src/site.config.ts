@@ -15,5 +15,6 @@ export default {
     about: '/about/',
     projects: '/projects/',
     blog: '/blog/',
-  }
+  },
+  pageSize: 10,
 }

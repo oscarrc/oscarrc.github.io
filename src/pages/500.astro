@@ -2,6 +2,8 @@
 import SectionButton from "@/components/SectionButton.astro";
 import Typewritter from "@/components/Typewritter.astro";
 import Layout from "@/layouts/Layout.astro";
+
+const error = "Internal Server Error";
 ---
 
 <Layout>
@@ -17,7 +19,9 @@ import Layout from "@/layouts/Layout.astro";
  ██████╔╝ ╚██████╔╝ ╚██████╔╝
 ╚═════╝   ╚═════╝   ╚═════╝
     </pre>
-    <Typewritter class="text-primary"> Internal Server Error </Typewritter>
+    <Typewritter class="text-primary" length={error.length}>
+      {error}
+    </Typewritter>
     <SectionButton href="/">Go back home</SectionButton>
   </div>
 </Layout>

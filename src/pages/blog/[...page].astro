@@ -1,0 +1,17 @@
+---
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import Layout from "@/layouts/Layout.astro";
+import siteConfig from "@/site.config";
+import { getSortedCollection } from "@/utils/collections";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const sortedPosts = await getSortedCollection("posts");
+  return paginate(sortedPosts, { pageSize: siteConfig.pageSize });
+}) satisfies GetStaticPaths;
+
+---
+
+<Layout>
+  <Breadcrumbs />
+</Layout>

@@ -74,7 +74,7 @@
 
 @theme {
   --font-nerd: "0xProtoMono", sans-serif;
-  --animate-typing: typing 3.5s steps(40, end), caret 0.75s step-end infinite;
+  --animate-typing: typing 1s steps(40, end), caret 500ms step-end infinite;
 
   @keyframes typing {
     from { 
@@ -171,9 +171,13 @@
   font-display: swap;
 }
 
-@layer utilities {
- .btn-sm{
-   font-weight: normal;
-   --size: calc(var(--size-field, 0.25rem) * 6);
- }
+@layer components {
+  .btn-sm{
+    font-weight: normal;
+    --size: calc(var(--size-field, 0.25rem) * 6);
+  }
+
+  .path li:before {
+    content: "/";
+  }
 }
