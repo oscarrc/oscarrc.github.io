@@ -16,17 +16,12 @@ const { prevLink, prevText, nextLink, nextText } = Astro.props;
 
 <div
   class:list={[
-    "flex w-full mt-8 mb-4",
-    {
-      "justify-between": !!prevLink && !!nextLink,
-      "justify-start": !!prevLink && !nextLink,
-      "justify-end": !prevLink && !!nextLink,
-    },
+    "flex w-full gap-4 flex-wrap",
   ]}
 >
   {
     prevLink && (
-      <SectionButton href={prevLink} aria-label="Previous Page">
+      <SectionButton href={prevLink} aria-label="Previous Page" class="mr-auto">
         <Icon name="chevronLeft" class="mr-2"/>
         {prevText || "Previous"}
       </SectionButton>
@@ -34,7 +29,7 @@ const { prevLink, prevText, nextLink, nextText } = Astro.props;
   }
   {
     nextLink && (
-      <SectionButton href={nextLink} aria-label="Next Page">
+      <SectionButton href={nextLink} aria-label="Next Page" class="ml-auto">
         {nextText || "Next"}
         <Icon name="chevronRight" class="ml-2" />
       </SectionButton>
