@@ -18,11 +18,15 @@ export async function getSortedTags(collections: Array<"posts" | "projects">) {
     const items = await getCollection(collection);
     
     items.forEach(item => {
-      item.data.tags?.forEach(tag => tagsMap.set(tag, (tagsMap.get(tag) || 0) + 1));
+      item.data.tags?.forEach(tag => {
+        tagsMap.set(tag, (tagsMap.get(tag) || 0) + 1);
+      });
     });
   }
 
-  const sortedTags = Array.from(tagsMap).sort((a, b) => a[1] - b[1]);
+
+  const sortedTags = Array.from(tagsMap).sort((a, b) => b[1] - a[1]);
+  
   return sortedTags;
 }
 
@@ -36,6 +40,6 @@ export async function getSortedSeries(collection: "posts") {
     seriesMap.set(series, (seriesMap.get(series) || 0) + 1);
   });
 
-  const sortedSeries = Array.from(seriesMap).sort((a, b) => a[1] - b[1]);
+  const sortedSeries = Array.from(seriesMap).sort((a, b) => b[1] - a[1]);
   return sortedSeries;
 }
