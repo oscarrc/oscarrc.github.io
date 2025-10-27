@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
+import TagsCard from "@/components/TagsCard.astro";
 import "@/styles/global.css";
 import siteConfig from "@/site.config";
 
@@ -10,8 +11,10 @@ interface Props {
   description?: string;
 }
 
-const { title = siteConfig.title, description = siteConfig.description } =
-  Astro.props;
+const { 
+  title = siteConfig.title, 
+  description = siteConfig.description
+} = Astro.props;
 ---
 
 <html lang="en">
@@ -24,14 +27,16 @@ const { title = siteConfig.title, description = siteConfig.description } =
     <ClientRouter />
   </head>
   <body>
-    <div
-      class="container max-w-4xl mx-auto flex flex-col gap-8 md:gap-16 p-4 min-h-screen"
-    >
-      <Header />
-      <main class="flex flex-col flex-1 gap-16">
-        <slot />
-      </main>
-      <Footer />
+    <div class="min-h-screen flex">
+      <div
+        class="container max-w-4xl mx-auto flex flex-col gap-8 md:gap-16 p-4 flex-1"
+      >
+        <Header />
+        <main class="flex flex-col flex-1 gap-16">
+          <slot />
+        </main>
+        <Footer />
+      </div>
     </div>
   </body>
 </html>

@@ -1,11 +1,12 @@
 ---
+import BadgesCard from "@/components/BadgesCard.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import Pagination from "@/components/Pagination.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import { getSortedCollection } from "@/utils/collections";
+import { getSortedCollection, getSortedTags } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -14,18 +15,27 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+
 const projects = page.data;
+const tags = (await getSortedTags(["projects"])).slice(0, 10);
 ---
 
 <Layout>
   <Breadcrumbs />
   <Section class="flex flex-col gap-8">
-    {projects.map((project) => <ProjectCard project={project} />)}
-    <Pagination
-      prevLink={page.url.prev}
-      prevText="Newer Projects"
-      nextLink={page.url.next}
-      nextText="Older Projects"
-    />
+    <div class="flex flex-col gap-16 xl:flex-row xl:items-start">
+      <div class="xl:-mt-4 xl:order-2 xl:shrink-0 xl:sticky xl:top-10 xl:w-64">
+        <BadgesCard badges={tags} base="tag" title="Top tags" />
+      </div>
+      <div class="flex flex-col gap-8 xl:min-w-full 2xl:min-w-full xl:order-1">
+        {projects.map((project) => <ProjectCard project={project} />)}
+        <Pagination
+          prevLink={page.url.prev}
+          prevText="Newer Projects"
+          nextLink={page.url.next}
+          nextText="Older Projects"
+        />
+      </div>
+    </div>
   </Section>
 </Layout>

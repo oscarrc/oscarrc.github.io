@@ -1,11 +1,16 @@
 ---
+import BadgesCard from "@/components/BadgesCard.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import Pagination from "@/components/Pagination.astro";
 import PostCard from "@/components/PostCard.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import { getSortedCollection } from "@/utils/collections";
+import {
+  getSortedCollection,
+  getSortedSeries,
+  getSortedTags,
+} from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -15,11 +20,28 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page } = Astro.props;
 const posts = page.data;
+
+const tags = (await getSortedTags(["posts"])).slice(0, 10);
+const series = (await getSortedSeries("posts")).slice(0, 10);
 ---
 
 <Layout>
   <Breadcrumbs />
   <Section class="flex flex-col gap-8">
-    {posts.map((post) => <PostCard post={post} />)}
+    <div class="flex flex-col gap-16 xl:flex-row xl:items-start">
+      <div class="flex flex-col gap-8 xl:-mt-4 xl:order-2 xl:shrink-0 xl:sticky xl:top-10 xl:w-64">
+        <BadgesCard badges={tags} base="tag" title="Top tags" variant="primary" />
+        <BadgesCard badges={series} base="series" title="Top series" variant="accent" />
+      </div>
+      <div class="flex flex-col gap-8 xl:min-w-full 2xl:min-w-full xl:order-1">
+        {posts.map((post) => <PostCard post={post} />)}
+        <Pagination
+          prevLink={page.url.prev}
+          prevText="Newer Posts"
+          nextLink={page.url.next}
+          nextText="Older Posts"
+        />
+      </div>
+    </div>
   </Section>
 </Layout>

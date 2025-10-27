@@ -1,0 +1,46 @@
+---
+import { range } from "@/utils/array";
+
+interface Props {
+  title: string;
+  badges: Array<[string, number]>;
+  base: string;
+  class?: string;
+  variant?: "primary" | "secondary" | "accent" | "neutral";
+}
+
+const { title, badges, base, class: className, variant = "primary" } = Astro.props;
+
+const variantClass = {
+  primary: "badge-primary",
+  secondary: "badge-secondary",
+  accent: "badge-accent",
+  neutral: "badge-neutral",
+}[variant];
+---
+
+<aside class={`card card-xs xl:p-8 space-y-2 ${className}`}>
+  <h2 class="card-title flex-col text-xl items-start gap-0">
+    {title}
+    <br />
+    <span>
+      {
+        range(title.length + 1)
+          .map(() => "-")
+          .join("")
+      }
+    </span>
+  </h2>
+  <div class="card-body flex-row flex-wrap p-0">
+    {
+      badges.map((badge) => (
+        <a
+          href={`/${base}/${badge[0]}/`}
+          class={`badge badge-soft ${variantClass} truncate space-x-2`}
+        >
+          {badge[0]} <span class={`badge badge-xs ${variantClass}`}>{badge[1]}</span>
+        </a>
+      ))
+    }
+  </div>
+</aside>
