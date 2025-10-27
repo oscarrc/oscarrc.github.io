@@ -19,13 +19,13 @@ const variantClass = {
 }[variant];
 ---
 
-<aside class={`card card-xs xl:p-8 space-y-2 ${className}`}>
+<aside class={`card card-xs xl:p-4 space-y-2 ${className}`}>
   <h2 class="card-title flex-col text-xl items-start gap-0">
-    {title}
+    > {title}
     <br />
     <span>
       {
-        range(title.length + 1)
+        range(title.length + 3)
           .map(() => "-")
           .join("")
       }

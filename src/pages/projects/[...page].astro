@@ -21,13 +21,9 @@ const tags = (await getSortedTags(["projects"])).slice(0, 10);
 ---
 
 <Layout>
-  <Breadcrumbs />
   <Section class="flex flex-col gap-8">
     <div class="flex flex-col gap-16 xl:flex-row xl:items-start">
-      <div class="xl:-mt-4 xl:order-2 xl:shrink-0 xl:sticky xl:top-10 xl:w-64">
-        <BadgesCard badges={tags} base="tag" title="Top tags" />
-      </div>
-      <div class="flex flex-col gap-8 xl:min-w-full 2xl:min-w-full xl:order-1">
+      <div class="flex flex-col gap-8 xl:min-w-full 2xl:min-w-full">
         {projects.map((project) => <ProjectCard project={project} />)}
         <Pagination
           prevLink={page.url.prev}
@@ -35,6 +31,9 @@ const tags = (await getSortedTags(["projects"])).slice(0, 10);
           nextLink={page.url.next}
           nextText="Older Projects"
         />
+      </div>
+      <div class="xl:sticky xl:top-10 xl:w-64">
+        <BadgesCard badges={tags} base="tag" title="Top tags" variant="primary" />
       </div>
     </div>
   </Section>

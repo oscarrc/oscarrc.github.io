@@ -11,26 +11,28 @@ const crumbs = currentPath
   });
 ---
 
-<div class="badge badge-soft badge-primary badge-xl text-left px-1 justify-start items-start">
-  <Typewritter length={currentPath.length}>
-    <div class="p-0 overflow-hidden">
-      <ul class="path flex gap-1">
-        {
-          crumbs.map((crumb, index) => (
-            <li>
-              {index < crumbs.length - 1 ? (
-                [
-                  <a class="capitalize" href={crumb.path}>
-                    {crumb.name}
-                  </a>,
-                ]
-              ) : (
-                <span class="capitalize">{crumb.name}</span>
-              )}
-            </li>
-          ))
-        }
-      </ul>
+{
+  crumbs.length == 0 ? null : (
+    <div class="badge badge-soft badge-primary badge-xl text-left px-1 justify-start items-start">
+      <Typewritter length={currentPath.length}>
+        <div class="p-0 overflow-hidden">
+          <ul class="path flex gap-1">
+            {crumbs.map((crumb, index) => (
+              <li>
+                {index < crumbs.length - 1 ? (
+                  [
+                    <a class="capitalize" href={crumb.path}>
+                      {crumb.name}
+                    </a>,
+                  ]
+                ) : (
+                  <span class="capitalize">{crumb.name}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Typewritter>
     </div>
-  </Typewritter>
-</div>
+  )
+}

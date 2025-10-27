@@ -2,19 +2,18 @@
 import { ClientRouter } from "astro:transitions";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
-import TagsCard from "@/components/TagsCard.astro";
-import "@/styles/global.css";
 import siteConfig from "@/site.config";
+
+import "@/styles/global.css";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const { 
-  title = siteConfig.title, 
-  description = siteConfig.description
-} = Astro.props;
+const { title = siteConfig.title, description = siteConfig.description } =
+  Astro.props;
 ---
 
 <html lang="en">
@@ -33,6 +32,7 @@ const {
       >
         <Header />
         <main class="flex flex-col flex-1 gap-16">
+          <Breadcrumbs />
           <slot />
         </main>
         <Footer />
