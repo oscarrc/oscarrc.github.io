@@ -36,18 +36,18 @@ const {
         {breadcrumbs ? <Breadcrumbs /> : null}
       </header>
 
-      <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-8 flex-1">
-        <div class="p-8 items-center">
+      <div class="grid lg:grid-cols-[1fr_auto_1fr] lg:gap-16 flex-1">
+        <div class="items-center">
           <slot name="left" />
         </div>
 
-        <div class="container max-w-4xl mx-auto w-full flex flex-col gap-8 md:gap-16 p-4 flex-1">
+        <div class="container lg:max-w-4xl mx-auto w-full flex flex-col gap-8 md:gap-16 p-4 flex-1">
           <main class="flex flex-col flex-1 gap-16">
             <slot />
           </main>
         </div>
 
-        <div class="p-8 items-center">
+        <div class="items-center">
           <slot name="right" />
         </div>
       </div>

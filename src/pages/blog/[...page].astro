@@ -39,7 +39,7 @@ const series = (await getSortedSeries("posts")).slice(0, 10);
       </div>
     </div>
   </Section>
-  <div class="lg:sticky lg:top-10 flex flex-col gap-8" slot="right">
+  <div class="lg:sticky lg:top-10 flex flex-col gap-8 px-4 py-8" slot="right">
     <BadgesCard badges={tags} base="tag" title="Top tags" variant="primary" />
     <BadgesCard
       badges={series}
