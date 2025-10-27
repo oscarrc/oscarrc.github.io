@@ -5,7 +5,7 @@ import siteConfig from "@/site.config";
 const { brand, links } = siteConfig;
 ---
 
-<header class="space-y-4">
+<nav class="space-y-4">
   <div class="navbar bg-primary/50 shadow-sm rounded-lg p-0 min-h-0">
     <div class="flex-1">
       <a href="/" class="btn btn-primary text-xl">{brand}</a>
@@ -22,7 +22,7 @@ const { brand, links } = siteConfig;
       </button>
     </div>
   </div>
-  <nav class="font-thin text-sm hidden sm:flex justify-end gap-2">
+  <div class="font-thin text-sm hidden sm:flex justify-end gap-2">
     {
       Object.entries(links).map(([key, url]) => (
         <>
@@ -34,5 +34,5 @@ const { brand, links } = siteConfig;
         </>
       ))
     }
-  </nav>
-</header>
+  </div>
+</nav>
