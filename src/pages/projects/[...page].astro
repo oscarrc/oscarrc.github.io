@@ -34,7 +34,10 @@ const tags = (await getSortedTags(["projects"])).slice(0, 10);
       </div>
     </div>
   </Section>
-  <div class="lg:sticky lg:top-10 flex flex-col gap-8 py-8" slot="right">
+  <div
+    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6"
+    slot="right"
+  >
     <BadgesCard badges={tags} base="tag" title="Top tags" variant="primary" />
   </div>
 </Layout>

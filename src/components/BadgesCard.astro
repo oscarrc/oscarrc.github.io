@@ -1,6 +1,4 @@
 ---
-import { range } from "@/utils/array";
-
 interface Props {
   title: string;
   badges: Array<[string, number]>;
@@ -19,26 +17,18 @@ const variantClass = {
 }[variant];
 ---
 
-<aside class={`card card-xs space-y-2 lg:max-w-64 ${className}`}>
-  <h2 class="card-title flex-col text-xl items-start gap-0">
-    > {title}
-    <br />
-    <span>
-      {
-        range(title.length + 3)
-          .map(() => "-")
-          .join("")
-      }
-    </span>
+<aside class={`card card-xs space-y-4 mx-auto max-w-4xl w-full ${className}`}>
+  <h2 class="card-title flex-col text-sm items-start gap-0 text-base-content/80">
+    {title}
   </h2>
   <div class="card-body flex-row flex-wrap p-0">
     {
       badges.map((badge) => (
         <a
           href={`/${base}/${badge[0]}/`}
-          class={`badge badge-soft ${variantClass} truncate space-x-2`}
+          class={`badge badge-soft badge-xs ${variantClass} truncate space-x-2 text-xs`}
         >
-          {badge[0]} <span class={`badge badge-xs ${variantClass}`}>{badge[1]}</span>
+          {badge[0]} <span class={`badge badge-xs size-3 text-xs ${variantClass}`}>{badge[1]}</span>
         </a>
       ))
     }
