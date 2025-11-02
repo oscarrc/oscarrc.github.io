@@ -38,12 +38,16 @@ const {
         {breadcrumbs ? <Breadcrumbs /> : null}
       </header>
 
-      <div class="grid 2xl:grid-cols-[1fr_auto_1fr] flex-1 2xl:gap-8">
+      <div
+        class="grid 2xl:grid-cols-[1fr_minmax(0,_min(56rem,_100%))_1fr] flex-1 2xl:gap-8"
+      >
         <div>
           <slot name="left" />
         </div>
 
-        <div class="container max-w-4xl min-w-0 mx-auto w-full flex flex-col gap-8 p-4 flex-1">
+        <div
+          class="container max-w-4xl min-w-0 mx-auto w-full flex flex-col gap-8 p-4 flex-1"
+        >
           <main class="flex flex-col flex-1 gap-16">
             <slot />
           </main>

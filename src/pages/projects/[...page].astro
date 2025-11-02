@@ -1,6 +1,5 @@
 ---
 import BadgesCard from "@/components/BadgesCard.astro";
-import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import Pagination from "@/components/Pagination.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import Section from "@/components/Section.astro";
@@ -38,6 +37,16 @@ const tags = (await getSortedTags(["projects"])).slice(0, 10);
     class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6"
     slot="right"
   >
-    <BadgesCard badges={tags} base="tag" title="Top tags" variant="primary" />
+    {
+      tags?.length > 0 ? (
+        <BadgesCard
+          badges={tags}
+          type="tags"
+          collection="projects"
+          title="Top tags"
+          variant="primary"
+        />
+      ) : null
+    }
   </div>
 </Layout>

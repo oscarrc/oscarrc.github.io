@@ -1,6 +1,4 @@
 ---
-import IconChevronsLeft from "~/icons/chevrons-left.svg";
-import IconChevronsRight from "~/icons/chevrons-right.svg";
 import Icon from "./Icon.astro";
 import SectionButton from "./SectionButton.astro";
 
@@ -21,7 +19,7 @@ const { prevLink, prevText, nextLink, nextText } = Astro.props;
 >
   {
     prevLink && (
-      <SectionButton href={prevLink} aria-label="Previous Page" class="mr-auto">
+      <SectionButton href={prevLink} aria-label="Previous Page" class="mr-auto capitalize">
         <Icon name="chevronLeft" class="mr-2"/>
         {prevText || "Previous"}
       </SectionButton>
@@ -29,7 +27,7 @@ const { prevLink, prevText, nextLink, nextText } = Astro.props;
   }
   {
     nextLink && (
-      <SectionButton href={nextLink} aria-label="Next Page" class="ml-auto">
+      <SectionButton href={nextLink} aria-label="Next Page" class="ml-auto capitalize">
         {nextText || "Next"}
         <Icon name="chevronRight" class="ml-2" />
       </SectionButton>

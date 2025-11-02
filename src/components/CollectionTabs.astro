@@ -1,0 +1,38 @@
+---
+interface Props {
+  tagName: string;
+  tagSlug: string;
+  currentCollection: "posts" | "projects";
+  postsCount: number;
+  projectsCount: number;
+}
+
+const { tagName, tagSlug, currentCollection, postsCount, projectsCount } = Astro.props;
+
+const baseUrl = `/tags/${tagSlug}`;
+const postsUrl = `${baseUrl}/posts`;
+const projectsUrl = `${baseUrl}/projects`;
+---
+
+<div class="tabs tabs-boxed">
+  <a
+    href={postsUrl}
+    class:list={[
+      "tab tab-sm rounded-box",
+      { "bg-base-300 text-base-content": currentCollection === "posts" },
+    ]}
+  >
+    {tagName} Posts
+    <span class="badge badge-xs badge-primary ml-2">{postsCount}</span>
+  </a>
+  <a
+    href={projectsUrl}
+    class:list={[
+      "tab tab-sm rounded-box",
+      { "bg-base-300 text-base-content": currentCollection === "projects" },
+    ]}
+  >
+    {tagName} Projects
+    <span class="badge badge-xs badge-primary ml-2">{projectsCount}</span>
+  </a>
+</div>

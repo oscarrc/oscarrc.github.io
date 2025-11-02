@@ -1,5 +1,6 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
+import { slug } from "github-slugger";
 import Icon from "./Icon.astro";
 
 interface Props {
@@ -60,13 +61,13 @@ const articleLink = `/posts/${post.id}`;
     tags && (
       <div class="flex flex-wrap gap-2">
         {series && (
-          <a href={`/series/${series}`} class="badge badge-soft badge-accent">
+          <a href={`/series/${slug(series)}`} class="badge badge-soft badge-accent">
             <Icon name="book" />
             {series}
           </a>
         )}
         {tags.map((tag) => (
-          <a href={`/tags/${tag}`} class="badge badge-soft badge-primary">
+          <a href={`/tags/${slug(tag)}/posts`} class="badge badge-soft badge-primary">
             {tag}
           </a>
         ))}

@@ -1,0 +1,117 @@
+---
+import BadgesCard from "@/components/BadgesCard.astro";
+import Pagination from "@/components/Pagination.astro";
+import PostCard from "@/components/PostCard.astro";
+import Section from "@/components/Section.astro";
+import Layout from "@/layouts/Layout.astro";
+import siteConfig from "@/site.config";
+import {
+  getSortedCollectionBySeries,
+  getSortedTags,
+  getSortedSeries,
+} from "@/utils/collections";
+import { slug } from "github-slugger";
+import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+import Typewritter from "@/components/Typewritter.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const paths = [];
+
+  // Get all unique series
+  const allSeries = await getSortedSeries("posts");
+  const uniqueSeries = new Set(allSeries.map(([seriesName]) => seriesName));
+
+  // Generate paths for each unique series
+  for (const seriesName of uniqueSeries) {
+    const seriesSlug = slug(seriesName);
+    const entries = await getSortedCollectionBySeries("posts", seriesSlug);
+    
+    const paginatedPaths = paginate(entries, {
+      pageSize: siteConfig.pageSize,
+      params: { slug: seriesSlug },
+    });
+    
+    for (const path of paginatedPaths) {
+      paths.push(path);
+    }
+  }
+
+  return paths;
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const { slug: seriesSlug } = Astro.params;
+
+const entries = page.data;
+
+// Get series name and count from all series
+const allSeries = await getSortedSeries("posts");
+const seriesMap = new Map(allSeries.map(([name, count]) => [slug(name), { name, count }]));
+const seriesInfo = seriesMap.get(seriesSlug);
+const seriesName = seriesInfo?.name || seriesSlug;
+const totalPosts = seriesInfo?.count || 0;
+
+const tags = (await getSortedTags(["posts"])).slice(0, 10);
+const series = (await getSortedSeries("posts")).slice(0, 10);
+
+const message = `No posts found in the series "${seriesName}".`;
+---
+
+<Layout>
+  <Section class="flex flex-col gap-8">
+    <div class="tabs tabs-boxed">
+      <div class="tab tab-sm rounded-box bg-base-300 text-base-content">
+        Series: {seriesName}
+        <span class="badge badge-xs badge-primary ml-2">{totalPosts}</span>
+      </div>
+    </div>
+    <div class="flex flex-col gap-16">
+      <div class="flex flex-col gap-8 2xl:min-w-full">
+        {
+          entries?.length ? (
+            entries.map((entry) => (
+              <PostCard post={entry as CollectionEntry<"posts">} />
+            ))
+          ) : (
+            <div class="w-full 2xl:min-w-4xl">
+              <Typewritter length={message.length}>{message}</Typewritter>
+            </div>
+          )
+        }
+        <Pagination
+          prevLink={page.url.prev}
+          prevText="Newer Posts"
+          nextLink={page.url.next}
+          nextText="Older Posts"
+        />
+      </div>
+    </div>
+  </Section>
+  <div
+    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6"
+    slot="right"
+  >
+    {
+      tags?.length > 0 ? (
+        <BadgesCard
+          badges={tags}
+          collection="posts"
+          type="tags"
+          title="Top tags"
+          variant="primary"
+        />
+      ) : null
+    }
+    {
+      series?.length > 0 ? (
+        <BadgesCard
+          badges={series}
+          type="series"
+          title="Top series"
+          variant="accent"
+        />
+      ) : null
+    }
+  </div>
+</Layout>

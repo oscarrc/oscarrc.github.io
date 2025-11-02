@@ -1,0 +1,47 @@
+---
+import SeriesCard from "@/components/SeriesCard.astro";
+import Pagination from "@/components/Pagination.astro";
+import Section from "@/components/Section.astro";
+import Layout from "@/layouts/Layout.astro";
+import siteConfig from "@/site.config";
+import { getSortedSeries } from "@/utils/collections";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  // Get all series with their counts (already sorted by count in descending order)
+  const allSeries = await getSortedSeries("posts");
+
+  // Map to include series name and count
+  const seriesWithCounts = allSeries.map(([seriesName, postsCount]) => ({
+    seriesName,
+    postsCount,
+  }));
+
+  return paginate(seriesWithCounts, { pageSize: siteConfig.pageSize * 2 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const series = page.data;
+---
+
+<Layout>
+  <Section class="flex flex-col gap-8">
+    <div class="flex flex-col gap-16 flex-1">
+      <div class="flex flex-col gap-8">
+        {series.map((s) => (
+          <SeriesCard
+            seriesName={s.seriesName}
+            postsCount={s.postsCount}
+          />
+        ))}
+      </div>
+      <Pagination
+        prevLink={page.url.prev}
+        prevText="Newer Series"
+        nextLink={page.url.next}
+        nextText="Older Series"
+      />
+    </div>
+  </Section>
+</Layout>
+

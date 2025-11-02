@@ -1,0 +1,145 @@
+---
+import BadgesCard from "@/components/BadgesCard.astro";
+import CollectionTabs from "@/components/CollectionTabs.astro";
+import Pagination from "@/components/Pagination.astro";
+import PostCard from "@/components/PostCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import Section from "@/components/Section.astro";
+import Layout from "@/layouts/Layout.astro";
+import siteConfig from "@/site.config";
+import {
+  getSortedCollectionByTag,
+  getSortedTags,
+  getSortedSeries,
+} from "@/utils/collections";
+import { slug } from "github-slugger";
+import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const paths = [];
+
+  // Get all unique tags from both collections
+  const allTags = await getSortedTags(["posts", "projects"]);
+  const uniqueTags = new Set(allTags.map(([tagName]) => tagName));
+
+  // Generate paths for each unique tag and both collections
+  for (const tagName of uniqueTags) {
+    const tagSlug = slug(tagName);
+
+    // Generate paths for posts collection
+    const postsEntries = await getSortedCollectionByTag("posts", tagSlug);
+    const postsPaginatedPaths = paginate(postsEntries, {
+      pageSize: siteConfig.pageSize,
+      params: { slug: tagSlug, collection: "posts" },
+    });
+    for (const path of postsPaginatedPaths) {
+      paths.push({
+        ...path,
+        params: {
+          ...path.params,
+          collection: "posts" as const,
+        },
+      });
+    }
+
+    // Generate paths for projects collection
+    const projectsEntries = await getSortedCollectionByTag("projects", tagSlug);
+    const projectsPaginatedPaths = paginate(projectsEntries, {
+      pageSize: siteConfig.pageSize,
+      params: { slug: tagSlug, collection: "projects" },
+    });
+    for (const path of projectsPaginatedPaths) {
+      paths.push({
+        ...path,
+        params: {
+          ...path.params,
+          collection: "projects" as const,
+        },
+      });
+    }
+  }
+
+  return paths;
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const { slug: tagSlug, collection } = Astro.params;
+
+const entries = page.data;
+
+// Get counts for both collections
+const postsEntries = await getSortedCollectionByTag("posts", tagSlug);
+const projectsEntries = await getSortedCollectionByTag("projects", tagSlug);
+const postsCount = postsEntries.length;
+const projectsCount = projectsEntries.length;
+
+// Get the original tag name from the slug
+const allTags = await getSortedTags(["posts", "projects"]);
+const tagName = allTags.find(([name]) => slug(name) === tagSlug)?.[0] || tagSlug;
+
+const tags = (await getSortedTags([collection])).slice(0, 10);
+const series =
+  collection === "posts" ? (await getSortedSeries("posts")).slice(0, 10) : [];
+---
+
+<Layout>
+  <Section class="flex flex-col gap-8">
+    <CollectionTabs
+      tagName={tagName}
+      tagSlug={tagSlug}
+      currentCollection={collection as "posts" | "projects"}
+      postsCount={postsCount}
+      projectsCount={projectsCount}
+    />
+    <div class="flex flex-col gap-16">
+      <div class="flex flex-col gap-8 2xl:min-w-full">
+        {
+          entries?.length ? (
+            entries.map((entry) =>
+              collection === "posts" ? (
+                <PostCard post={entry as CollectionEntry<"posts">} />
+              ) : (
+                <ProjectCard project={entry as CollectionEntry<"projects">} />
+              )
+            )
+          ) : (
+            <p>{`No ${collection} found with the tag "${tagName}".`}</p>
+          )
+        }
+        <Pagination
+          prevLink={page.url.prev}
+          prevText={`Newer ${collection}`}
+          nextLink={page.url.next}
+          nextText={`Older ${collection}`}
+        />
+      </div>
+    </div>
+  </Section>
+  <div
+    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6"
+    slot="right"
+  >
+    {
+      tags?.length > 0 ? (
+        <BadgesCard
+          badges={tags}
+          collection={collection}
+          type="tags"
+          title="Top tags"
+          variant="primary"
+        />
+      ) : null
+    }
+    {
+      collection === "posts" && series?.length > 0 ? (
+        <BadgesCard
+          badges={series}
+          type="series"
+          title="Top series"
+          variant="accent"
+        />
+      ) : null
+    }
+  </div>
+</Layout>

@@ -1,13 +1,24 @@
 ---
+import { slug } from "github-slugger";
+import Icon from "./Icon.astro";
+
 interface Props {
   title: string;
   badges: Array<[string, number]>;
-  base: string;
   class?: string;
+  type: "tags" | "series";
+  collection?: "posts" | "projects";
   variant?: "primary" | "secondary" | "accent" | "neutral";
 }
 
-const { title, badges, base, class: className, variant = "primary" } = Astro.props;
+const {
+  title,
+  badges,
+  type,
+  class: className,
+  collection,
+  variant = "primary",
+} = Astro.props;
 
 const variantClass = {
   primary: "badge-primary",
@@ -18,19 +29,31 @@ const variantClass = {
 ---
 
 <aside class={`card card-xs space-y-4 mx-auto max-w-4xl w-full ${className}`}>
-  <h2 class="card-title flex-col text-sm items-start gap-0 text-base-content/80">
+  <h2
+    class="card-title flex-col text-sm items-start gap-0 text-type-content/80"
+  >
     {title}
   </h2>
   <div class="card-body flex-row flex-wrap p-0">
     {
       badges.map((badge) => (
         <a
-          href={`/${base}/${badge[0]}/`}
+          href={`/${type}/${slug(badge[0])}/${collection ? `${collection}/` : ""}`}
           class={`badge badge-soft badge-xs ${variantClass} truncate space-x-2 text-xs`}
         >
-          {badge[0]} <span class={`badge badge-xs size-3 text-xs ${variantClass}`}>{badge[1]}</span>
+          {badge[0]}{" "}
+          <span class={`badge badge-xs size-3 text-xs ${variantClass}`}>
+            {badge[1]}
+          </span>
         </a>
       ))
     }
+    <a
+      href={`/${type}`}
+      class={`badge badge-outline badge-xs ${variantClass} truncate space-x-2 text-2xs`}
+    >
+      View all 
+      <Icon name="chevronRight" />
+    </a>
   </div>
 </aside>

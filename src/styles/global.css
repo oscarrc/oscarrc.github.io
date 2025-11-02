@@ -75,18 +75,23 @@
 @theme {
   --font-nerd: "0xProtoMono", sans-serif;
   --animate-typing: typing 1s steps(40, end), caret 500ms step-end infinite;
+}
 
-  @keyframes typing {
-    from { 
-      width: 0;
-      border-color: transparent;
-    }
-    to { width: 100% }
+@keyframes typing {
+  from { 
+    width: 0;
   }
+  to { 
+    width: 100%;
+  }
+}
 
-  @keyframes caret {
-    from, to { border-color: transparent }
-    50% { border-color: var(--color-neutral) }
+@keyframes caret {
+  from, to { 
+    border-color: transparent;
+  }
+  50% { 
+    border-color: var(--color-neutral);
   }
 }
 

@@ -1,0 +1,41 @@
+---
+import { slug } from "github-slugger";
+import Icon from "./Icon.astro";
+
+interface Props {
+  tagName: string;
+  postsCount: number;
+  projectsCount: number;
+}
+
+const { tagName, postsCount, projectsCount } = Astro.props;
+
+const tagSlug = slug(tagName);
+
+// Determine default collection: posts if it has items, otherwise whichever has items
+let defaultCollection: "posts" | "projects" = "posts";
+if (postsCount === 0 && projectsCount > 0) {
+  defaultCollection = "projects";
+}
+
+const tagLink = `/tags/${tagSlug}/${defaultCollection}`;
+---
+
+<article
+  class="w-full flex flex-row justify-between items-center gap-4"
+>
+  <div class="flex flex-col gap-2 flex-1">
+    <h3 class="text-xl font-semibold">
+      ## {tagName}
+    </h3>
+    <div class="flex items-center gap-2 text-neutral text-sm">
+      <span>{postsCount} posts</span>
+      <span>|</span>
+      <span>{projectsCount} projects</span>
+    </div>
+  </div>
+  <a class="btn btn-outline btn-sm" href={tagLink}>
+    View Tag
+    <Icon name="chevronRight" />
+  </a>
+</article>
