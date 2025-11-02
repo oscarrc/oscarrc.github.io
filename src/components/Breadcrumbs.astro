@@ -16,17 +16,17 @@ const crumbs = currentPath
     <div class="badge badge-soft badge-primary badge-xl text-left px-1 justify-start items-start">
       <Typewritter length={currentPath.length}>
         <div class="p-0 overflow-hidden">
-          <ul class="path flex gap-1">
+          <ul class="path flex">
             {crumbs.map((crumb, index) => (
               <li>
                 {index < crumbs.length - 1 ? (
                   [
-                    <a class="capitalize" href={crumb.path}>
+                    <a href={crumb.path}>
                       {crumb.name}
                     </a>,
                   ]
                 ) : (
-                  <span class="capitalize">{crumb.name}</span>
+                  <span>{crumb.name}</span>
                 )}
               </li>
             ))}

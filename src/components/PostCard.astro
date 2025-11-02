@@ -24,8 +24,7 @@ const date = new Date(post.data.published).toLocaleDateString("en-US", {
   day: "numeric",
 });
 
-const samePage = Astro.url.pathname === `/posts/${post.id}`;
-const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`;
+const articleLink = `/posts/${post.id}`;
 ---
 
 <article class="w-full flex flex-col gap-4 py-4">
@@ -76,7 +75,7 @@ const articleLink = samePage ? `#${post.id}` : `/posts/${post.id}`;
   }
   <div class="flex gap-2 mt-2">
     <a class="btn btn-outline btn-sm" href={articleLink}>
-      Read
+      Read More
       <Icon name="chevronRight" />
     </a>
   </div>
