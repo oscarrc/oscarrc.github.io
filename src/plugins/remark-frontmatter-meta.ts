@@ -1,6 +1,6 @@
 import type { RemarkPlugin } from '@astrojs/markdown-remark'
-import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
+import { visit } from 'unist-util-visit'
 
 const remarkFrontmatterMeta: RemarkPlugin = () => {
   return function (tree, { data }) {
@@ -11,7 +11,6 @@ const remarkFrontmatterMeta: RemarkPlugin = () => {
     let firstParagraphFound = false
 
     visit(tree, (node: any) => {
-      // Extract title from first heading (if not already in frontmatter)
       if (!firstHeadingFound && node.type === 'heading' && !frontmatter.title) {
         const titleText = toString(node).trim()
         if (titleText) {
@@ -20,7 +19,6 @@ const remarkFrontmatterMeta: RemarkPlugin = () => {
         }
       }
 
-      // Extract description from first paragraph (if not already in frontmatter)
       if (!firstParagraphFound && node.type === 'paragraph' && !frontmatter.description) {
         const descriptionText = toString(node).trim()
         if (descriptionText) {
@@ -29,7 +27,6 @@ const remarkFrontmatterMeta: RemarkPlugin = () => {
         }
       }
 
-      // Stop visiting if we've found both
       if (firstHeadingFound && firstParagraphFound) {
         return false
       }

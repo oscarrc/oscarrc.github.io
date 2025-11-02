@@ -78,10 +78,15 @@
   --animate-typing: typing 1s steps(40, end), caret 500ms step-end infinite;
 }
 
-@layer typography {
-  .prose h1, .prose h2, .prose h3 {
+@layer typography {  
+  .prose h1 {
+    font-size: 1.75rem; /* text-2xl */
     color: var(--color-primary);
   }
+  
+  .prose h2 {
+    font-size: 1.5rem;
+  }  
 }
 
 @keyframes typing {
