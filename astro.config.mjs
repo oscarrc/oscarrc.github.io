@@ -2,6 +2,9 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import remarkReadingTime from './src/plugins/remark-reading-time';
+import rehypeHeadingHash from './src/plugins/rehype-heading-hash';
+import rehypeHrDashes from './src/plugins/rehype-hr-dashes';
+import rehypeListMarkers from './src/plugins/rehype-list-markers';
 import siteConfig from './src/site.config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -23,6 +26,7 @@ export default defineConfig({
   prefetch: true,
   markdown: {
     remarkPlugins: [remarkReadingTime],
+    rehypePlugins: [rehypeHeadingHash, rehypeHrDashes, rehypeListMarkers],
   },
   integrations: [
     sitemap(), 

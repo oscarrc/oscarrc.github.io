@@ -58,9 +58,9 @@ Over the years, I’ve worked across a range of projects in **web development**,
 
 ## Certifications
 
-- Cambridge Advanced English (C2) – 2023  
-- Linux Professional Institute (LPIC-1) – 2021  
-- Microsoft Azure AI Fundamentals (AI-900) – 2024  
+- **Microsoft Azure AI Fundamentals (AI-900)** – 2024
+- **Cambridge Advanced English (C2)** – 2023  
+- **Linux Professional Institute (LPIC-1)** – 2021    
 
 ---
 

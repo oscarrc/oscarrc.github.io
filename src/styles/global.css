@@ -188,4 +188,47 @@
   .path li:before {
     content: "/";
   }
+  
+  .hr-dashes {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: clip;
+  }
+  
+  /* Hide default list markers and style custom ones */
+  .prose ul {
+    list-style: none !important;
+    padding-left: 0;
+  }
+  
+  .prose ul li {
+    list-style: none !important;
+  }
+  
+  .prose ol {
+    list-style: none !important;
+    padding-left: 0;
+    counter-reset: list-counter;
+  }
+  
+  .prose ol li {
+    list-style: none !important;
+    counter-increment: list-counter;
+  }
+
+  .prose li > * {
+    display: inline;
+  }
+  
+  .prose li::marker {
+    content: none !important;
+  }
+  
+  .prose .list-marker {
+    display: inline;
+    color: var(--color-neutral);
+    margin-right: 0.25em;
+    margin-left: -1.5rem;
+  }
 }
