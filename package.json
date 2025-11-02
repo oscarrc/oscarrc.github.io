@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
+    "@tailwindcss/typography": "^0.5.19",
     "daisyui": "^5.3.9"
   }
 }

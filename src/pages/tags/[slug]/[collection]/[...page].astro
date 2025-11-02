@@ -76,7 +76,8 @@ const projectsCount = projectsEntries.length;
 
 // Get the original tag name from the slug
 const allTags = await getSortedTags(["posts", "projects"]);
-const tagName = allTags.find(([name]) => slug(name) === tagSlug)?.[0] || tagSlug;
+const tagsMap = new Map(allTags.map(([name]) => [slug(name), name]));
+const tagName = tagsMap.get(tagSlug) || tagSlug;
 
 const tags = (await getSortedTags([collection])).slice(0, 10);
 const series =
