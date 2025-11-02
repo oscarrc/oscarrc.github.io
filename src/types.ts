@@ -34,9 +34,40 @@ export interface GitHubActivityApiResponse {
   error?: string
 }
 
-export interface Collation<CollectionType extends keyof DataEntryMap> {
-  title: string
-  url: string
-  titleSlug: string
-  entries: CollectionEntry<CollectionType>[]
+// Content store types
+export type Post = CollectionEntry<"posts">;
+export type Project = CollectionEntry<"projects">;
+export type TagName = string;
+export type TagSlug = string;
+export type SeriesName = string;
+export type SeriesSlug = string;
+
+export interface TagData {
+  name: TagName;
+  slug: TagSlug;
+  postsCount: number;
+  projectsCount: number;
+  totalCount: number;
+}
+
+export interface SeriesData {
+  name: SeriesName;
+  slug: SeriesSlug;
+  postsCount: number;
+}
+
+export interface ContentData {
+  sortedPosts: Post[];
+  sortedProjects: Project[];
+  allTags: TagData[];
+  postTags: TagData[];
+  projectTags: TagData[];
+  allSeries: SeriesData[];
+  postBySlug: Map<string, Post>;
+  projectBySlug: Map<string, Project>;
+  tagNameBySlug: Map<TagSlug, TagName>;
+  seriesNameBySlug: Map<SeriesSlug, SeriesName>;
+  postsByTag: Map<TagSlug, Post[]>;
+  projectsByTag: Map<TagSlug, Project[]>;
+  postsBySeries: Map<SeriesSlug, Post[]>;
 }

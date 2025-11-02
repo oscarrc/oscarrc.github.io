@@ -1,10 +1,10 @@
 ---
-import { slug } from "github-slugger";
+import type { TagData, SeriesData } from "@/types";
 import Icon from "./Icon.astro";
 
 interface Props {
   title: string;
-  badges: Array<[string, number]>;
+  badges: TagData[] | SeriesData[];
   class?: string;
   type: "tags" | "series";
   collection?: "posts" | "projects";
@@ -26,6 +26,17 @@ const variantClass = {
   accent: "badge-accent",
   neutral: "badge-neutral",
 }[variant];
+
+// Helper to get count from badge based on type and collection
+const getCount = (badge: TagData | SeriesData): number => {
+  if (type === "series") {
+    return (badge as SeriesData).postsCount;
+  }
+  const tagBadge = badge as TagData;
+  if (collection === "posts") return tagBadge.postsCount;
+  if (collection === "projects") return tagBadge.projectsCount;
+  return tagBadge.totalCount;
+};
 ---
 
 <aside
@@ -40,12 +51,12 @@ const variantClass = {
     {
       badges.map((badge) => (
         <a
-          href={`/${type}/${slug(badge[0])}/${collection ? `${collection}/` : ""}`}
+          href={`/${type}/${badge.slug}/${collection ? `${collection}/` : ""}`}
           class={`badge badge-soft badge-xs ${variantClass} truncate space-x-2 text-xs`}
         >
-          {badge[0]}{" "}
+          {badge.name}{" "}
           <span class={`badge badge-xs size-3 text-xs ${variantClass}`}>
-            {badge[1]}
+            {getCount(badge)}
           </span>
         </a>
       ))

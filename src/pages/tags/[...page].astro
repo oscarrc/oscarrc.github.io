@@ -5,45 +5,33 @@ import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import {
-  getSortedTags,
-  getSortedCollectionByTag,
+  getAllTags,
+  getPostsByTag,
+  getProjectsByTag,
 } from "@/utils/collections";
 import { slug } from "github-slugger";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  // Get all tags from both collections
-  const allTags = await getSortedTags(["posts", "projects"]);
-  const uniqueTags = Array.from(new Set(allTags.map(([tagName]) => tagName)));
+  // Get all tags from both collections (already sorted by count)
+  const allTags = await getAllTags();
 
-  // Get counts for each tag in both collections
-  const tagsWithCounts = await Promise.all(
-    uniqueTags.map(async (tagName) => {
-      const tagSlug = slug(tagName);
-      const postsCount = (await getSortedCollectionByTag("posts", tagSlug)).length;
-      const projectsCount = (await getSortedCollectionByTag("projects", tagSlug)).length;
-      return {
-        tagName,
-        postsCount,
-        projectsCount,
-        totalCount: postsCount + projectsCount,
-      };
-    })
-  );
+  // Map to the format expected by the component
+  const tagsWithCounts = allTags.map(tag => ({
+    tagName: tag.name,
+    postsCount: tag.postsCount,
+    projectsCount: tag.projectsCount,
+    totalCount: tag.totalCount,
+  }));
 
-  // Sort by total count (posts + projects) in descending order
-  const sortedTags = tagsWithCounts.sort(
-    (a, b) => b.totalCount - a.totalCount
-  );
-
-  return paginate(sortedTags, { pageSize: siteConfig.pageSize * 2 });
+  return paginate(tagsWithCounts, { pageSize: siteConfig.pageSize * 2 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
 const tags = page.data;
 ---
 
-<Layout title="Tags" description="Browse Oscar R.C.'s projects and posts categorized by tags.">
+<Layout description="Browse Oscar R.C.'s projects and posts categorized by tags.">
   <Section title="Content tags" class="flex flex-col gap-8">
     <div class="flex flex-col gap-16 flex-1">
       <div class="flex flex-col gap-8">

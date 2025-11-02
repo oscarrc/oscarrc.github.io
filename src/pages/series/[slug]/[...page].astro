@@ -6,11 +6,11 @@ import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import {
-  getSortedCollectionBySeries,
-  getSortedTags,
-  getSortedSeries,
+  getPostsBySeries,
+  getPostTags,
+  getAllSeries,
+  getSeriesData,
 } from "@/utils/collections";
-import { slug } from "github-slugger";
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
 import Typewritter from "@/components/Typewritter.astro";
@@ -18,20 +18,19 @@ import Typewritter from "@/components/Typewritter.astro";
 export const getStaticPaths = (async ({ paginate }) => {
   const paths = [];
 
-  // Get all unique series
-  const allSeries = await getSortedSeries("posts");
-  const uniqueSeries = new Set(allSeries.map(([seriesName]) => seriesName));
+  // Get all series
+  const allSeries = await getAllSeries();
 
-  // Generate paths for each unique series
-  for (const seriesName of uniqueSeries) {
-    const seriesSlug = slug(seriesName);
-    const entries = await getSortedCollectionBySeries("posts", seriesSlug);
-    
+  // Generate paths for each series
+  for (const series of allSeries) {
+    const seriesSlug = series.slug;
+    const entries = await getPostsBySeries(seriesSlug);
+
     const paginatedPaths = paginate(entries, {
       pageSize: siteConfig.pageSize,
       params: { slug: seriesSlug },
     });
-    
+
     for (const path of paginatedPaths) {
       paths.push(path);
     }
@@ -45,27 +44,19 @@ const { slug: seriesSlug } = Astro.params;
 
 const entries = page.data;
 
-// Get series name and count from all series
-const allSeries = await getSortedSeries("posts");
-const seriesMap = new Map(allSeries.map(([name, count]) => [slug(name), { name, count }]));
-const seriesInfo = seriesMap.get(seriesSlug);
-const seriesName = seriesInfo?.name || seriesSlug;
-const totalPosts = seriesInfo?.count || 0;
+// Get series data
+const seriesData = await getSeriesData(seriesSlug);
+const seriesName = seriesData.name || seriesSlug;
+const totalPosts = seriesData.postsCount;
 
-const tags = (await getSortedTags(["posts"])).slice(0, 10);
-const series = (await getSortedSeries("posts")).slice(0, 10);
+const tags = (await getPostTags()).slice(0, 10);
+const series = (await getAllSeries()).slice(0, 10);
 
 const message = `No posts found in the series "${seriesName}".`;
 ---
 
 <Layout title={`${seriesName} posts`} description={entries[0].data.description}>
   <Section class="flex flex-col gap-8">
-    <div class="tabs tabs-boxed">
-      <div class="tab tab-sm rounded-box bg-base-300 text-base-content">
-        Series: {seriesName}
-        <span class="badge badge-xs badge-primary ml-2">{totalPosts}</span>
-      </div>
-    </div>
     <div class="flex flex-col gap-16">
       <div class="flex flex-col gap-8 2xl:min-w-full">
         {

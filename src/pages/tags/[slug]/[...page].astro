@@ -11,52 +11,57 @@ import {
   getPostsByTag,
   getProjectsByTag,
   getAllTags,
-  getPostTags,
-  getProjectTags,
   getAllSeries,
   getTagData,
 } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
 
+type CombinedEntry =
+  | { type: "post"; entry: CollectionEntry<"posts"> }
+  | { type: "project"; entry: CollectionEntry<"projects"> };
+
 export const getStaticPaths = (async ({ paginate }) => {
   const paths = [];
 
-  // Get all tags from both collections
   const allTags = await getAllTags();
 
-  // Generate paths for each tag and both collections
   for (const tag of allTags) {
     const tagSlug = tag.slug;
 
-    // Generate paths for posts collection
     const postsEntries = await getPostsByTag(tagSlug);
-    const postsPaginatedPaths = paginate(postsEntries, {
-      pageSize: siteConfig.pageSize,
-      params: { slug: tagSlug, collection: "posts" },
-    });
-    for (const path of postsPaginatedPaths) {
-      paths.push({
-        ...path,
-        params: {
-          ...path.params,
-          collection: "posts" as const,
-        },
-      });
-    }
-
-    // Generate paths for projects collection
     const projectsEntries = await getProjectsByTag(tagSlug);
-    const projectsPaginatedPaths = paginate(projectsEntries, {
-      pageSize: siteConfig.pageSize,
-      params: { slug: tagSlug, collection: "projects" },
+
+    const combined: CombinedEntry[] = [
+      ...postsEntries.map((entry) => ({
+        type: "post" as const,
+        entry,
+      })),
+      ...projectsEntries.map((entry) => ({
+        type: "project" as const,
+        entry,
+      })),
+    ].sort((a, b) => {
+      const dateA = new Date(
+        a.entry.data.updated || a.entry.data.published
+      ).getTime();
+      const dateB = new Date(
+        b.entry.data.updated || b.entry.data.published
+      ).getTime();
+      return dateB - dateA;
     });
-    for (const path of projectsPaginatedPaths) {
+
+    const paginatedPaths = paginate(combined, {
+      pageSize: siteConfig.pageSize,
+      params: { slug: tagSlug },
+    });
+
+    for (const path of paginatedPaths) {
       paths.push({
         ...path,
         params: {
           ...path.params,
-          collection: "projects" as const,
+          slug: tagSlug,
         },
       });
     }
@@ -66,9 +71,9 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
-const { slug: tagSlug, collection } = Astro.params;
+const { slug: tagSlug } = Astro.params;
 
-const entries = page.data;
+const entries = page.data as CombinedEntry[];
 
 // Get tag data
 const tagData = await getTagData(tagSlug);
@@ -76,44 +81,43 @@ const tagName = tagData.name || tagSlug;
 const postsCount = tagData.postsCount;
 const projectsCount = tagData.projectsCount;
 
-const tags = (
-  collection === "posts" ? await getPostTags() : await getProjectTags()
-).slice(0, 10);
-const series =
-  collection === "posts" ? (await getAllSeries()).slice(0, 10) : [];
+const tags = (await getAllTags()).slice(0, 10);
+const series = (await getAllSeries()).slice(0, 10);
 ---
 
 <Layout
-  title={`${collection.charAt(0).toUpperCase()}${collection.slice(1)} tagged ${tagName}`}
-  description={`Browse all ${collection === "posts" ? postsCount : projectsCount} ${collection} tagged with "${tagName}".`}
+  title={`Content tagged ${tagName}`}
+  description={`Browse all ${postsCount + projectsCount} posts and projects tagged with "${tagName}".`}
 >
   <Section class="flex flex-col gap-8">
     <CollectionTabs
       tagSlug={tagSlug}
-      currentCollection={collection as "posts" | "projects"}
       postsCount={postsCount}
       projectsCount={projectsCount}
     />
+
     <div class="flex flex-col gap-16">
       <div class="flex flex-col gap-8 2xl:min-w-full">
         {
           entries?.length ? (
-            entries.map((entry) =>
-              collection === "posts" ? (
-                <PostCard post={entry as CollectionEntry<"posts">} />
+            entries.map((item) =>
+              item.type === "post" ? (
+                <PostCard post={item.entry as CollectionEntry<"posts">} />
               ) : (
-                <ProjectCard project={entry as CollectionEntry<"projects">} />
+                <ProjectCard
+                  project={item.entry as CollectionEntry<"projects">}
+                />
               )
             )
           ) : (
-            <p>{`No ${collection} found with the tag "${tagName}".`}</p>
+            <p>{`No content found with the tag "${tagName}".`}</p>
           )
         }
         <Pagination
           prevLink={page.url.prev}
-          prevText={`Newer ${collection}`}
+          prevText="Newer Content"
           nextLink={page.url.next}
-          nextText={`Older ${collection}`}
+          nextText="Older Content"
         />
       </div>
     </div>
@@ -126,7 +130,7 @@ const series =
       tags?.length > 0 ? (
         <BadgesCard
           badges={tags}
-          collection={collection}
+          collection="posts"
           type="tags"
           title="Top tags"
           variant="primary"
@@ -134,7 +138,7 @@ const series =
       ) : null
     }
     {
-      collection === "posts" && series?.length > 0 ? (
+      series?.length > 0 ? (
         <BadgesCard
           badges={series}
           type="series"

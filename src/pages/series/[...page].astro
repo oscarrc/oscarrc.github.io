@@ -4,17 +4,17 @@ import Pagination from "@/components/Pagination.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import { getSortedSeries } from "@/utils/collections";
+import { getAllSeries } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   // Get all series with their counts (already sorted by count in descending order)
-  const allSeries = await getSortedSeries("posts");
+  const allSeries = await getAllSeries();
 
   // Map to include series name and count
-  const seriesWithCounts = allSeries.map(([seriesName, postsCount]) => ({
-    seriesName,
-    postsCount,
+  const seriesWithCounts = allSeries.map(series => ({
+    seriesName: series.name,
+    postsCount: series.postsCount,
   }));
 
   return paginate(seriesWithCounts, { pageSize: siteConfig.pageSize * 2 });
@@ -25,7 +25,7 @@ const series = page.data;
 ---
 
 <Layout title="Series" description="Explore Oscar R.C.'s blog posts series and read them in order.">
-  <Section title="Posts series" class="flex flex-col gap-8">
+  <Section class="flex flex-col gap-8">
     <div class="flex flex-col gap-16 flex-1">
       <div class="flex flex-col gap-8">
         {series.map((s) => (
