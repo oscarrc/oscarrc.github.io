@@ -19,8 +19,11 @@ const projects = page.data;
 const tags = (await getSortedTags(["projects"])).slice(0, 10);
 ---
 
-<Layout>
-  <Section class="flex flex-col gap-8">
+<Layout
+  title="Projects"
+  description="Discover Oscar R.C.'s personal projects, showcasing his interests and experiments in software development."
+>
+  <Section title="Personal Projects" class="flex flex-col gap-8">
     <div class="flex flex-col gap-16">
       <div class="flex flex-col gap-8 lg:min-w-full">
         {projects.map((project) => <ProjectCard project={project} />)}

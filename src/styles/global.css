@@ -38,7 +38,7 @@
   --color-base-content: #cdd6f4;
 }
 
-@plugin "daisyui/theme" {
+/* @plugin "daisyui/theme" {
   name: "catpuccin-latte";
   default: false;
   prefersdark: false;
@@ -71,11 +71,17 @@
   --color-base-200: #e6e9ef;
   --color-base-300: #dce0e8;
   --color-base-content: #4c4f69;
-}
+} */
 
 @theme {
   --font-nerd: "0xProtoMono", sans-serif;
   --animate-typing: typing 1s steps(40, end), caret 500ms step-end infinite;
+}
+
+@layer typography {
+  .prose h1, .prose h2, .prose h3 {
+    color: var(--color-primary);
+  }
 }
 
 @keyframes typing {
@@ -195,7 +201,7 @@
     overflow: hidden;
     text-overflow: clip;
   }
-  
+
   /* Hide default list markers and style custom ones */
   .prose ul {
     list-style: none !important;
@@ -227,7 +233,7 @@
   
   .prose .list-marker {
     display: inline;
-    color: var(--color-neutral);
+    color: var(--color-primary);
     margin-right: 0.25em;
     margin-left: -1.5rem;
   }

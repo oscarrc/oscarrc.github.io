@@ -58,7 +58,7 @@ const series = (await getSortedSeries("posts")).slice(0, 10);
 const message = `No posts found in the series "${seriesName}".`;
 ---
 
-<Layout>
+<Layout title={`${seriesName} posts`} description={entries[0].data.description}>
   <Section class="flex flex-col gap-8">
     <div class="tabs tabs-boxed">
       <div class="tab tab-sm rounded-box bg-base-300 text-base-content">

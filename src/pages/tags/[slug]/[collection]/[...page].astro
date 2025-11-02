@@ -84,7 +84,10 @@ const series =
   collection === "posts" ? (await getSortedSeries("posts")).slice(0, 10) : [];
 ---
 
-<Layout>
+<Layout
+  title={`${collection.charAt(0).toUpperCase()}${collection.slice(1)} tagged ${tagName}`}
+  description={`Browse all ${collection === "posts" ? postsCount : projectsCount} ${collection} tagged with "${tagName}".`}
+>
   <Section class="flex flex-col gap-8">
     <CollectionTabs
       tagName={tagName}
@@ -118,7 +121,7 @@ const series =
     </div>
   </Section>
   <div
-    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6"
+    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-8 2xl:gap-16 p-6"
     slot="right"
   >
     {

@@ -24,8 +24,8 @@ const tags = (await getSortedTags(["posts"])).slice(0, 10);
 const series = (await getSortedSeries("posts")).slice(0, 10);
 ---
 
-<Layout>
-  <Section class="flex flex-col gap-8">
+<Layout title="Blog" description="Read Oscar R.C.'s latest blog posts on software development, technology, and programming.">
+  <Section title="Latest Posts" class="flex flex-col gap-8">
     <div class="flex flex-col gap-16">
       <div class="flex flex-col gap-8 2xl:min-w-full">
         {posts.map((post) => <PostCard post={post} />)}
@@ -39,7 +39,7 @@ const series = (await getSortedSeries("posts")).slice(0, 10);
     </div>
   </Section>
   <div
-    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6"
+    class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-8 2xl:gap-16 p-6"
     slot="right"
   >
     {

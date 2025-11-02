@@ -1,10 +1,11 @@
 ---
-import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import Layout from "./Layout.astro";
 import Section from "@/components/Section.astro";
+
+const { frontmatter } = Astro.props;
 ---
 
-<Layout>
+<Layout title={frontmatter.title} description={frontmatter.description}>
   <Section class="flex flex-col gap-16">
     <article class="prose prose-invert max-w-none">
       <slot />

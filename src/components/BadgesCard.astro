@@ -28,13 +28,15 @@ const variantClass = {
 }[variant];
 ---
 
-<aside class={`card card-xs space-y-4 mx-auto max-w-4xl w-full ${className}`}>
-  <h2
-    class="card-title flex-col text-sm items-start gap-0 text-type-content/80"
+<aside
+  class={`relative card card-xs space-y-4 mx-auto max-w-4xl w-full  border rounded-box ${className}`}
+>
+  <h6
+    class="absolute bg-base-100 -top-2.5 left-3 px-2 card-title flex-col text-sm items-start gap-0"
   >
     {title}
-  </h2>
-  <div class="card-body flex-row flex-wrap p-0">
+  </h6>
+  <div class="card-body flex-row flex-wrap p-4 pt-6">
     {
       badges.map((badge) => (
         <a
@@ -52,7 +54,7 @@ const variantClass = {
       href={`/${type}`}
       class={`badge badge-outline badge-xs ${variantClass} truncate space-x-2 text-2xs`}
     >
-      View all 
+      View all
       <Icon name="chevronRight" />
     </a>
   </div>

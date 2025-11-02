@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import remarkReadingTime from './src/plugins/remark-reading-time';
+import remarkFrontmatterMeta from './src/plugins/remark-frontmatter-meta';
 import rehypeHeadingHash from './src/plugins/rehype-heading-hash';
 import rehypeHrDashes from './src/plugins/rehype-hr-dashes';
 import rehypeListMarkers from './src/plugins/rehype-list-markers';
@@ -25,7 +26,7 @@ export default defineConfig({
   },
   prefetch: true,
   markdown: {
-    remarkPlugins: [remarkReadingTime],
+    remarkPlugins: [remarkReadingTime, remarkFrontmatterMeta],
     rehypePlugins: [rehypeHeadingHash, rehypeHrDashes, rehypeListMarkers],
   },
   integrations: [
