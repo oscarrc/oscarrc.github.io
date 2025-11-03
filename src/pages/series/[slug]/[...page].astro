@@ -5,28 +5,16 @@ import PostCard from "@/components/PostCard.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import {
-  getPostsBySeries,
-  getPostTags,
-  getAllSeries,
-  getSeriesData,
-} from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
-import type { CollectionEntry } from "astro:content";
 import Typewritter from "@/components/Typewritter.astro";
+import { getSeriesBySlug, postsBySeries, postSeries, postTags } from "@/utils/collections";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const paths = [];
 
-  // Get all series
-  const allSeries = await getAllSeries();
-
-  // Generate paths for each series
-  for (const series of allSeries) {
-    const seriesSlug = series.slug;
-    const entries = await getPostsBySeries(seriesSlug);
-
-    const paginatedPaths = paginate(entries, {
+  // Iterate over the postsBySeries map directly
+  for (const [seriesSlug, posts] of postsBySeries) {
+    const paginatedPaths = paginate(posts, {
       pageSize: siteConfig.pageSize,
       params: { slug: seriesSlug },
     });
@@ -42,27 +30,26 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 const { slug: seriesSlug } = Astro.params;
 
-const entries = page.data;
+const posts = page.data;
 
 // Get series data
-const seriesData = await getSeriesData(seriesSlug);
-const seriesName = seriesData.name || seriesSlug;
-const totalPosts = seriesData.postsCount;
+const seriesData = getSeriesBySlug(seriesSlug);
+const seriesName = seriesData?.name || seriesSlug;
 
-const tags = (await getPostTags()).slice(0, 10);
-const series = (await getAllSeries()).slice(0, 10);
+const tags = postTags.slice(0, 10);
+const series = postSeries.slice(0, 10);
 
 const message = `No posts found in the series "${seriesName}".`;
 ---
 
-<Layout title={`${seriesName} posts`} description={entries[0].data.description}>
+<Layout title={`${seriesName} posts`} description={posts[0].data.description}>
   <Section class="flex flex-col gap-8">
     <div class="flex flex-col gap-16">
       <div class="flex flex-col gap-8 2xl:min-w-full">
         {
-          entries?.length ? (
-            entries.map((entry) => (
-              <PostCard post={entry as CollectionEntry<"posts">} />
+          posts?.length ? (
+            posts.map((post) => (
+              <PostCard post={post} />
             ))
           ) : (
             <div class="w-full 2xl:min-w-4xl">

@@ -5,18 +5,17 @@ import ProjectCard from "@/components/ProjectCard.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import { getAllProjects, getProjectTags } from "@/utils/collections";
+import { projects as allProjects, projectTags } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const projects = await getAllProjects();
-  return paginate(projects, { pageSize: siteConfig.pageSize });
+  return paginate(allProjects, { pageSize: siteConfig.pageSize });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
 
 const projects = page.data;
-const tags = (await getProjectTags()).slice(0, 10);
+const tags = projectTags.slice(0, 10);
 ---
 
 <Layout

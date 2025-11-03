@@ -8,13 +8,12 @@ import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import {
-  getPostsByTag,
-  getProjectsByTag,
-  getAllTags,
-  getPostTags,
-  getProjectTags,
-  getAllSeries,
-  getTagData,
+  getTagBySlug,
+  postsByTag,
+  postSeries,
+  postTags,
+  projectsByTag,
+  projectTags,
 } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
@@ -22,20 +21,13 @@ import type { CollectionEntry } from "astro:content";
 export const getStaticPaths = (async ({ paginate }) => {
   const paths = [];
 
-  // Get all tags from both collections
-  const allTags = await getAllTags();
-
-  // Generate paths for each tag and both collections
-  for (const tag of allTags) {
-    const tagSlug = tag.slug;
-
-    // Generate paths for posts collection
-    const postsEntries = await getPostsByTag(tagSlug);
-    const postsPaginatedPaths = paginate(postsEntries, {
+  for (const [tagSlug, posts] of postsByTag) {
+    const paginatedPaths = paginate(posts, {
       pageSize: siteConfig.pageSize,
       params: { slug: tagSlug, collection: "posts" },
     });
-    for (const path of postsPaginatedPaths) {
+
+    for (const path of paginatedPaths) {
       paths.push({
         ...path,
         params: {
@@ -44,14 +36,15 @@ export const getStaticPaths = (async ({ paginate }) => {
         },
       });
     }
+  }
 
-    // Generate paths for projects collection
-    const projectsEntries = await getProjectsByTag(tagSlug);
-    const projectsPaginatedPaths = paginate(projectsEntries, {
+  for (const [tagSlug, projects] of projectsByTag) {
+    const paginatedPaths = paginate(projects, {
       pageSize: siteConfig.pageSize,
       params: { slug: tagSlug, collection: "projects" },
     });
-    for (const path of projectsPaginatedPaths) {
+
+    for (const path of paginatedPaths) {
       paths.push({
         ...path,
         params: {
@@ -70,17 +63,14 @@ const { slug: tagSlug, collection } = Astro.params;
 
 const entries = page.data;
 
-// Get tag data
-const tagData = await getTagData(tagSlug);
-const tagName = tagData.name || tagSlug;
-const postsCount = tagData.postsCount;
-const projectsCount = tagData.projectsCount;
+const tagData = await getTagBySlug(tagSlug);
+const tagName = tagData?.name || tagSlug;
+const postsCount = tagData?.postCount || 0;
+const projectsCount = tagData?.projectCount || 0;
 
-const tags = (
-  collection === "posts" ? await getPostTags() : await getProjectTags()
-).slice(0, 10);
-const series =
-  collection === "posts" ? (await getAllSeries()).slice(0, 10) : [];
+const entryTags = collection === "posts" ? postTags : projectTags;
+const tags = entryTags.slice(0, siteConfig.pageSize * 2);
+const series = collection === "posts" ? postSeries.slice(0, siteConfig.pageSize * 2) : [];
 ---
 
 <Layout

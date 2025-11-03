@@ -7,51 +7,17 @@ import ProjectCard from "@/components/ProjectCard.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import {
-  getPostsByTag,
-  getProjectsByTag,
-  getAllTags,
-  getAllSeries,
-  getTagData,
-} from "@/utils/collections";
+import type { CombinedEntry } from "@/types";
+import { allTags, contentByTag, getTagBySlug, postSeries } from "@/utils/collections";
+
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
-
-type CombinedEntry =
-  | { type: "post"; entry: CollectionEntry<"posts"> }
-  | { type: "project"; entry: CollectionEntry<"projects"> };
 
 export const getStaticPaths = (async ({ paginate }) => {
   const paths = [];
 
-  const allTags = await getAllTags();
-
-  for (const tag of allTags) {
-    const tagSlug = tag.slug;
-
-    const postsEntries = await getPostsByTag(tagSlug);
-    const projectsEntries = await getProjectsByTag(tagSlug);
-
-    const combined: CombinedEntry[] = [
-      ...postsEntries.map((entry) => ({
-        type: "post" as const,
-        entry,
-      })),
-      ...projectsEntries.map((entry) => ({
-        type: "project" as const,
-        entry,
-      })),
-    ].sort((a, b) => {
-      const dateA = new Date(
-        a.entry.data.updated || a.entry.data.published
-      ).getTime();
-      const dateB = new Date(
-        b.entry.data.updated || b.entry.data.published
-      ).getTime();
-      return dateB - dateA;
-    });
-
-    const paginatedPaths = paginate(combined, {
+  for (const [tagSlug, combinedEntries] of contentByTag) {
+    const paginatedPaths = paginate(combinedEntries, {
       pageSize: siteConfig.pageSize,
       params: { slug: tagSlug },
     });
@@ -75,14 +41,13 @@ const { slug: tagSlug } = Astro.params;
 
 const entries = page.data as CombinedEntry[];
 
-// Get tag data
-const tagData = await getTagData(tagSlug);
-const tagName = tagData.name || tagSlug;
-const postsCount = tagData.postsCount;
-const projectsCount = tagData.projectsCount;
+const tagData = await getTagBySlug(tagSlug);
+const tagName = tagData?.name || tagSlug;
+const postsCount = tagData?.postCount || 0;
+const projectsCount = tagData?.projectCount || 0;
 
-const tags = (await getAllTags()).slice(0, 10);
-const series = (await getAllSeries()).slice(0, 10);
+const tags = allTags.slice(0, siteConfig.pageSize * 2);
+const series = postSeries.slice(0, siteConfig.pageSize * 2);
 ---
 
 <Layout
@@ -102,10 +67,10 @@ const series = (await getAllSeries()).slice(0, 10);
           entries?.length ? (
             entries.map((item) =>
               item.type === "post" ? (
-                <PostCard post={item.entry as CollectionEntry<"posts">} />
+                <PostCard post={item as CollectionEntry<"posts">} />
               ) : (
                 <ProjectCard
-                  project={item.entry as CollectionEntry<"projects">}
+                  project={item as CollectionEntry<"projects">}
                 />
               )
             )

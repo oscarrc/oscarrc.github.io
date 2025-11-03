@@ -1,10 +1,10 @@
 ---
-import type { TagData, SeriesData } from "@/types";
+import type { TagStats, SeriesStats } from "@/types";
 import Icon from "./Icon.astro";
 
 interface Props {
   title: string;
-  badges: TagData[] | SeriesData[];
+  badges: TagStats[] | SeriesStats[];
   class?: string;
   type: "tags" | "series";
   collection?: "posts" | "projects";
@@ -28,13 +28,13 @@ const variantClass = {
 }[variant];
 
 // Helper to get count from badge based on type and collection
-const getCount = (badge: TagData | SeriesData): number => {
+const getCount = (badge: TagStats | SeriesStats): number => {
   if (type === "series") {
-    return (badge as SeriesData).postsCount;
+    return (badge as SeriesStats).postCount;
   }
-  const tagBadge = badge as TagData;
-  if (collection === "posts") return tagBadge.postsCount;
-  if (collection === "projects") return tagBadge.projectsCount;
+  const tagBadge = badge as TagStats;
+  if (collection === "posts") return tagBadge.postCount;
+  if (collection === "projects") return tagBadge.projectCount;
   return tagBadge.totalCount;
 };
 ---

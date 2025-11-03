@@ -9,11 +9,11 @@ import Section from "@/components/Section.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import PostCard from "@/components/PostCard.astro";
 import SectionButton from "@/components/SectionButton.astro";
-import { getAllProjects, getAllPosts } from "@/utils/collections";
+import { projects as allProjects, posts as allPosts } from "@/utils/collections";
 
 const home = await getCollection("home");
-const projects = (await getAllProjects()).slice(0, 3);
-const posts = (await getAllPosts()).slice(0, 3);
+const projects = allProjects.slice(0, 3);
+const posts = allPosts.slice(0, 3);
 
 const github = config.github;
 

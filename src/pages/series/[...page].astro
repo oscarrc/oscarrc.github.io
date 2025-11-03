@@ -4,36 +4,29 @@ import Pagination from "@/components/Pagination.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import { getAllSeries } from "@/utils/collections";
+import { postSeries } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  // Get all series with their counts (already sorted by count in descending order)
-  const allSeries = await getAllSeries();
-
-  // Map to include series name and count
-  const seriesWithCounts = allSeries.map(series => ({
-    seriesName: series.name,
-    postsCount: series.postsCount,
-  }));
-
-  return paginate(seriesWithCounts, { pageSize: siteConfig.pageSize * 2 });
+  return paginate(postSeries, { pageSize: siteConfig.pageSize * 2 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
 const series = page.data;
 ---
 
-<Layout title="Series" description="Explore Oscar R.C.'s blog posts series and read them in order.">
+<Layout
+  title="Series"
+  description="Explore Oscar R.C.'s blog posts series and read them in order."
+>
   <Section class="flex flex-col gap-8">
     <div class="flex flex-col gap-16 flex-1">
       <div class="flex flex-col gap-8">
-        {series.map((s) => (
-          <SeriesCard
-            seriesName={s.seriesName}
-            postsCount={s.postsCount}
-          />
-        ))}
+        {
+          series.map((s) => (
+            <SeriesCard seriesName={s.name} postsCount={s.postCount} />
+          ))
+        }
       </div>
       <Pagination
         prevLink={page.url.prev}
@@ -44,4 +37,3 @@ const series = page.data;
     </div>
   </Section>
 </Layout>
-

@@ -71,3 +71,20 @@ export interface ContentData {
   projectsByTag: Map<TagSlug, Project[]>;
   postsBySeries: Map<SeriesSlug, Post[]>;
 }
+
+export type ContentCollectionType = keyof Pick<DataEntryMap, "projects" | "posts">;
+export type CombinedEntry = (CollectionEntry<"posts"> | CollectionEntry<"projects">) & { type: string };
+
+export interface TagStats {
+  name: string;
+  slug: string;
+  postCount: number;
+  projectCount: number;
+  totalCount: number;
+}
+
+export interface SeriesStats {
+  name: string;
+  slug: string;
+  postCount: number;
+}
