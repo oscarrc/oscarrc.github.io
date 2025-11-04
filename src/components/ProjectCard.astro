@@ -2,7 +2,7 @@
 import { render, type CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import Icon from "./Icon.astro";
-import { slug } from "github-slugger";
+import { slug as sluggify } from "github-slugger";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -26,7 +26,7 @@ const date = new Date(project.data.published).toLocaleDateString("en-US", {
   day: "numeric",
 });
 
-const articleLink = `/projects/${project.id}`;
+const articleLink = `/projects/${project.data.slug}`;
 ---
 
 <article class="w-full flex flex-col gap-4 py-4">
@@ -61,7 +61,10 @@ const articleLink = `/projects/${project.id}`;
     tags && (
       <div class="flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <a href={`/tags/${slug(tag)}/projects`} class="badge badge-soft badge-primary">
+          <a
+            href={`/tags/${sluggify(tag)}/projects`}
+            class="badge badge-soft badge-primary"
+          >
             {tag}
           </a>
         ))}

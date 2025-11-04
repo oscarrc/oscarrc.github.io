@@ -67,16 +67,21 @@ const [projects, posts] = await Promise.all([
   getCollection("posts"),
 ]);
 
-const sortedProjects = projects.filter((p) => !p.data.draft).sort(sortByDate);
-const sortedPosts = posts.filter((p) => !p.data.draft).sort(sortByDate);
+const sortedProjects = projects.flatMap((p) => ( 
+  p.data.draft ? [] : [{ ...p, data: { ...p.data, slug: slugify(p.data.title) } }]
+)).sort(sortByDate);
+
+const sortedPosts = posts.flatMap((p) => ( 
+  p.data.draft ? [] : [{ ...p, data: { ...p.data, slug: slugify(p.data.title) } }]
+)).sort(sortByDate);
 
 /* -------------------------------------------------------
  * Index by slug
  * -----------------------------------------------------*/
 
-const collectionsBySlug: Record<ContentCollectionType, Map<string, string>> = {
-  projects: new Map(sortedProjects.map((p) => [slugify(p.data.title), p.id])),
-  posts: new Map(sortedPosts.map((p) => [slugify(p.data.title), p.id])),
+const collectionsBySlug: Record<ContentCollectionType, Map<string, CollectionEntry<ContentCollectionType>>> = {
+  projects: new Map(sortedProjects.map((p) => [p.data.slug, p])),
+  posts: new Map(sortedPosts.map((p) => [p.data.slug, p])),
 };
 
 export const getCollectionBySlug = (
@@ -89,8 +94,7 @@ export const getEntryBySlug = async (
   collection: ContentCollectionType,
   entrySlug: string
 ) => {
-  const id = collectionsBySlug[collection].get(entrySlug);
-  return id ? await getEntry(collection, id) : undefined;
+  return collectionsBySlug[collection].get(entrySlug);
 };
 
 /* -------------------------------------------------------
@@ -104,7 +108,7 @@ function aggregateContent(
   const tagStatsMap = new Map<string, TagStats>();
   const seriesStatsMap = new Map<string, SeriesStats>();
 
-  // --- Maps keyed by slug, NOT by name ---
+  // --- Maps keyed by slug ---
   const postsByTag = new Map<string, CollectionEntry<"posts">[]>();         // key: tagSlug
   const projectsByTag = new Map<string, CollectionEntry<"projects">[]>();   // key: tagSlug
   const postsBySeries = new Map<string, CollectionEntry<"posts">[]>();      // key: seriesSlug

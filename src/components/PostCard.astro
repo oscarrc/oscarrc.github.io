@@ -1,6 +1,6 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
-import { slug } from "github-slugger";
+import { slug as sluggify } from "github-slugger";
 import Icon from "./Icon.astro";
 
 interface Props {
@@ -25,9 +25,8 @@ const date = new Date(post.data.published).toLocaleDateString("en-US", {
   day: "numeric",
 });
 
-const articleLink = `/posts/${post.id}`;
+const articleLink = `/blog/${post.data.slug}`;
 ---
-
 <article class="w-full flex flex-col gap-4 py-4">
   <div class="flex flex-col gap-1">
     <h3 class="text-2xl font-semibold">
@@ -61,13 +60,13 @@ const articleLink = `/posts/${post.id}`;
     tags && (
       <div class="flex flex-wrap gap-2">
         {series && (
-          <a href={`/series/${slug(series)}`} class="badge badge-soft badge-accent">
+          <a href={`/series/${sluggify(series)}`} class="badge badge-soft badge-accent">
             <Icon name="book" />
             {series}
           </a>
         )}
         {tags.map((tag) => (
-          <a href={`/tags/${slug(tag)}/posts`} class="badge badge-soft badge-primary">
+          <a href={`/tags/${sluggify(tag)}/posts`} class="badge badge-soft badge-primary">
             {tag}
           </a>
         ))}

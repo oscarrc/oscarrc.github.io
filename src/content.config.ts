@@ -40,6 +40,7 @@ const projectsCollection = defineCollection({
       description: z.string().optional(),
       author: z.string().optional(),
       tags: z.array(z.string()).optional().default([]),
+      slug: z.string().optional(),
       cover: z
         .strictObject({
           src: image(),
@@ -64,6 +65,7 @@ const postsCollection = defineCollection({
       author: z.string().optional(),
       series: z.string().optional(),
       tags: z.array(z.string()).optional().default([]),
+      slug: z.string().optional(),
       cover: z
         .strictObject({
           src: image(),

@@ -10,8 +10,8 @@ export const getStaticPaths = (async () => {
   const paths = [];
   const posts = getCollectionBySlug("posts");
 
-  for (const [slug, id] of posts) {
-    paths.push({ params: { slug, id } });
+  for (const [slug] of posts) {
+    paths.push({ params: { slug } });
   }
 
   return paths;
