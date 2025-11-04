@@ -73,7 +73,7 @@ export interface ContentData {
 }
 
 export type ContentCollectionType = keyof Pick<DataEntryMap, "projects" | "posts">;
-export type CombinedEntry = (CollectionEntry<"posts"> | CollectionEntry<"projects">) & { type: string };
+export type CombinedEntry = (CollectionEntry<"posts"> | CollectionEntry<"projects">) & { type: ContentCollectionType };
 
 export interface TagStats {
   name: string;

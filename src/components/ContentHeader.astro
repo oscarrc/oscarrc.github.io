@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
+import { slug as sluggify } from "github-slugger";
+import type { ContentCollectionType, FrontmatterImage } from "@/types";
+
+interface Props {
+  collection: ContentCollectionType;
+  title?: string;
+  description?: string;
+  readingTime?: string;
+  repo?: string;
+  cover?: FrontmatterImage;
+  published: Date;
+  updated?: Date;
+  series?: string;
+  author?: string;
+  tags?: string[];
+}
+
+const {
+  collection,
+  title,
+  description,
+  readingTime,
+  cover,
+  published,
+  updated,
+  series,
+  author,
+  repo,
+  tags = [],
+} = Astro.props;
+
+const formatDate = (date: Date): string => {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+const publishedDate = formatDate(published);
+const updatedDate = updated ? formatDate(updated) : null;
+---
+
+<div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-1">
+    <h1 class="text-2xl font-semibold text-primary">
+      # {title}
+    </h1>
+    <div class="flex items-center gap-2 text-neutral text-sm">
+      <time>
+        <Icon name="calendar" />
+        {
+          updatedDate
+            ? `Updated on ${updatedDate}`
+            : `Published on ${publishedDate}`
+        }
+      </time>
+      {
+        readingTime && (
+          <>
+            <span>|</span>
+            <span>
+              <Icon name="clock" />
+              {readingTime}
+            </span>
+          </>
+        )
+      }
+      {
+        author && (
+          <>
+            <span>|</span>
+            <span>
+              <Icon name="user" />
+              {author}
+            </span>
+          </>
+        )
+      }
+      {
+        repo && (
+          <>
+            <span>|</span>
+            <a
+              href={`https://github.com/${repo}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="github" />
+              {repo}
+            </a>
+          </>
+        )
+      }
+    </div>
+  </div>
+
+  {description && <p class="text-accent">{description}</p>}
+  {
+    (tags || series) && (
+      <div class="flex flex-wrap gap-2">
+        {series && (
+          <a
+            href={`/series/${sluggify(series)}`}
+            class="badge badge-soft badge-accent"
+          >
+            <Icon name="book" />
+            {series}
+          </a>
+        )}
+        {tags.map((tag) => (
+          <a
+            href={`/tags/${sluggify(tag)}/${collection}`}
+            class="badge badge-soft badge-primary"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    cover && (
+      <figure class="w-full rounded-lg overflow-hidden">
+        <Image {...cover} class="w-full h-auto object-cover" loading="eager" />
+      </figure>
+    )
+  }
+</div>

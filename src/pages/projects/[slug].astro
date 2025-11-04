@@ -1,4 +1,6 @@
 ---
+import ContentHeader from "@/components/ContentHeader.astro";
+import ContentTree from "@/components/ContentTree.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getEntryBySlug } from "@/utils/collections";
@@ -18,14 +20,36 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-const project = (await getEntryBySlug("projects", slug)) as CollectionEntry<"projects">;
-const { Content } = await render(project);
+const project = (await getEntryBySlug(
+  "projects",
+  slug
+)) as CollectionEntry<"projects">;
+const { Content, headings } = await render(project);
 ---
 
 <Layout breadcrumbs={false}>
+  <div class="container max-w-4xl mx-auto p-4 space-y-8" slot="top">
+    <ContentHeader
+      collection={project.collection}
+      title={project.data.title}
+      description={project.data.description}
+      cover={project.data.cover}
+      published={project.data.published}
+      updated={project.data?.updated}
+      repo={project.data.repo}
+      tags={project.data.tags}
+    />
+  </div>
   <Section class="flex flex-col gap-16">
-    <article data-pagefind-body class="prose prose-invert max-w-none">
+    <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
   </Section>
+  {
+    headings && headings.length > 0 && (
+      <aside slot="right" class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6">
+        <ContentTree headings={headings} />
+      </aside>
+    )
+  }
 </Layout>

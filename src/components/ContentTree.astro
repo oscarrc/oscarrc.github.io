@@ -1,0 +1,65 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  class?: string;
+}
+
+const { headings, class: className } = Astro.props;
+
+const filteredHeadings = headings.filter(
+  ({ depth }) => depth === 2 || depth === 3
+);
+
+// Build nested structure with reduce (h2 items with children array)
+const nestedHeadings = filteredHeadings.reduce(
+  (acc: Array<MarkdownHeading & { children: MarkdownHeading[] }>, h) => {
+    if (h.depth === 2) {
+      acc.push({ ...h, children: [] });
+    } else {
+      const last = acc[acc.length - 1];
+      if (last) {
+        last.children.push(h);
+      } else {
+        acc.push({ ...h, depth: 2, children: [] });
+      }
+    }
+    return acc;
+  },
+  []
+);
+---
+
+<aside class={`card card-xs space-y-4 mx-auto max-w-4xl w-full border rounded-box ${className}`}>
+  <h6 class="absolute bg-base-100 -top-2.5 left-3 px-2 card-title flex-col text-sm items-start gap-0">
+    Table of Contents
+  </h6>
+
+  <nav>
+    <ul class="menu menu-xs p-4 pt-6">
+      {
+        nestedHeadings.map((h2) => (
+          <li>
+            {h2.children && h2.children.length > 0 ? (
+              <details open>
+                <summary class="truncate text-primary">
+                  <a href={`#${h2.slug}`}>{h2.text}</a>
+                </summary>
+                <ul>
+                  {h2.children.map((h3) => (
+                    <li class="truncate text-accent">
+                      <a href={`#${h3.slug}`}>{h3.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ) : (
+              <a class="truncate text-primary" href={`#${h2.slug}`}>{h2.text}</a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</aside>

@@ -57,7 +57,7 @@ const articleLink = `/blog/${post.data.slug}`;
   </div>
   {description && <p class="text-accent">{description}</p>}
   {
-    tags && (
+    (tags || series) && (
       <div class="flex flex-wrap gap-2">
         {series && (
           <a href={`/series/${sluggify(series)}`} class="badge badge-soft badge-accent">
