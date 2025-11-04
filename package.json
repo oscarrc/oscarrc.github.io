@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "pagefind --site dist && cp dist/pagefind public/pagefind",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
     "@tailwindcss/typography": "^0.5.19",
-    "daisyui": "^5.3.9"
+    "daisyui": "^5.3.9",
+    "pagefind": "^1.4.0"
   }
 }

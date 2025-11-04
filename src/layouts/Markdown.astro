@@ -7,7 +7,7 @@ const { frontmatter } = Astro.props;
 
 <Layout title={frontmatter.title} description={frontmatter.description}>
   <Section class="flex flex-col gap-16">
-    <article class="prose prose-invert max-w-none">
+    <article data-pagefind-body class="prose prose-invert max-w-none">
       <slot />
     </article>
   </Section>

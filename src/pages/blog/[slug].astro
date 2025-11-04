@@ -1,0 +1,31 @@
+---
+import Section from "@/components/Section.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getEntryBySlug } from "@/utils/collections";
+import { getCollectionBySlug } from "@/utils/collections";
+import type { GetStaticPaths } from "astro";
+import { render, type CollectionEntry } from "astro:content";
+
+export const getStaticPaths = (async () => {
+  const paths = [];
+  const posts = getCollectionBySlug("posts");
+
+  for (const [slug, id] of posts) {
+    paths.push({ params: { slug, id } });
+  }
+
+  return paths;
+}) satisfies GetStaticPaths;
+
+const { slug } = Astro.params;
+const post = (await getEntryBySlug("posts", slug)) as CollectionEntry<"posts">;
+const { Content } = await render(post);
+---
+
+<Layout data-pagefind-body breadcrumbs={false}>
+  <Section class="flex flex-col gap-16">
+    <article data-pagefind-body class="prose prose-invert max-w-none">
+      <Content />
+    </article>
+  </Section>
+</Layout>

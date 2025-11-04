@@ -79,6 +79,12 @@ const collectionsBySlug: Record<ContentCollectionType, Map<string, string>> = {
   posts: new Map(sortedPosts.map((p) => [slugify(p.data.title), p.id])),
 };
 
+export const getCollectionBySlug = (
+  collection: ContentCollectionType
+) => {
+  return collectionsBySlug[collection];
+}
+
 export const getEntryBySlug = async (
   collection: ContentCollectionType,
   entrySlug: string
