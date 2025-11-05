@@ -39,9 +39,7 @@ const getCount = (badge: TagStats | SeriesStats): number => {
 };
 ---
 
-<aside
-  class={`relative card card-xs space-y-4 mx-auto max-w-4xl w-full  border rounded-box ${className}`}
->
+<nav class={`relative card card-xs space-y-4 mx-auto max-w-4xl 2xl:max-w-xs w-full  border rounded-box ${className}`}>
   <h6
     class="absolute bg-base-100 -top-2.5 left-3 px-2 card-title flex-col text-sm items-start gap-0"
   >
@@ -69,4 +67,4 @@ const getCount = (badge: TagStats | SeriesStats): number => {
       <Icon name="chevronRight" />
     </a>
   </div>
-</aside>
+</nav>

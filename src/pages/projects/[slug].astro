@@ -27,7 +27,11 @@ const project = (await getEntryBySlug(
 const { Content, headings } = await render(project);
 ---
 
-<Layout breadcrumbs={false}>
+<Layout 
+  data-pagefind-body
+  breadcrumbs={false} 
+  collapse={{ right: 'first', left: 'last' }}
+>
   <div class="container max-w-4xl mx-auto p-4 space-y-8" slot="top">
     <ContentHeader
       collection={project.collection}
@@ -47,9 +51,9 @@ const { Content, headings } = await render(project);
   </Section>
   {
     headings && headings.length > 0 && (
-      <aside slot="right" class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-6">
+      <div slot="right" class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-4">
         <ContentTree headings={headings} />
-      </aside>
+      </div>
     )
   }
 </Layout>

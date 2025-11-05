@@ -31,35 +31,35 @@ const nestedHeadings = filteredHeadings.reduce(
 );
 ---
 
-<aside class={`card card-xs space-y-4 mx-auto max-w-4xl w-full border rounded-box ${className}`}>
+<nav class={`card card-xs space-y-4 mx-auto max-w-4xl 2xl:max-w-xs w-full border rounded-box ${className}`}>
   <h6 class="absolute bg-base-100 -top-2.5 left-3 px-2 card-title flex-col text-sm items-start gap-0">
     Table of Contents
   </h6>
 
-  <nav>
-    <ul class="menu menu-xs p-4 pt-6">
+  <div class="w-full min-w-0">
+    <ul class="menu menu-xs p-4 pt-6 w-full min-w-0 box-border">
       {
         nestedHeadings.map((h2) => (
-          <li>
+          <li class="min-w-0 w-full overflow-hidden">
             {h2.children && h2.children.length > 0 ? (
-              <details open>
-                <summary class="truncate text-primary">
-                  <a href={`#${h2.slug}`}>{h2.text}</a>
+              <details open class="w-full min-w-0">
+                <summary class="min-w-0 w-full overflow-hidden">
+                  <a href={`#${h2.slug}`} class="truncate block text-primary">{h2.text}</a>
                 </summary>
-                <ul>
+                <ul class="w-full min-w-0">
                   {h2.children.map((h3) => (
-                    <li class="truncate text-accent">
-                      <a href={`#${h3.slug}`}>{h3.text}</a>
+                    <li class="min-w-0 w-full overflow-hidden">
+                      <a href={`#${h3.slug}`} class="truncate block text-accent">{h3.text}</a>
                     </li>
                   ))}
                 </ul>
               </details>
             ) : (
-              <a class="truncate text-primary" href={`#${h2.slug}`}>{h2.text}</a>
+              <a href={`#${h2.slug}`} class="truncate block text-primary min-w-0 w-full">{h2.text}</a>
             )}
           </li>
         ))
       }
     </ul>
-  </nav>
-</aside>
+  </div>
+</nav>
