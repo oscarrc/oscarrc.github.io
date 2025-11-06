@@ -85,9 +85,7 @@ import Icon from "./Icon.astro";
   import Alpine from "alpinejs";
 
   const modal = document.getElementById("search") as HTMLDialogElement | null;
-  const searchInput = document.getElementById(
-    "search-input"
-  ) as HTMLInputElement | null;
+  const searchInput = document.getElementById("search-input") as HTMLInputElement | null;
 
   Alpine.data("searchDialog", () => ({
     loading: false,

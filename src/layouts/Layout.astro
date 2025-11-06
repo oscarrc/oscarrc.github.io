@@ -8,6 +8,7 @@ import "@/styles/global.css";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import ShortcutsDialog from "@/components/ShortcutsDialog.astro";
 import SearchDialog from "@/components/SearchDialog.astro";
+import ChatDialog from "@/components/ChatDialog.astro";
 
 interface Props {
   title?: string;
@@ -90,5 +91,6 @@ const { name } = siteConfig;
     </div>
     <ShortcutsDialog />
     <SearchDialog />
+    <ChatDialog />
   </body>
 </html>
