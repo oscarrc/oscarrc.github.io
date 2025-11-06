@@ -120,7 +120,7 @@ function aggregateContent(
       const tagSlug = slugify(tag);
       addToTagStats(tagStatsMap, tag, "post");
       addToGroup(postsByTag, tagSlug, post);
-      addToGroup(contentByTag, tagSlug, { ...post, type: "post" });
+      addToGroup(contentByTag, tagSlug, { ...post, type: "posts" });
     }
 
     if (post.data.series) {
@@ -137,7 +137,7 @@ function aggregateContent(
       const tagSlug = slugify(tag);
       addToTagStats(tagStatsMap, tag, "project");
       addToGroup(projectsByTag, tagSlug, project);
-      addToGroup(contentByTag, tagSlug, { ...project, type: "project" });
+      addToGroup(contentByTag, tagSlug, { ...project, type: "projects" });
     }
   }
 
