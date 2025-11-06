@@ -13,9 +13,10 @@ import Icon from "./Icon.astro";
         placeholder="Search"
         id="search-input"
         x-model="query"
+        autocomplete="off"
       />
     </label>
-    <div id="search-results" class="h-96 overflow-y-auto py-4">
+    <div id="search-results" class="h-96 overflow-y-auto">
       <template x-if="idle">
         <div class="flex items-center justify-center h-full">
           <p class="text-lg text-neutral text-sm">Start typing to search...</p>
@@ -37,36 +38,29 @@ import Icon from "./Icon.astro";
       </template>
 
       <template x-if="!idle && !loading && results.length > 0">
-        <div class="flex flex-col gap-2 px-2">
+        <div class="flex flex-col px-2 gap-2">
           <template x-for="result in results" :key="result.url">
-            <article class="w-full flex flex-col gap-2 p-2 pb-4 border-b last:border-b-0 hover:bg-base-200/50 transition-colors cursor-pointer">
-              <div class="flex flex-col gap-1">
-                <h3 class="text-xl font-semibold">
-                  <a
-                    :href="result.url"
-                    class="hover:text-primary transition-colors"
-                  >
-                    <span x-html="result.meta?.title || result.url"></span>
-                  </a>
-                </h3>
-                <div class="flex items-center gap-2 text-neutral text-xs">
-                  <span class="text-base-content/60" x-text="result.url"></span>
-                </div>
+            <a
+              :href="result.url"
+              class="w-full rounded-box hover:bg-base-200 flex flex-col p-3 transition-colors cursor-pointer group"
+            >
+              <!-- Path/Breadcrumb -->
+              <div class="text-xs text-neutral mb-0.5 line-clamp-1">
+                <span x-text="result.url"></span>
               </div>
+              <!-- Title -->
+              <h3
+                class="text-sm font-semibold text-base-content mb-0.5 line-clamp-1 group-hover:text-primary transition-colors"
+              >
+                <span x-html="result.meta?.title || result.url"></span>
+              </h3>
+              <!-- Excerpt -->
               <p
-                class="text-accent text-sm line-clamp-3 leading-relaxed"
+                class="text-xs text-accent line-clamp-2 leading-snug"
                 x-html="result.excerpt || ''"
               >
               </p>
-              <div class="flex gap-2 mt-1">
-                <a
-                  :href="result.url"
-                  class="btn btn-outline btn-sm"
-                >
-                  Read More &#xf013e;
-                </a>
-              </div>
-            </article>
+            </a>
           </template>
         </div>
       </template>
@@ -129,7 +123,6 @@ import Icon from "./Icon.astro";
       this.results = await Promise.all(
         search.results.map(async (result: any) => await result.data())
       );
-      console.log(this.results);
       this.loading = false;
     },
   }));

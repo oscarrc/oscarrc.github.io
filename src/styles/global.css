@@ -107,6 +107,8 @@
   }
 }
 
+@custom-variant hover (&:hover);
+
 @layer base {
   html {
     @apply font-nerd;
