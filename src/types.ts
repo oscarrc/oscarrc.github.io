@@ -1,5 +1,11 @@
 import type { CollectionEntry, DataEntryMap } from "astro:content"
 
+declare global {
+  interface Window {
+    Pagefind: any;
+  }
+}
+
 export interface FrontmatterImage {
   alt: string
   src: {

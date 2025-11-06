@@ -4,31 +4,60 @@ import Dialog from "./Dialog.astro";
 
 <Dialog id="shortcuts" title="Shortcuts">
   <div class="flex flex-col gap-2">
-    <span class="space-x-2"><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">H</kbd> - show this modal</span>
-    <span class="space-x-2"><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">K</kbd> - open search</span>
-    <span class="space-x-2"><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">T</kbd> - switch theme</span>
-    <span class="space-x-2"><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">A</kbd> - chat with AI</span>
+    <span class="space-x-2"
+      ><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">H</kbd> - show
+      this modal</span
+    >
+    <span class="space-x-2"
+      ><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">K</kbd> - open
+      search</span
+    >
+    <span class="space-x-2"
+      ><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">T</kbd> - switch
+      theme</span
+    >
+    <span class="space-x-2"
+      ><kbd class="kbd kbd-sm mod">Ctrl</kbd><kbd class="kbd kbd-sm">A</kbd> - chat
+      with AI</span
+    >
   </div>
 </Dialog>
 
 <script>
-  const uaData = typeof navigator !== 'undefined' ? (navigator as any).userAgentData : undefined;
-  const ua = navigator.userAgent || '';
+  const uaData =
+    typeof navigator !== "undefined"
+      ? (navigator as any).userAgentData
+      : undefined;
+  const ua = navigator.userAgent || "";
 
   const isIOS =
     /\b(iPad|iPhone|iPod)\b/.test(ua) ||
-    (ua.includes('Macintosh') && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1);
+    (ua.includes("Macintosh") &&
+      typeof navigator.maxTouchPoints === "number" &&
+      navigator.maxTouchPoints > 1);
 
   const isMac =
-    (uaData && typeof uaData.platform === 'string' && /mac/i.test(uaData.platform)) ||
+    (uaData &&
+      typeof uaData.platform === "string" &&
+      /mac/i.test(uaData.platform)) ||
     /macintosh|mac os x/i.test(ua);
 
   const isMacOrIOS = isMac || isIOS;
 
-  const modKey = isMacOrIOS ? '⌘' : 'Ctrl';
-  const modifiers = document.querySelectorAll('.kbd.mod');
+  const modKey = isMacOrIOS ? "⌘" : "Ctrl";
+  const modifiers = document.querySelectorAll(".kbd.mod");
 
-  modifiers.forEach(mod => {
+  modifiers.forEach((mod) => {
     mod.textContent = modKey;
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key === "h") {
+      event.preventDefault();
+      const modal = document.getElementById(
+        "shortcuts"
+      ) as HTMLDialogElement | null;
+      modal?.showModal();
+    }
   });
 </script>

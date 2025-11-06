@@ -1,3 +1,4 @@
+import alpinejs from '@astrojs/alpinejs';
 // @ts-check
 import { defineConfig } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
@@ -32,7 +33,7 @@ export default defineConfig({
     rehypePlugins: [rehypeHeadingHash, rehypeHrDashes, rehypeListMarkers],
   },
   integrations: [
-    sitemap(),    
+    sitemap(),
     expressiveCode({
       themes: ['catppuccin-mocha'],
       useDarkModeMediaQuery: false,
@@ -41,6 +42,7 @@ export default defineConfig({
       },
       plugins: [pluginLineNumbers()]
     }),
-    mdx()
-  ]
+    mdx(),
+    alpinejs()
+  ],
 });

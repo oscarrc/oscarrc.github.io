@@ -9,7 +9,7 @@ interface Props {
 const { id = "modal", title } = Astro.props;
 ---
 
-<dialog id={id} class="modal">
+<dialog id={id} data-modal={id} class="modal">
   <div class="relative modal-box border border-double shadow-sm">
     {title ? <h3 class="font-bold text-lg"># {title}</h3> : null}
     <div class="modal-body mt-4">
@@ -27,3 +27,19 @@ const { id = "modal", title } = Astro.props;
     </div>
   </div>
 </dialog>
+
+<script>
+  document.querySelectorAll("dialog[data-modal]").forEach((dialog) => {
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        (dialog as HTMLDialogElement).close();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        (dialog as HTMLDialogElement).close();
+      }
+    });
+  });
+</script>

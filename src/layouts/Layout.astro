@@ -7,6 +7,7 @@ import siteConfig from "@/site.config";
 import "@/styles/global.css";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import ShortcutsDialog from "@/components/ShortcutsDialog.astro";
+import SearchDialog from "@/components/SearchDialog.astro";
 
 interface Props {
   title?: string;
@@ -88,17 +89,6 @@ const { name } = siteConfig;
       </footer>
     </div>
     <ShortcutsDialog />
+    <SearchDialog />
   </body>
 </html>
-
-<script>
-  document.addEventListener("keydown", (event) => {
-    if (event.ctrlKey && event.key === "h") {
-      event.preventDefault();
-      const modal = document.getElementById(
-        "shortcuts"
-      ) as HTMLDialogElement | null;
-      modal?.showModal();
-    }
-  });
-</script>
