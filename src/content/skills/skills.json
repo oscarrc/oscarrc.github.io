@@ -12,12 +12,12 @@
     },
     {
       "skill": "Javascript",
-      "level": 8,
+      "level": 9,
       "category": "Languages"
     },
     {
       "skill": "Typescript",
-      "level": 7,
+      "level": 8,
       "category": "Languages"
     },
     {
@@ -37,12 +37,12 @@
     },
     {
       "skill": "React.js",
-      "level": 8,
+      "level": 9,
       "category": "Frameworks"
     },
     {
       "skill": "Next.js",
-      "level": 7,
+      "level": 8,
       "category": "Frameworks"
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "skill": "React Native",
-      "level": 5,
+      "level": 6,
       "category": "Frameworks"
     },
     {
@@ -62,12 +62,12 @@
     },
     {
       "skill": "PostgreSQL",
-      "level": 6,
+      "level": 7,
       "category": "Databases"
     },
     {
       "skill": "SQL / MySQL",
-      "level": 7,
+      "level": 8,
       "category": "Databases"
     },
     {
@@ -77,12 +77,12 @@
     },
     {
       "skill": "AWS",
-      "level": 6,
+      "level": 7,
       "category": "Infrastructure"
     },
     {
       "skill": "GCP",
-      "level": 4,
+      "level": 5,
       "category": "Infrastructure"
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "skill": "Linux VPS",
-      "level": 8,
+      "level": 9,
       "category": "Infrastructure"
     }
   ]
