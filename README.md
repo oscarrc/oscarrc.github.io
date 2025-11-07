@@ -1,43 +1,206 @@
-# Astro Starter Kit: Minimal
+[![Deployment](https://github.com/oscarrc/oscarrc.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/oscarrc/oscarrc.github.io/actions/workflows/deploy.yml)
 
-```sh
-npm create astro@latest -- --template minimal
+# oscarrc.github.io
+
+Personal blog and portfolio website built with [Astro](https://astro.build), featuring blog posts, project showcases, and an AI-powered search experience.
+
+## ✨ Features
+
+- **📝 Blog System**: MDX-based blog posts with series support, tags, and reading time estimation
+- **🚀 Projects Portfolio**: Showcase projects with GitHub integration, live demos, and cover images
+- **🔍 AI-Powered Search**: Semantic search using embeddings and Pagefind for full-text search
+- **🎨 Modern UI**: Built with Tailwind CSS 4 and DaisyUI, featuring Catppuccin Mocha theme
+- **📱 Responsive Design**: Fully responsive layout that works on all devices
+- **⚡ Performance**: Static site generation with Astro for optimal performance
+- **💬 Comments**: Giscus integration for blog posts and projects
+- **🔗 RSS Feed**: Automatic RSS feed generation for blog posts
+- **🗺️ Sitemap**: Automatic sitemap generation for SEO
+- **📊 GitHub Integration**: Dynamic GitHub repository cards with stats
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- Git
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/oscarrc/oscarrc.github.io.git
+cd oscarrc.github.io
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+2. Install dependencies:
+```bash
+npm install
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+3. Start the development server:
+```bash
+npm run dev
+```
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+The site will be available at `http://localhost:4321`
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
+## 📜 Available Scripts
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `npm install`             | Installs dependencies                            |
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |
 | `npm run build`           | Build your production site to `./dist/`          |
+| `npm run build:pagefind`  | Generate Pagefind search index                   |
+| `npm run build:embeddings`| Generate AI embeddings for semantic search       |
+| `npm run postbuild`       | Run both Pagefind and embeddings generation      |
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
+## 📁 Project Structure
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```
+/
+├── public/              # Static assets (fonts, favicon, etc.)
+├── src/
+│   ├── assets/         # Images and other assets
+│   ├── components/     # Astro components
+│   │   ├── GithubCard.astro
+│   │   ├── ProjectCard.astro
+│   │   ├── PostCard.astro
+│   │   └── ...
+│   ├── content/        # Content collections
+│   │   ├── home/       # Home page content
+│   │   ├── posts/      # Blog posts (MDX/MD)
+│   │   ├── projects/   # Project showcases (MDX/MD)
+│   │   └── skills/     # Skills data (JSON)
+│   ├── layouts/        # Page layouts
+│   ├── pages/          # Route pages
+│   ├── plugins/        # Remark/Rehype plugins
+│   ├── styles/         # Global styles
+│   ├── utils/          # Utility functions
+│   ├── workers/        # Web workers
+│   ├── content.config.ts  # Content collection schemas
+│   └── site.config.ts  # Site configuration
+├── scripts/            # Build scripts
+└── astro.config.mjs    # Astro configuration
+```
+
+## 📝 Content Management
+
+### Creating a Blog Post
+
+Create a new directory in `src/content/posts/` with an `index.md` or `index.mdx` file:
+
+```markdown
+---
+title: "My Blog Post"
+published: 2024-01-01
+description: "A brief description"
+tags: ["astro", "web-development"]
+series: "web-development" # Optional
+cover:
+  src: "./cover.png"
+  alt: "Cover image"
+---
+
+# Your content here
+```
+
+### Creating a Project
+
+Create a new directory in `src/content/projects/` with an `index.md` or `index.mdx` file:
+
+```markdown
+---
+title: "My Project"
+published: 2024-01-01
+description: "Project description"
+tags: ["react", "typescript"]
+repo: "username/repo-name" # Optional
+url: "https://example.com" # Optional
+active: true
+cover:
+  src: "./cover.png"
+  alt: "Project cover"
+---
+
+# Project details
+```
+
+## 🎨 Customization
+
+### Site Configuration
+
+Edit `src/site.config.ts` to customize:
+- Site name, title, and description
+- Social media links
+- Navigation links
+- Giscus comment settings
+- Page size for pagination
+
+### Styling
+
+The site uses:
+- **Tailwind CSS 4** for utility classes
+- **DaisyUI** for component styling
+- **Catppuccin Mocha** theme (customized in `src/styles/global.css`)
+
+To customize colors, edit the theme variables in `src/styles/global.css`.
+
+### Components
+
+Reusable components are located in `src/components/`:
+- `GithubCard.astro`: Displays GitHub repository information
+- `ProjectCard.astro`: Project showcase card
+- `PostCard.astro`: Blog post preview card
+- `Icon.astro`: Icon component using Nerd Font icons
+
+## 🔧 Technologies Used
+
+- **[Astro](https://astro.build)** - Static site generator
+- **[Tailwind CSS 4](https://tailwindcss.com)** - Utility-first CSS framework
+- **[DaisyUI](https://daisyui.com)** - Component library
+- **[MDX](https://mdxjs.com)** - Markdown with JSX
+- **[Pagefind](https://pagefind.app)** - Search engine
+- **[Giscus](https://giscus.app)** - Comments system
+- **[Alpine.js](https://alpinejs.dev)** - Lightweight JavaScript framework
+- **[Expressive Code](https://expressive-code.com)** - Code block styling
+- **[@huggingface/transformers](https://huggingface.co/docs/transformers.js)** - AI embeddings for semantic search
+
+## 📦 Build & Deployment
+
+### Production Build
+
+```bash
+npm run build
+npm run postbuild  # Generate search index and embeddings
+```
+
+The built site will be in the `dist/` directory.
+
+### Deployment
+
+This site is configured for GitHub Pages. The build process generates:
+- Static HTML files
+- Pagefind search index
+- AI embeddings for semantic search
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🔗 Links
+
+- **Website**: [oscarrc.me](https://oscarrc.me)
+- **GitHub**: [@oscarrc](https://github.com/oscarrc)
+- **LinkedIn**: [oscarrc-web](https://www.linkedin.com/in/oscarrc-web/)
+- **Instagram**: [@oscarrc_web](https://www.instagram.com/oscarrc_web/)
+
+---
+
+Built with ❤️ using Astro
