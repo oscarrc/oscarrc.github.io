@@ -23,5 +23,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# pagefind output
+# pagefind and embeddings output
 public/pagefind/
+public/embeddings/

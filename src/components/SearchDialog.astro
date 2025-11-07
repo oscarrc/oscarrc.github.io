@@ -17,13 +17,13 @@ import Icon from "./Icon.astro";
       />
     </label>
     <div id="search-results" class="h-96 overflow-y-auto">
-      <template x-if="error">
+      <template x-if="idle">
         <div class="flex items-center justify-center h-full">
-          <p class="text-lg text-error text-sm" x-text="error"></p>
+          <p class="text-lg text-neutral text-sm">Start typing to search...</p>
         </div>
       </template>
 
-      <template x-if="!error && !loading">
+      <template x-if="loading">
         <div class="flex items-center justify-center h-full">
           <p class="text-lg text-neutral text-sm flex items-center gap-2">
             <span class="loading loading-spinner loading-xs"></span> Searching...
@@ -31,13 +31,19 @@ import Icon from "./Icon.astro";
         </div>
       </template>
 
-      <template x-if="!error !idle && !loading && results.length === 0">
+      <template x-if="error">
+        <div class="flex items-center justify-center h-full">
+          <p class="text-lg text-error text-sm" x-text="error"></p>
+        </div>
+      </template>
+
+      <template x-if="!idle && !loading && results.length === 0">
         <div class="flex items-center justify-center h-full">
           <p class="text-lg text-neutral text-sm">No results found</p>
         </div>
       </template>
 
-      <template x-if="!error && !idle && !loading && results.length > 0">
+      <template x-if="!idle && !loading && results.length > 0">
         <div class="flex flex-col px-2 gap-2">
           <template x-for="result in results" :key="result.url">
             <a
@@ -104,12 +110,10 @@ import Icon from "./Icon.astro";
       this.$watch("query", (value) => {
         if (!value.trim()) {
           this.idle = true;
-          this.error = null;
           this.results = [];
           return;
         } else {
           this.idle = false;
-          this.error = null;
           this.onSearch();
         }
       });

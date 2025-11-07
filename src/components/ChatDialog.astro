@@ -1,10 +1,12 @@
 ---
+import { Image } from "astro:assets";
 import Dialog from "./Dialog.astro";
 import Icon from "./Icon.astro";
+import avatar from "@/assets/avatar.png";
 ---
 
 <Dialog id="chat">
-  <div class="flex flex-col h-[600px]" x-data="chatDialog">
+    <div class="flex flex-col h-[600px]" x-data="chatDialog">
     <!-- Chat Messages Container -->
     <div 
       id="chat-messages" 
@@ -13,8 +15,22 @@ import Icon from "./Icon.astro";
     >
       <template x-for="message in messages" :key="message.id">
         <div :class="message.role === 'user' ? 'chat chat-end' : 'chat chat-start'">
+          <template x-if="message.role === 'assistant'">
+            <div class="chat-image avatar">
+              <div class="w-10 rounded-full  bg-base-200">
+                <Image src={avatar} alt="Assistant Avatar" />
+              </div>
+            </div> 
+          </template>
           <div class="chat-bubble text-sm" :class="message.role === 'user' ? 'chat-bubble-primary' : 'chat-bubble-base-200'">
-            <span class="text-sm" x-html="message.content"></span>
+            <template x-if="message.isLoading">
+              <p class="text-sm text-base-content/60">
+                <span class="loading loading-dots loading-xs"></span>
+              </p>
+            </template>
+            <template x-if="!message.isLoading">
+              <p class="text-sm whitespace-pre-line" x-text="message.content"></p>
+            </template>
           </div>
         </div>
       </template>
@@ -22,7 +38,7 @@ import Icon from "./Icon.astro";
 
     <!-- Input Bar at Bottom -->
     <div class="px-4">
-      <form @submit.prevent="sendMessage" class="relative">
+      <form id="chat-form" @submit.prevent="sendMessage" class="relative">
         <div class="relative">
           <textarea
             id="chat-input"
@@ -37,10 +53,10 @@ import Icon from "./Icon.astro";
           ></textarea>
           <button
             type="submit"
-            class="btn btn-primary btn-sm absolute bottom-2 right-2"
-            :disabled="!inputMessage.trim()"
+            class="btn btn-primary btn-sm btn-square absolute bottom-2 right-4"
+            :disabled="!inputMessage.trim() || isLoading || !isWorkerReady"
           >
-            Send
+            <Icon name="send" class="text-lg" />
           </button>
         </div>
       </form>
@@ -56,84 +72,156 @@ import Icon from "./Icon.astro";
 
   Alpine.data("chatDialog", () => ({
     inputMessage: "",
-    resizeTextarea(textarea: HTMLTextAreaElement) {
-      textarea.style.height = "auto";
-      textarea.style.height = `${Math.min(textarea.scrollHeight, 128)}px`;
-    },
+    isLoading: false,
+    isWorkerReady: false,
+    worker: null as Worker | null,
+    pendingRequestId: null as string | null,
+    pendingAnswerIndex: null as number | null,
+    nextMessageId: 2,
     messages: [
       {
         id: 1,
         role: "assistant",
-        content: "Hello! How can I help you today?",
-      },
-      {
-        id: 2,
-        role: "user",
-        content: "What is Astro?",
-      },
-      {
-        id: 3,
-        role: "assistant",
-        content: "Astro is a modern web framework for building fast, content-focused websites. It allows you to use your favorite UI components and outputs zero JavaScript by default, resulting in faster page loads.",
-      },
-      {
-        id: 4,
-        role: "user",
-        content: "That sounds interesting! Can you tell me more about its features?",
-      },
-      {
-        id: 5,
-        role: "assistant",
-        content: "Sure! Astro features include:<br/>• Islands architecture for optimal performance<br/>• Support for multiple UI frameworks (React, Vue, Svelte, etc.)<br/>• Built-in content collections<br/>• Optimized images and assets<br/>• TypeScript support out of the box",
+        content: "Hello! Ask me anything about my portfolio content.",
+        isLoading: false,
       },
     ],
-    sendMessage() {
-      if (!this.inputMessage.trim()) return;
-
-      // Add user message
-      this.messages.push({
-        id: this.messages.length + 1,
-        role: "user",
-        content: this.inputMessage,
+    resizeTextarea(textarea: HTMLTextAreaElement) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 128)}px`;
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        if (this.$refs.messagesContainer) {
+          this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
+        }
       });
+    },
+    appendMessage(role: "user" | "assistant", content: string, isLoading = false) {
+      const message = { id: this.nextMessageId++, role, content, isLoading };
+      this.messages.push(message);
+      this.scrollToBottom();
+      return this.messages.length - 1;
+    },
+    setupWorker() {
+      if (this.worker) return;
+      try {
+        const worker = new Worker(new URL("../workers/ai.ts", import.meta.url), { type: "module" });
+        worker.onmessage = (event: MessageEvent<any>) => this.handleWorkerMessage(event);
+        worker.onerror = (error) => {
+          console.error("Worker error", error);
+          this.isWorkerReady = false;
+          this.isLoading = false;
+          this.appendMessage(
+            "assistant",
+            "I ran into an error while getting ready. Please refresh the page and try again."
+          );
+        };
+        worker.postMessage({ type: "init" });
+        this.worker = worker;
+      } catch (error) {
+        console.error("Failed to start AI worker", error);
+        this.appendMessage(
+          "assistant",
+          "I couldn't start my AI helper. Please try reloading the page."
+        );
+      }
+    },
+    handleWorkerMessage(event: MessageEvent<any>) {
+      const data = event.data;
+      if (!data) return;
 
-      const userMessage = this.inputMessage;
+      if (data.type === "ready") {
+        this.isWorkerReady = true;
+        return;
+      }
+
+      if (!this.pendingRequestId || data.id !== this.pendingRequestId) {
+        return;
+      }
+
+      switch (data.type) {
+        case "status": {
+          if (this.pendingAnswerIndex !== null) {
+            const pendingMessage = this.messages[this.pendingAnswerIndex];
+            pendingMessage.content = "";
+            pendingMessage.isLoading = true;
+            this.scrollToBottom();
+          }
+          break;
+        }
+        case "result": {
+          if (this.pendingAnswerIndex !== null) {
+            const pendingMessage = this.messages[this.pendingAnswerIndex];
+            pendingMessage.content = data.answer;
+            pendingMessage.isLoading = false;
+            this.scrollToBottom();
+          } else {
+            this.appendMessage("assistant", data.answer);
+          }
+          this.isLoading = false;
+          this.pendingRequestId = null;
+          this.pendingAnswerIndex = null;
+          break;
+        }
+        case "error": {
+          const fallback =
+            data.error || "Sorry, I couldn't answer that right now. Please try again later.";
+          if (this.pendingAnswerIndex !== null) {
+            const pendingMessage = this.messages[this.pendingAnswerIndex];
+            pendingMessage.content = fallback;
+            pendingMessage.isLoading = false;
+            this.scrollToBottom();
+          } else {
+            this.appendMessage("assistant", fallback);
+          }
+          this.isLoading = false;
+          this.pendingRequestId = null;
+          this.pendingAnswerIndex = null;
+          break;
+        }
+        default:
+          console.warn("Unhandled worker message", data);
+      }
+    },
+    sendMessage() {
+      if (!this.inputMessage.trim() || this.isLoading) return;
+
+      const userMessage = this.inputMessage.trim();
+      this.appendMessage("user", userMessage);
       this.inputMessage = "";
-      
-      // Reset textarea height
+
       if (this.$refs.textarea) {
         this.$refs.textarea.style.height = "auto";
       }
 
-      // Scroll to bottom after user message
-      this.$nextTick(() => {
-        if (this.$refs.messagesContainer) {
-          this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
-        }
-      });
+      if (!this.worker || !this.isWorkerReady) {
+        this.appendMessage(
+          "assistant",
+          "I’m still getting ready. Please wait a moment and try again."
+        );
+        return;
+      }
 
-      // Simulate LLM response (placeholder)
-      setTimeout(() => {
-        this.messages.push({
-          id: this.messages.length + 1,
-          role: "assistant",
-          content: `I received your message: "${userMessage}". This is a placeholder response. In a real implementation, this would connect to an LLM API.`,
-        });
+      const requestId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-        // Scroll to bottom after LLM response
-        this.$nextTick(() => {
-          if (this.$refs.messagesContainer) {
-            this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
-          }
-        });
-      }, 500);
+      this.isLoading = true;
+      this.pendingRequestId = requestId;
+      this.pendingAnswerIndex = this.appendMessage(
+        "assistant",
+        "",
+        true
+      );
+
+      this.worker.postMessage({ type: "ask", id: requestId, question: userMessage });
     },
     init() {
-      // Scroll to bottom on init
-      this.$nextTick(() => {
-        if (this.$refs.messagesContainer) {
-          this.$refs.messagesContainer.scrollTop = this.$refs.messagesContainer.scrollHeight;
-        }
+      this.setupWorker();
+      this.scrollToBottom();
+      window.addEventListener("beforeunload", () => {
+        this.worker?.terminate();
       });
     },
   }));
@@ -143,6 +231,22 @@ import Icon from "./Icon.astro";
       event.preventDefault();
       modal?.showModal();
       chatInput?.focus();
+    }
+  });
+
+  document.getElementById("chat-input")?.addEventListener("keydown", (event) => {
+    if(event.key === "Enter" && !event.ctrlKey) {
+      event.preventDefault();
+      document.getElementById("chat-form")?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    }
+
+    if(event.key === "Enter" && event.ctrlKey) {
+      const textarea = event.target as HTMLTextAreaElement;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      textarea.value = textarea.value.substring(0, start) + "\n" + textarea.value.substring(end);
+      textarea.selectionStart = textarea.selectionEnd = start + 1;
+      event.preventDefault();
     }
   });
 </script>
