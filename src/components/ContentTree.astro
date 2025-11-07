@@ -31,8 +31,12 @@ const nestedHeadings = filteredHeadings.reduce(
 );
 ---
 
-<nav class={`card card-xs space-y-4 mx-auto max-w-4xl 2xl:max-w-xs w-full border rounded-box ${className}`}>
-  <h6 class="absolute bg-base-100 -top-2.5 left-3 px-2 card-title flex-col text-sm items-start gap-0">
+<nav
+  class={`card card-xs space-y-4 mx-auto max-w-4xl 2xl:max-w-xs w-full border rounded-box ${className}`}
+>
+  <h6
+    class="absolute bg-base-100 -top-2.5 left-3 px-2 card-title flex-col text-sm items-start gap-0"
+  >
     Table of Contents
   </h6>
 
@@ -44,18 +48,36 @@ const nestedHeadings = filteredHeadings.reduce(
             {h2.children && h2.children.length > 0 ? (
               <details open class="w-full min-w-0">
                 <summary class="min-w-0 w-full overflow-hidden">
-                  <a href={`#${h2.slug}`} class="truncate block text-primary">{h2.text}</a>
+                  <a
+                    href={`#${h2.slug}`}
+                    data-toc-link={`#${h2.slug}`}
+                    class="truncate block text-primary toc-link"
+                  >
+                    {h2.text}
+                  </a>
                 </summary>
                 <ul class="w-full min-w-0">
                   {h2.children.map((h3) => (
                     <li class="min-w-0 w-full overflow-hidden">
-                      <a href={`#${h3.slug}`} class="truncate block text-accent">{h3.text}</a>
+                      <a
+                        href={`#${h3.slug}`}
+                        data-toc-link={`#${h3.slug}`}
+                        class="truncate block text-accent toc-link"
+                      >
+                        {h3.text}
+                      </a>
                     </li>
                   ))}
                 </ul>
               </details>
             ) : (
-              <a href={`#${h2.slug}`} class="truncate block text-primary min-w-0 w-full">{h2.text}</a>
+              <a
+                href={`#${h2.slug}`}
+                data-toc-link={`#${h2.slug}`}
+                class="truncate block text-primary min-w-0 w-full toc-link"
+              >
+                {h2.text}
+              </a>
             )}
           </li>
         ))
@@ -63,3 +85,109 @@ const nestedHeadings = filteredHeadings.reduce(
     </ul>
   </div>
 </nav>
+
+<script>
+  function initScrollSpy() {
+    const tocLinks = document.querySelectorAll("[data-toc-link]");
+    if (tocLinks.length === 0) return;
+
+    const headings = Array.from(tocLinks)
+      .map((link) => {
+        const id = link.getAttribute("href")?.slice(1);
+        return id ? document.getElementById(id) : null;
+      })
+      .filter((heading) => heading !== null);
+
+    if (headings.length === 0) return;
+
+    const updateActiveLink = () => {
+      let activeHeading = null;
+      const scrollPosition = window.scrollY + 100; // Offset for better UX
+
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const heading = headings[i];
+        if (heading && heading.offsetTop <= scrollPosition) {
+          activeHeading = heading;
+          break;
+        }
+      }
+
+      if (!activeHeading && headings.length > 0) {
+        activeHeading = headings[0];
+      }
+
+      tocLinks.forEach((link) => {
+        link.classList.remove("active", "font-semibold");
+        if (
+          activeHeading &&
+          link.getAttribute("href") === `#${activeHeading.id}`
+        ) {
+          link.classList.add("active", "font-semibold");
+        }
+      });
+    };
+
+    const observerOptions = {
+      rootMargin: "-20% 0px -70% 0px",
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const visibleEntries = entries.filter((e) => e.isIntersecting);
+      if (visibleEntries.length === 0) {
+        updateActiveLink();
+        return;
+      }
+
+      visibleEntries.sort((a, b) => {
+        if (a.intersectionRatio !== b.intersectionRatio) {
+          return b.intersectionRatio - a.intersectionRatio;
+        }
+        return a.boundingClientRect.top - b.boundingClientRect.top;
+      });
+
+      const activeHeading = visibleEntries[0]?.target;
+
+      tocLinks.forEach((link) => {
+        link.classList.remove("active", "font-semibold");
+        if (
+          activeHeading &&
+          link.getAttribute("href") === `#${activeHeading.id}`
+        ) {
+          link.classList.add("active", "font-semibold");
+        }
+      });
+    }, observerOptions);
+
+    headings.forEach((heading) => observer.observe(heading));
+
+    // Fallback: update on scroll for headings that might not be observed
+    let scrollTimeout: number;
+    window.addEventListener(
+      "scroll",
+      () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = window.setTimeout(updateActiveLink, 100);
+      },
+      { passive: true }
+    );
+
+    updateActiveLink();
+  }
+
+  initScrollSpy();
+</script>
+
+<style>
+  .toc-link {
+    transition: all 0.2s ease;
+  }
+
+  .toc-link.active {
+    color: hsl(var(--p)); /* Primary color for active link */
+  }
+
+  .toc-link.active.text-accent {
+    color: hsl(var(--a)); /* Accent color for active h3 links */
+  }
+</style>
