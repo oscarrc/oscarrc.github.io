@@ -1,8 +1,10 @@
 ---
 import ContentHeader from "@/components/ContentHeader.astro";
 import ContentTree from "@/components/ContentTree.astro";
+import GiscusComments from "@/components/GiscusComments.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
+import siteConfig from "@/site.config";
 import { getEntryBySlug } from "@/utils/collections";
 import { getCollectionBySlug } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
@@ -20,11 +22,13 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-const project = (await getEntryBySlug(
-  "projects",
-  slug
-)) as CollectionEntry<"projects">;
+const project = (await getEntryBySlug("projects", slug)) as CollectionEntry<"projects">;
 const { Content, headings } = await render(project);
+
+const giscusConfig = siteConfig.giscus.projects;
+if (!giscusConfig) {
+  throw new Error("Giscus configuration is missing in site.config.ts");
+}
 ---
 
 <Layout 
@@ -48,6 +52,7 @@ const { Content, headings } = await render(project);
     <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
+    <GiscusComments {...giscusConfig} />
   </Section>
   {
     headings && headings.length > 0 && (

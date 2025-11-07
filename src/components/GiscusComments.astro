@@ -1,0 +1,61 @@
+---
+import siteConfig from "@/site.config";
+
+interface GiscusCommentsProps {
+  repo: string;
+  repoId: string;
+  category: string;
+  categoryId: string;
+  reactionsEnabled: string;
+  mapping?: string;
+}
+
+const {
+  repo,
+  repoId,
+  category,
+  categoryId,
+  reactionsEnabled,
+  mapping = "pathname",
+} = Astro.props as GiscusCommentsProps;
+---
+
+<div
+  id="giscus"
+  class="giscus"
+  data-repo={repo}
+  data-repo-id={repoId}
+  data-category={category}
+  data-category-id={categoryId}
+  data-mapping={mapping}
+  data-reactions-enabled={reactionsEnabled}
+>
+</div>
+
+<script>
+  import type { GiscusConfig } from "@/types";
+
+  const giscusContainer = document.getElementById(
+    "giscus"
+  ) as HTMLDivElement | null;
+  const { repo, repoId, category, categoryId, reactionsEnabled, mapping = 'pathname' } =
+    giscusContainer?.dataset as unknown as GiscusConfig;
+
+  const script = document.createElement("script");
+  script.src = "https://giscus.app/client.js";
+  script.setAttribute("data-repo", repo);
+  script.setAttribute("data-repo-id", repoId);
+  script.setAttribute("data-category", category);
+  script.setAttribute("data-category-id", categoryId);
+  script.setAttribute("data-mapping", mapping);
+  script.setAttribute("data-strict", "0");
+  script.setAttribute("data-reactions-enabled", reactionsEnabled);
+  script.setAttribute("data-emit-metadata", "0");
+  script.setAttribute("data-input-position", "top");
+  script.setAttribute("data-theme", "catppuccin_mocha");
+  script.setAttribute("data-lang", "en");
+  script.setAttribute("loading", "lazy");
+  script.crossOrigin = "anonymous";
+  script.async = true;
+  document.body.appendChild(script);
+</script>

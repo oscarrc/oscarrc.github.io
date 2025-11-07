@@ -40,6 +40,15 @@ export interface GitHubActivityApiResponse {
   error?: string
 }
 
+export type GiscusConfig = {
+  repo: string
+  repoId: string
+  category: string
+  categoryId: string
+  mapping?: string
+  reactionsEnabled: '0' | '1'
+}
+
 // Content store types
 export type Post = CollectionEntry<"posts">;
 export type Project = CollectionEntry<"projects">;

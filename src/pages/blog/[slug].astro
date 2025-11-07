@@ -1,8 +1,10 @@
 ---
 import ContentHeader from "@/components/ContentHeader.astro";
 import ContentTree from "@/components/ContentTree.astro";
+import GiscusComments from "@/components/GiscusComments.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
+import siteConfig from "@/site.config";
 import { getEntryBySlug } from "@/utils/collections";
 import { getCollectionBySlug } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
@@ -23,6 +25,11 @@ const { slug } = Astro.params;
 const post = (await getEntryBySlug("posts", slug)) as CollectionEntry<"posts">;
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const { minutesRead } = remarkPluginFrontmatter;
+
+const giscusConfig = siteConfig.giscus.blog;
+if (!giscusConfig) {
+  throw new Error("Giscus configuration is missing in site.config.ts");
+}
 ---
 
 <Layout
@@ -48,6 +55,7 @@ const { minutesRead } = remarkPluginFrontmatter;
     <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
+    <GiscusComments {...giscusConfig} />
   </Section>
   {
     headings && headings.length > 0 && (

@@ -16,5 +16,23 @@ export default {
     projects: '/projects/',
     blog: '/blog/',
   },
+  giscus: {
+    blog: {
+      repo: 'oscarrc/oscarrc.github.io',
+      repoId: 'R_kgDOH1dnnQ',
+      category: 'Comments',
+      categoryId: 'DIC_kwDOH1dnnc4CxiOb',
+      reactionsEnabled: '1',
+      mapping: 'pathname',
+    },
+    projects: {
+      repo: 'oscarrc/oscarrc.github.io',
+      repoId: 'R_kgDOH1dnnQ',
+      category: 'Projects',
+      categoryId: 'DIC_kwDOH1dnnc4CxiL0',
+      reactionsEnabled: '1',
+      mapping: 'pathname',
+    }
+  },
   pageSize: 5,
 }
