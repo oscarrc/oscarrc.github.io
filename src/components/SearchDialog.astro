@@ -17,13 +17,13 @@ import Icon from "./Icon.astro";
       />
     </label>
     <div id="search-results" class="h-96 overflow-y-auto">
-      <template x-if="idle">
+      <template x-if="error">
         <div class="flex items-center justify-center h-full">
-          <p class="text-lg text-neutral text-sm">Start typing to search...</p>
+          <p class="text-lg text-error text-sm" x-text="error"></p>
         </div>
       </template>
 
-      <template x-if="loading">
+      <template x-if="!error && !loading">
         <div class="flex items-center justify-center h-full">
           <p class="text-lg text-neutral text-sm flex items-center gap-2">
             <span class="loading loading-spinner loading-xs"></span> Searching...
@@ -31,13 +31,13 @@ import Icon from "./Icon.astro";
         </div>
       </template>
 
-      <template x-if="!idle && !loading && results.length === 0">
+      <template x-if="!error !idle && !loading && results.length === 0">
         <div class="flex items-center justify-center h-full">
           <p class="text-lg text-neutral text-sm">No results found</p>
         </div>
       </template>
 
-      <template x-if="!idle && !loading && results.length > 0">
+      <template x-if="!error && !idle && !loading && results.length > 0">
         <div class="flex flex-col px-2 gap-2">
           <template x-for="result in results" :key="result.url">
             <a
@@ -85,11 +85,14 @@ import Icon from "./Icon.astro";
   import Alpine from "alpinejs";
 
   const modal = document.getElementById("search") as HTMLDialogElement | null;
-  const searchInput = document.getElementById("search-input") as HTMLInputElement | null;
+  const searchInput = document.getElementById(
+    "search-input"
+  ) as HTMLInputElement | null;
 
   Alpine.data("searchDialog", () => ({
     loading: false,
     idle: true,
+    error: null as string | null,
     query: "",
     pagefind: null as {
       init: () => void;
@@ -101,9 +104,12 @@ import Icon from "./Icon.astro";
       this.$watch("query", (value) => {
         if (!value.trim()) {
           this.idle = true;
+          this.error = null;
           this.results = [];
           return;
         } else {
+          this.idle = false;
+          this.error = null;
           this.onSearch();
         }
       });
@@ -111,17 +117,22 @@ import Icon from "./Icon.astro";
     async onSearch() {
       if (!this.pagefind) return;
 
-      this.idle = false;
       this.loading = true;
-      const search = await this.pagefind.debouncedSearch(this.query);
-      if (search === null) {
+
+      try {
+        const search = await this.pagefind.debouncedSearch(this.query);
+        if (search === null) {
+          this.loading = false;
+          return;
+        }
+        this.results = await Promise.all(
+          search.results.map(async (result: any) => await result.data())
+        );
+      } catch (error) {
+        this.error = "An error occurred during the search.";
+      } finally {
         this.loading = false;
-        return;
       }
-      this.results = await Promise.all(
-        search.results.map(async (result: any) => await result.data())
-      );
-      this.loading = false;
     },
   }));
 
