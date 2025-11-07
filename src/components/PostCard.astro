@@ -2,6 +2,7 @@
 import { render, type CollectionEntry } from "astro:content";
 import { slug as sluggify } from "github-slugger";
 import Icon from "./Icon.astro";
+import { formatDate } from "@/utils/date";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -19,11 +20,7 @@ const tags = post.data.tags;
 const author = post.data.author;
 const series = post.data.series;
 
-const date = new Date(post.data.published).toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const date = formatDate(post.data.updated ?? post.data.published);
 
 const articleLink = `/blog/${post.data.slug}`;
 ---

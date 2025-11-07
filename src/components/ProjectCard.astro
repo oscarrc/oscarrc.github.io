@@ -3,6 +3,7 @@ import { render, type CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import Icon from "./Icon.astro";
 import { slug as sluggify } from "github-slugger";
+import { formatDate } from "@/utils/date";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -20,11 +21,7 @@ const url = project.data.url?.trim();
 const active = project.data.active ?? true;
 const cover = project.data.cover;
 
-const date = new Date(project.data.published).toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const date = formatDate(project.data.updated ?? project.data.published);
 
 const articleLink = `/projects/${project.data.slug}`;
 ---

@@ -1,5 +1,4 @@
 ---
-import BadgesCard from "@/components/BadgesCard.astro";
 import CollectionTabs from "@/components/CollectionTabs.astro";
 import Pagination from "@/components/Pagination.astro";
 import PostCard from "@/components/PostCard.astro";
@@ -11,10 +10,7 @@ import {
   allTags,
   getTagBySlug,
   postsByTag,
-  postSeries,
-  postTags,
   projectsByTag,
-  projectTags,
 } from "@/utils/collections";
 import type { GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";

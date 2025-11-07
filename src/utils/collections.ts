@@ -10,7 +10,7 @@ import { slug as slugify } from "github-slugger";
  * Helpers
  * -----------------------------------------------------*/
 
-const sortByDate = <T extends { data: { updated?: Date; published: Date } }>(
+export const sortByDate = <T extends { data: { updated?: Date; published: Date } }>(
   a: T,
   b: T
 ) => {
