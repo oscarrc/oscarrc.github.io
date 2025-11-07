@@ -61,9 +61,9 @@ if (!giscusConfig) {
     headings && headings.length > 0 && (
       <aside
         slot="right"
-        class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-4"
+        class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-8 p-4"
       >
-        <ContentTree headings={headings} />
+        {headings && headings.length > 0 && <ContentTree headings={headings} />}
       </aside>
     )
   }

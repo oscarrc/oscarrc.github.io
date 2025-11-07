@@ -2,6 +2,8 @@
 import ContentHeader from "@/components/ContentHeader.astro";
 import ContentTree from "@/components/ContentTree.astro";
 import GiscusComments from "@/components/GiscusComments.astro";
+import GithubCard from "@/components/GithubCard.astro";
+import Icon from "@/components/Icon.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
@@ -22,7 +24,10 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-const project = (await getEntryBySlug("projects", slug)) as CollectionEntry<"projects">;
+const project = (await getEntryBySlug(
+  "projects",
+  slug
+)) as CollectionEntry<"projects">;
 const { Content, headings } = await render(project);
 
 const giscusConfig = siteConfig.giscus.projects;
@@ -31,10 +36,10 @@ if (!giscusConfig) {
 }
 ---
 
-<Layout 
+<Layout
   data-pagefind-body
-  breadcrumbs={false} 
-  collapse={{ right: 'first', left: 'last' }}
+  breadcrumbs={false}
+  collapse={{ right: "first", left: "last" }}
 >
   <div class="container max-w-4xl mx-auto p-4 space-y-8" slot="top">
     <ContentHeader
@@ -56,8 +61,31 @@ if (!giscusConfig) {
   </Section>
   {
     headings && headings.length > 0 && (
-      <div slot="right" class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-16 p-4">
-        <ContentTree headings={headings} />
+      <div
+        slot="right"
+        class="2xl:sticky 2xl:top-10 max-w-4xl mx-auto flex flex-col gap-8 p-4"
+      >
+        {headings && headings.length > 0 && <ContentTree headings={headings} />}
+        <div class="flex flex-col gap-4 2xl:gap-8">
+          {project.data.repo && <GithubCard repo={project.data.repo} />}
+          {!project.data.url || !project.data.active ? (
+            <button class="btn btn-disabled max-w-4xl 2xl:max-w-xs mx-auto w-full">
+              {project.data.active === false
+                ? "Inactive Project"
+                : "No Website Available"}
+            </button>
+          ) : (
+            <a
+              href={project.data.url}
+              rel="noreferrer noopener"
+              target="_blank"
+              class="btn btn-primary max-w-4xl 2xl:max-w-xs mx-auto w-full"
+            >
+              Visit Site
+              <Icon name="external" class="ml-2 text-xl" />
+            </a>
+          )}
+        </div>
       </div>
     )
   }
