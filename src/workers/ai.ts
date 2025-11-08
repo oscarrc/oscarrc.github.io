@@ -1,361 +1,456 @@
-/// <reference lib="WebWorker" />
+import {
+  pipeline,
+  env,
+  FeatureExtractionPipeline,
+  TextGenerationPipeline,
+  TextStreamer,
+} from "@huggingface/transformers";
 
-import { pipeline, env } from "@huggingface/transformers";
-
-declare const self: DedicatedWorkerGlobalScope & typeof globalThis;
-
-type WorkerRequest =
-  | { type: "init" }
-  | { type: "ask"; id: string; question: string }
-  | { type: "cancel"; id: string };
-
-type WorkerResponse =
-  | { type: "ready" }
-  | { type: "status"; id: string; status: "retrieving" | "answering" }
-  | { type: "result"; id: string; answer: string; sources: SourceSnippet[] }
-  | { type: "error"; id: string; error: string };
-
-type SourceSnippet = {
-  docId?: string;
-  url: string;
-  title: string;
-  section: string;
-  score: number;
-  snippet: string;
-};
-
-type GenerationPipeline = (
-  input: string,
-  options?: { max_new_tokens?: number; temperature?: number; repetition_penalty?: number }
-) => Promise<Array<{ generated_text: string }>>;
-
-type EmbeddingPipeline = (
-  input: string,
-  options?: { pooling?: "mean"; normalize?: boolean }
-) => Promise<{ data: Float32Array | number[] | number[][] } & Record<string, unknown>>;
-
-interface RawEmbeddingRecord {
-  id: string;
-  url: string;
-  title: string;
-  section: string;
-  chunk: string;
-  embedding: number[];
-}
-
-interface EmbeddingRecord {
-  id: string;
-  url: string;
-  title: string;
-  section: string;
-  chunk: string;
-  embedding: Float32Array;
-}
-
+// Configuration
 env.allowLocalModels = false;
-env.allowRemoteModels = true;
 env.useBrowserCache = true;
-if (env.backends?.onnx?.wasm) {
-  env.backends.onnx.wasm.wasmPaths =
-    "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/dist/";
+
+// Model URLs - using lightweight models suitable for browser
+const EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2";
+// Using the smallest available model (82M parameters) - not instruction-tuned but much faster
+const GENERATION_MODEL = "Xenova/distilgpt2"; // Smallest GPT-2 variant
+
+// Embedding data structure
+interface EmbeddingEntry {
+  id: string;
+  slug: string;
+  collection: string;
+  content: string;
+  embeddings: number[] | Float32Array;
 }
 
-const EMBEDDING_INDEX_URL = "/embeddings/index.json";
-const MAX_CONTEXT_CHUNKS = 6;
-const MIN_SIMILARITY = 0.2;
-const MAX_SNIPPET_LENGTH = 600;
-const MIN_ANSWER_LENGTH = 80;
+// Worker message types
+interface WorkerMessage {
+  type: "init" | "ask";
+  id?: string;
+  question?: string;
+}
 
-let generatorPromise: Promise<GenerationPipeline> | null = null;
-let embeddingPipelinePromise: Promise<EmbeddingPipeline> | null = null;
-let embeddingsPromise: Promise<EmbeddingRecord[]> | null = null;
+interface ProgressMessage {
+  type: "status" | "ready" | "result" | "error";
+  id?: string;
+  message?: string;
+  answer?: string;
+  error?: string;
+}
 
-const activeRequests = new Set<string>();
+class RAGWorker {
+  private embedder: FeatureExtractionPipeline | undefined;
+  private generator: TextGenerationPipeline | undefined;
+  private streamer: TextStreamer | undefined;
+  private dataset: Map<string, EmbeddingEntry>;
+  private searchIndex: Map<string, Set<string>>;
+  private isInitialized: boolean = false;
 
-async function getGenerator(): Promise<GenerationPipeline> {
-  if (!generatorPromise) {
-    generatorPromise = pipeline(
-      "text2text-generation",
-      "Xenova/distilbart-cnn-6-6"
-    ) as unknown as Promise<GenerationPipeline>;
+  constructor() {
+    this.embedder = undefined;
+    this.generator = undefined;
+    this.streamer = undefined;
+    this.dataset = new Map();
+    this.searchIndex = new Map();
   }
-  return generatorPromise;
-}
 
-async function getEmbeddingPipeline(): Promise<EmbeddingPipeline> {
-  if (!embeddingPipelinePromise) {
-    embeddingPipelinePromise = pipeline(
-      "feature-extraction",
-      "Xenova/all-MiniLM-L6-v2"
-    ) as unknown as Promise<EmbeddingPipeline>;
+  // Tokenize text for keyword search
+  tokenizeForSearch(text: string): string[] {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "")
+      .split(/\s+/)
+      .filter((term) => term.length > 2);
   }
-  return embeddingPipelinePromise;
-}
 
-async function loadEmbeddings(): Promise<EmbeddingRecord[]> {
-  if (!embeddingsPromise) {
-    embeddingsPromise = (async () => {
-      const response = await fetch(`${EMBEDDING_INDEX_URL}?ts=${Date.now()}`);
-      if (!response.ok) {
-        throw new Error(`Failed to load embeddings index (${response.status})`);
-      }
-      const raw = (await response.json()) as RawEmbeddingRecord[];
-      return raw.map((record) => ({
-        ...record,
-        embedding: Float32Array.from(record.embedding),
+  // Build inverted index for keyword search
+  buildSearchIndex(): void {
+    this.searchIndex.clear();
+    this.dataset.forEach((doc) => {
+      const terms = this.tokenizeForSearch(doc.content);
+      terms.forEach((term) => {
+        const termSet = this.searchIndex.get(term) || new Set<string>();
+        termSet.add(doc.id);
+        this.searchIndex.set(term, termSet);
+      });
+    });
+  }
+
+  // Text-based search using TF-IDF-like scoring
+  textSearch(query: string, k: number = 10): Array<{ docId: string; textScore: number }> {
+    const queryTerms = this.tokenizeForSearch(query);
+    const docScores = new Map<string, number>();
+
+    queryTerms.forEach((term) => {
+      const docs = this.searchIndex.get(term) || new Set<string>();
+      docs.forEach((docId: string) => {
+        const doc = this.dataset.get(docId);
+        if (!doc) return;
+
+        const termFreq = this.tokenizeForSearch(doc.content).filter((t) => t === term).length;
+        const score = termFreq * Math.log(this.dataset.size / (docs.size + 1));
+        docScores.set(docId, (docScores.get(docId) || 0) + score);
+      });
+    });
+
+    const maxScore = Math.max(...Array.from(docScores.values()), 1);
+    return Array.from(docScores.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, k)
+      .map(([docId, score]) => ({
+        docId,
+        textScore: score / maxScore,
       }));
-    })();
-  }
-  return embeddingsPromise;
-}
-
-function toFloat32(vector: Float32Array | number[] | number[][]): Float32Array {
-  if (vector instanceof Float32Array) {
-    return vector;
-  }
-  if (Array.isArray(vector) && typeof vector[0] === "number") {
-    return Float32Array.from(vector as number[]);
-  }
-  if (Array.isArray(vector) && Array.isArray(vector[0])) {
-    return Float32Array.from((vector as number[][]).flat());
-  }
-  throw new Error("Unsupported embedding format");
-}
-
-function cosineSimilarity(a: Float32Array, b: Float32Array): number {
-  const length = Math.min(a.length, b.length);
-  let dot = 0;
-  let normA = 0;
-  let normB = 0;
-  for (let index = 0; index < length; index++) {
-    const valueA = a[index];
-    const valueB = b[index];
-    dot += valueA * valueB;
-    normA += valueA * valueA;
-    normB += valueB * valueB;
-  }
-  if (normA === 0 || normB === 0) {
-    return 0;
-  }
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-}
-
-function cleanGeneratedText(text: string): string {
-  return text.replace(/^answer\s*:\s*/i, "").trim();
-}
-
-function extractContent(chunk: string): string {
-  const contentMatch = chunk.match(/Content:\s*([\s\S]*)/i);
-  if (contentMatch && contentMatch[1]) {
-    return contentMatch[1].trim();
-  }
-  return chunk.trim();
-}
-
-function limitText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return `${text.slice(0, maxLength).trimEnd()}…`;
-}
-
-async function buildContext(question: string) {
-  const [embedder, records] = await Promise.all([getEmbeddingPipeline(), loadEmbeddings()]);
-
-  if (!records.length) {
-    return { context: "", sources: [] as SourceSnippet[] };
   }
 
-  const embeddingOutput = await embedder(question, { pooling: "mean", normalize: true });
-  const queryVector = toFloat32(embeddingOutput.data ?? []);
+  // Cosine similarity between two vectors
+  cosineSimilarity(
+    a: Float32Array | number[],
+    b: Float32Array | number[]
+  ): number {
+    const aArray = Array.isArray(a) ? a : Array.from(a);
+    const bArray = Array.isArray(b) ? b : Array.from(b);
 
-  const scored = records
-    .map((record) => ({
-      record,
-      score: cosineSimilarity(record.embedding, queryVector),
-    }))
-    .filter(({ score }) => Number.isFinite(score))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, MAX_CONTEXT_CHUNKS);
+    const dotProduct = aArray.reduce((sum, val, i) => sum + val * bArray[i], 0);
+    const normA = Math.sqrt(aArray.reduce((sum, val) => sum + val * val, 0));
+    const normB = Math.sqrt(bArray.reduce((sum, val) => sum + val * val, 0));
 
-  const baseSources: SourceSnippet[] = scored
-    .filter(({ score }) => {
-      const topScore = scored[0]?.score ?? 0;
-      return score >= MIN_SIMILARITY || score >= topScore * 0.75;
-    })
-    .map(({ record, score }) => ({
-      url: record.url,
-      title: record.title,
-      section: record.section,
-      score,
-      snippet: limitText(extractContent(record.chunk), MAX_SNIPPET_LENGTH),
-    }));
+    if (normA === 0 || normB === 0) return 0;
+    return dotProduct / (normA * normB);
+  }
 
-  const includeProjects = /\bproject(s)?\b/i.test(question);
-  const sourcesByUrl = new Map(baseSources.map((source) => [source.url, source]));
+  // Hybrid search combining semantic and text search
+  async hybridSearch(
+    query: string,
+    topK: number = 3,
+    semanticWeight: number = 0.7,
+    requestId: string,
+    progressCallback: (message: ProgressMessage) => void
+  ): Promise<Array<{ id: string; score: number; content: string }>> {
+    if (!this.embedder) throw new Error("Embedder not initialized");
 
-  if (includeProjects) {
-    const projectDocs = new Map<string, SourceSnippet>();
-    for (const record of records) {
-      if (!record.url.includes("/projects/")) continue;
-      if (projectDocs.has(record.url)) continue;
-      projectDocs.set(record.url, {
-        url: record.url,
-        title: record.title,
-        section: record.section,
-        score: 0.25,
-        snippet: limitText(extractContent(record.chunk), MAX_SNIPPET_LENGTH),
+    // Semantic search
+    progressCallback({
+      type: "status",
+      id: requestId,
+      message: "Embedding query...",
+    });
+    const questionEmbedding = await this.embedder(query, {
+      pooling: "mean",
+      normalize: true,
+    });
+    // Handle different data types from transformers.js
+    const embeddingData = questionEmbedding.data;
+    const queryVector = embeddingData instanceof Float32Array
+      ? embeddingData
+      : new Float32Array(Array.from(embeddingData as ArrayLike<number>));
+
+    progressCallback({
+      type: "status",
+      id: requestId,
+      message: "Searching embeddings...",
+    });
+    const semanticResults: Array<{ docId: string; score: number }> = [];
+
+    for (const [docId, doc] of this.dataset) {
+      const embeddings = doc.embeddings instanceof Float32Array
+        ? doc.embeddings
+        : new Float32Array(doc.embeddings);
+      const score = this.cosineSimilarity(queryVector, embeddings);
+      semanticResults.push({ docId, score });
+    }
+
+    // Text search
+    progressCallback({
+      type: "status",
+      id: requestId,
+      message: "Performing keyword search...",
+    });
+    const textResults = this.textSearch(query, topK * 2);
+
+    // Combine results
+    const combinedResults = new Map<
+      string,
+      { semanticScore: number; textScore: number; content: string }
+    >();
+
+    semanticResults.forEach((result) => {
+      const doc = this.dataset.get(result.docId);
+      if (!doc) return;
+
+      if (!combinedResults.has(result.docId)) {
+        combinedResults.set(result.docId, {
+          semanticScore: 0,
+          textScore: 0,
+          content: doc.content,
+        });
+      }
+      const entry = combinedResults.get(result.docId);
+      if (entry) entry.semanticScore = result.score;
+    });
+
+    textResults.forEach((result) => {
+      if (!combinedResults.has(result.docId)) {
+        const doc = this.dataset.get(result.docId);
+        if (!doc) return;
+        combinedResults.set(result.docId, {
+          semanticScore: 0,
+          textScore: 0,
+          content: doc.content,
+        });
+      }
+      const entry = combinedResults.get(result.docId);
+      if (entry) entry.textScore = result.textScore;
+    });
+
+    // Final scoring
+    return Array.from(combinedResults.entries())
+      .map(([id, data]) => ({
+        id,
+        score:
+          data.semanticScore * semanticWeight +
+          data.textScore * (1 - semanticWeight),
+        content: data.content,
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, topK);
+  }
+
+  // Initialize the RAG system
+  async init(progressCallback: (message: ProgressMessage) => void): Promise<void> {
+    try {
+      // Load embedding model - try WebGPU first, fallback to CPU
+      progressCallback({
+        type: "status",
+        message: "Loading embedding model...",
+      });
+      console.log("Loading embedding model:", EMBEDDING_MODEL);
+      let embedderResult;
+      try {
+        embedderResult = await pipeline("feature-extraction", EMBEDDING_MODEL, {
+          device: "webgpu",
+        });
+        console.log("Embedding model loaded with WebGPU");
+      } catch (webgpuError) {
+        console.warn("WebGPU not available, falling back to CPU:", webgpuError);
+        embedderResult = await pipeline("feature-extraction", EMBEDDING_MODEL);
+        console.log("Embedding model loaded with CPU");
+      }
+      this.embedder = embedderResult as unknown as FeatureExtractionPipeline;
+
+      // Load text generation model
+      progressCallback({
+        type: "status",
+        message: "Loading language model (this may take a minute)...",
+      });
+      console.log("Loading generation model:", GENERATION_MODEL);
+      const generatorResult = await pipeline("text-generation", GENERATION_MODEL, {
+        dtype: "fp32",
+      });
+      console.log("Generation model loaded successfully");
+      this.generator = generatorResult as unknown as TextGenerationPipeline;
+
+      // Create text streamer for real-time updates
+      this.streamer = new TextStreamer(this.generator.tokenizer, {
+        skip_prompt: true,
+        callback_function: (text: string) => {
+          // Stream updates can be sent here if needed
+        },
+      });
+
+      // Load embeddings dataset
+      progressCallback({
+        type: "status",
+        message: "Loading embeddings...",
+      });
+      const response = await fetch("/embeddings/index.json");
+      if (!response.ok) {
+        throw new Error(`Failed to fetch embeddings: ${response.status} ${response.statusText}`);
+      }
+
+      const jsonData: EmbeddingEntry[] = await response.json();
+      this.dataset = new Map(
+        jsonData.map((doc) => [
+          doc.id,
+          {
+            ...doc,
+            embeddings:
+              doc.embeddings instanceof Float32Array
+                ? doc.embeddings
+                : new Float32Array(doc.embeddings),
+          },
+        ])
+      );
+
+      // Build search index
+      progressCallback({
+        type: "status",
+        message: "Building search index...",
+      });
+      this.buildSearchIndex();
+
+      this.isInitialized = true;
+      console.log("RAG system initialized successfully");
+      progressCallback({
+        type: "ready",
+      });
+    } catch (error) {
+      console.error("RAG initialization error:", error);
+      const message =
+        error instanceof Error ? error.message : "Unknown error occurred";
+      progressCallback({
+        type: "error",
+        error: `Initialization failed: ${message}`,
+      });
+      // Don't throw - send error message instead
+      progressCallback({
+        type: "ready", // Send ready anyway so UI doesn't hang, but with error state
       });
     }
-
-    for (const [url, source] of projectDocs) {
-      if (!sourcesByUrl.has(url)) {
-        baseSources.push(source);
-        sourcesByUrl.set(url, source);
-      }
-    }
   }
 
-  if (!baseSources.length) {
-    return { context: "", sources: [] as SourceSnippet[] };
-  }
-
-  const sourcesWithIds = baseSources
-    .sort((a, b) => b.score - a.score)
-    .map((source, index) => ({ ...source, docId: `DOC${index + 1}` }));
-
-  const context = sourcesWithIds
-    .map(
-      (source) =>
-        `[${source.docId}] ${source.title} — ${source.section}\n${source.snippet}`
-    )
-    .join("\n\n");
-
-  return { context, sources: sourcesWithIds };
-}
-
-async function handleAsk(id: string, question: string) {
-  activeRequests.add(id);
-  try {
-    self.postMessage({ type: "status", id, status: "retrieving" } satisfies WorkerResponse);
-
-    const { context, sources } = await buildContext(question);
-
-    if (!activeRequests.has(id)) {
-      return;
+  // Query the RAG system
+  async query(
+    question: string,
+    requestId: string,
+    progressCallback: (message: ProgressMessage) => void
+  ): Promise<void> {
+    if (!this.isInitialized || !this.embedder || !this.generator) {
+      throw new Error("RAG system not initialized");
     }
 
-    if (!context) {
-      self.postMessage({
-        type: "error",
-        id,
-        error: "I couldn't find relevant information in the portfolio. Try rephrasing your question.",
-      } satisfies WorkerResponse);
-      return;
-    }
+    try {
+      // Perform hybrid search
+      const results = await this.hybridSearch(
+        question,
+        3, // topK
+        0.7, // semanticWeight
+        requestId,
+        progressCallback
+      );
 
-    self.postMessage({ type: "status", id, status: "answering" } satisfies WorkerResponse);
+      // Build context from retrieved chunks
+      const context = results
+        .map(
+          (result, idx) =>
+            `[Source ${idx + 1}]\n${result.content.substring(0, 500)}...`
+        )
+        .join("\n\n");
 
-    const generator = await getGenerator();
-
-    if (!activeRequests.has(id)) {
-      return;
-    }
-
-    const needsListAnswer = /\b(list|which|what\s+projects|show|give|enumerate|provide\s+projects)\b/i.test(
-      question
-    );
-
-    const instructions = needsListAnswer
-      ? "If the question asks for multiple items, answer with a concise bullet list"
-      : "Answer in 3–4 sentences. Do not invent information.";
-
-    const contextGuide = sources
-      .map(
-        (source) =>
-          `${source.docId}: ${source.title} — ${source.section} (similarity ${source.score.toFixed(2)})`
-      )
-      .join("\n");
-
-    const prompt = `You are an AI assistant helping visitors understand my software portfolio. Only use information from the provided context snippets. ${instructions}
-
-Context snippets:
+      // Create prompt for DistilGPT-2 (simple text completion format)
+      const prompt = `Context from my portfolio:
 ${context}
-
-Snippet summary:
-${contextGuide}
 
 Question: ${question}
 
-Answer:`;
+Answer (as Oscar RC, in first person):`;
 
-    let outputs = await generator(prompt, {
-      max_new_tokens: needsListAnswer ? 220 : 280,
-      temperature: 0.2,
-      repetition_penalty: 1.2,
-    });
-
-    if (!activeRequests.has(id)) {
-      return;
-    }
-
-    let answerText = cleanGeneratedText(outputs?.[0]?.generated_text ?? "").trim();
-
-    if (answerText.length < MIN_ANSWER_LENGTH) {
-      outputs = await generator(`${prompt}
-
-Please restate the answer clearly following the required format and doc references.`, {
-        max_new_tokens: needsListAnswer ? 220 : 280,
-        temperature: 0.2,
-        repetition_penalty: 1.15,
+      // Generate response
+      progressCallback({
+        type: "status",
+        id: requestId,
+        message: "Generating answer...",
       });
-      answerText = cleanGeneratedText(outputs?.[0]?.generated_text ?? "").trim();
-    }
 
-    if (answerText.length < MIN_ANSWER_LENGTH) {
-      answerText = sources[0]
-        ? `I couldn't form a full answer, but ${sources[0].docId} (${sources[0].title} — ${sources[0].section}) might have the details.`
-        : "I couldn't form a direct answer, and the context didn't include enough information.";
-    }
+      const response = await this.generator(prompt, {
+        max_new_tokens: 256,
+        do_sample: true,
+        temperature: 0.8,
+        top_p: 0.9,
+        return_full_text: false,
+      });
 
-    self.postMessage({ type: "result", id, answer: answerText, sources: [] } satisfies WorkerResponse);
-  } catch (error) {
-    console.error("AI worker ask error", error);
-    self.postMessage({
-      type: "error",
-      id,
-      error: error instanceof Error ? error.message : "Something went wrong answering your question.",
-    } satisfies WorkerResponse);
-  } finally {
-    activeRequests.delete(id);
+      // Extract generated text
+      const firstResponse = Array.isArray(response[0])
+        ? response[0][0]
+        : response[0];
+
+      if (!firstResponse) {
+        throw new Error("No generation output received");
+      }
+
+      // Define the expected structure for generated messages
+      interface GeneratedMessage {
+        content: string;
+      }
+
+      const answer =
+        typeof firstResponse.generated_text === "string"
+          ? firstResponse.generated_text.trim()
+          : firstResponse.generated_text
+              .reduce((acc: string, msg: GeneratedMessage) => acc + msg.content, "")
+              .trim();
+
+      progressCallback({
+        type: "result",
+        id: requestId,
+        answer,
+      });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Sorry, I couldn't answer that right now. Please try again later.";
+      progressCallback({
+        type: "error",
+        id: requestId,
+        error: errorMessage,
+      });
+    }
   }
 }
 
-self.onmessage = (event: MessageEvent<WorkerRequest>) => {
-  const message = event.data;
+// Create RAG instance
+const rag = new RAGWorker();
 
-  switch (message.type) {
+// Worker message handler
+self.addEventListener("message", async (event: MessageEvent<WorkerMessage>) => {
+  const { type, id, question } = event.data;
+
+  switch (type) {
     case "init": {
-      void Promise.all([loadEmbeddings(), getEmbeddingPipeline(), getGenerator()])
-        .then(() => {
-          self.postMessage({ type: "ready" } satisfies WorkerResponse);
-        })
-        .catch((error) => {
-          console.error("Failed to initialise AI worker", error);
+      console.log("Worker received init message");
+      try {
+        await rag.init((message) => {
+          console.log("Sending progress message:", message.type);
+          self.postMessage(message);
         });
+        console.log("Init completed successfully");
+      } catch (error) {
+        console.error("Worker init error:", error);
+        self.postMessage({
+          type: "error",
+          error: error instanceof Error ? error.message : "Failed to initialize",
+        });
+        // Still send ready so UI doesn't hang
+        self.postMessage({
+          type: "ready",
+        });
+      }
       break;
     }
-    case "ask": {
-      void handleAsk(message.id, message.question);
-      break;
-    }
-    case "cancel": {
-      activeRequests.delete(message.id);
-      break;
-    }
-    default:
-      console.warn("Unknown worker message", message);
-  }
-};
 
-export default {};
+    case "ask": {
+      if (!question || !id) {
+        self.postMessage({
+          type: "error",
+          id,
+          error: "Missing question or request ID",
+        });
+        return;
+      }
+
+      await rag.query(question, id, (message) => {
+        self.postMessage(message);
+      });
+      break;
+    }
+
+    default:
+      self.postMessage({
+        type: "error",
+        error: `Unknown message type: ${type}`,
+      });
+  }
+});

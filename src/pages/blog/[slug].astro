@@ -2,11 +2,18 @@
 import ContentHeader from "@/components/ContentHeader.astro";
 import ContentTree from "@/components/ContentTree.astro";
 import GiscusComments from "@/components/GiscusComments.astro";
+import PostCard from "@/components/PostCard.astro";
 import Section from "@/components/Section.astro";
+import Subsection from "@/components/Subsection.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
-import { getEntryBySlug } from "@/utils/collections";
+import {
+  getEntryBySlug,
+  getNextPostInSeries,
+  getSeriesSlug,
+} from "@/utils/collections";
 import { getCollectionBySlug } from "@/utils/collections";
+import { getSimilarEntries } from "@/utils/embeddings";
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
 
@@ -22,9 +29,19 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-const post = (await getEntryBySlug("posts", slug)) as CollectionEntry<"posts">;
+
+const post = (await getEntryBySlug(slug, "posts")) as CollectionEntry<"posts">;
+
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
+const { id, collection, data } = post;
+const { title, description, cover, published, updated, series, author, tags } = data;
 const { minutesRead } = remarkPluginFrontmatter;
+
+const seriesSlug = series ? getSeriesSlug(series) : null;
+const nextPost = seriesSlug ? getNextPostInSeries(seriesSlug, id) : null;
+
+const similar = !nextPost ? await getSimilarEntries(slug, 2, "posts") : null;
+const similarEntries = similar ? await Promise.all(similar.map((entry) => getEntryBySlug(entry.slug, "posts"))) : [];
 
 const giscusConfig = siteConfig.giscus.blog;
 if (!giscusConfig) {
@@ -39,15 +56,15 @@ if (!giscusConfig) {
 >
   <div class="container max-w-4xl mx-auto p-4 space-y-8" slot="top">
     <ContentHeader
-      collection={post.collection}
-      title={post.data.title}
-      description={post.data.description}
-      cover={post.data.cover}
-      published={post.data.published}
-      updated={post.data?.updated}
-      series={post.data.series}
-      author={post.data.author}
-      tags={post.data.tags}
+      collection={collection}
+      title={title}
+      description={description}
+      cover={cover}
+      published={published}
+      updated={updated}
+      series={series}
+      author={author}
+      tags={tags}
       readingTime={minutesRead}
     />
   </div>
@@ -55,7 +72,21 @@ if (!giscusConfig) {
     <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
-    <GiscusComments {...giscusConfig} />
+    { nextPost ? (
+      <Subsection title="More from this series">
+        <PostCard post={nextPost} />
+      </Subsection>
+    ) : null }
+    { similarEntries.length > 0 ? (
+      <Subsection title="Similar posts">
+        { similarEntries.map((entry) => (
+          <PostCard post={entry as CollectionEntry<"posts">} />
+        )) }
+      </Subsection>
+    ) : null }
+    <Subsection title="Comments">
+      <GiscusComments {...giscusConfig} />
+    </Subsection>
   </Section>
   {
     headings && headings.length > 0 && (

@@ -40,6 +40,16 @@ export interface GitHubActivityApiResponse {
   error?: string
 }
 
+export interface GithubRepoData {
+  name: string;
+  description: string | null;
+  stargazers_count: number;
+  watchers_count: number;
+  forks_count: number;
+  html_url: string;
+  error?: string;
+}
+
 export type GiscusConfig = {
   repo: string
   repoId: string

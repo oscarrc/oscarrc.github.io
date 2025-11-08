@@ -1,7 +1,7 @@
 ---
 import { parseISO, getYear } from 'date-fns'
 import { range } from '@/utils/array'
-import { fetchData, groupByWeeks, groupByMonths } from '@/utils/github'
+import { fetchActivityData, groupByWeeks, groupByMonths } from '@/utils/github'
 
 interface Props {
   username: string
@@ -18,7 +18,7 @@ const contributionClasses = [
 
 const { username, year = 'last' } = Astro.props
 
-const data = await fetchData(username, year);
+const data = await fetchActivityData(username, year);
 
 const totalCount = year === 'last' ? data.total.lastYear : data.total[year]
 const maxLevel = 4

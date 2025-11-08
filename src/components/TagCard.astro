@@ -1,5 +1,5 @@
 ---
-import { slug } from "github-slugger";
+import { getTagSlug } from "@/utils/collections";
 import Icon from "./Icon.astro";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 
 const { tagName, postsCount, projectsCount } = Astro.props;
 
-const tagSlug = slug(tagName);
+const tagSlug = getTagSlug(tagName);
 
 // Determine default collection: posts if it has items, otherwise whichever has items
 let defaultCollection: "posts" | "projects" = "posts";

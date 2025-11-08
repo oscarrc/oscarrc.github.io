@@ -1,7 +1,6 @@
 import type { TagStats, SeriesStats, ContentCollectionType, CombinedEntry } from "@/types";
 import {
   getCollection,
-  getEntry,
   type CollectionEntry,
 } from "astro:content";
 import { slug as slugify } from "github-slugger";
@@ -27,13 +26,13 @@ const addToGroup = <T>(map: Map<string, T[]>, key: string, item: T) => {
 
 const addToTagStats = (
   tagStats: Map<string, TagStats>,
+  tagSlug: string,
   tag: string,
   type: "post" | "project"
 ) => {
-  const slug = slugify(tag);
-  const stat = tagStats.get(slug) ?? {
+  const stat = tagStats.get(tagSlug) ?? {
     name: tag,
-    slug,
+    slug: tagSlug,
     postCount: 0,
     projectCount: 0,
     totalCount: 0,
@@ -41,21 +40,21 @@ const addToTagStats = (
   if (type === "post") stat.postCount++;
   else stat.projectCount++;
   stat.totalCount++;
-  tagStats.set(slug, stat);
+  tagStats.set(tagSlug, stat);
 };
 
 const addToSeriesStats = (
   seriesStats: Map<string, SeriesStats>,
+  seriesSlug: string,
   series: string
 ) => {
-  const slug = slugify(series);
-  const stat = seriesStats.get(slug) ?? {
+  const stat = seriesStats.get(seriesSlug) ?? {
     name: series,
-    slug,
+    slug: seriesSlug,
     postCount: 0,
   };
   stat.postCount++;
-  seriesStats.set(slug, stat);
+  seriesStats.set(seriesSlug, stat);
 };
 
 /* -------------------------------------------------------
@@ -91,8 +90,8 @@ export const getCollectionBySlug = (
 }
 
 export const getEntryBySlug = async (
-  collection: ContentCollectionType,
-  entrySlug: string
+  entrySlug: string,
+  collection: ContentCollectionType
 ) => {
   return collectionsBySlug[collection].get(entrySlug);
 };
@@ -108,6 +107,10 @@ function aggregateContent(
   const tagStatsMap = new Map<string, TagStats>();
   const seriesStatsMap = new Map<string, SeriesStats>();
 
+  // --- Maps keyed by name ---
+  const tagsByName = new Map<string, string>();
+  const seriesByName = new Map<string, string>();
+
   // --- Maps keyed by slug ---
   const postsByTag = new Map<string, CollectionEntry<"posts">[]>();         // key: tagSlug
   const projectsByTag = new Map<string, CollectionEntry<"projects">[]>();   // key: tagSlug
@@ -118,16 +121,18 @@ function aggregateContent(
   for (const post of posts) {
     for (const tag of post.data.tags ?? []) {
       const tagSlug = slugify(tag);
-      addToTagStats(tagStatsMap, tag, "post");
+      addToTagStats(tagStatsMap, tagSlug, tag, "post");
       addToGroup(postsByTag, tagSlug, post);
       addToGroup(contentByTag, tagSlug, { ...post, type: "posts" });
+      tagsByName.set(tag, tagSlug);
     }
 
     if (post.data.series) {
       const series = post.data.series;
       const seriesSlug = slugify(series);
-      addToSeriesStats(seriesStatsMap, series);
+      addToSeriesStats(seriesStatsMap, seriesSlug, series);
       addToGroup(postsBySeries, seriesSlug, post);
+      seriesByName.set(series, seriesSlug);
     }
   }
 
@@ -135,7 +140,7 @@ function aggregateContent(
   for (const project of projects) {
     for (const tag of project.data.tags ?? []) {
       const tagSlug = slugify(tag);
-      addToTagStats(tagStatsMap, tag, "project");
+      addToTagStats(tagStatsMap, tagSlug, tag, "project");
       addToGroup(projectsByTag, tagSlug, project);
       addToGroup(contentByTag, tagSlug, { ...project, type: "projects" });
     }
@@ -150,6 +155,8 @@ function aggregateContent(
   return {
     tagStatsMap,
     seriesStatsMap,
+    tagsByName,
+    seriesByName,
     postsByTag,
     projectsByTag,
     postsBySeries,
@@ -164,6 +171,8 @@ function aggregateContent(
 const {
   tagStatsMap,
   seriesStatsMap,
+  tagsByName,
+  seriesByName,
   postsByTag,
   projectsByTag,
   postsBySeries,
@@ -192,7 +201,9 @@ const postSeries = Array.from(seriesStatsMap.values()).sort(
  * -----------------------------------------------------*/
 
 export const getTagBySlug = (slug: string) => tagStatsMap.get(slug);
+export const getTagSlug = (name: string) => tagsByName.get(name);
 export const getSeriesBySlug = (slug: string) => seriesStatsMap.get(slug);
+export const getSeriesSlug = (name: string) => seriesByName.get(name);
 
 export const getContentByTag = (tagSlug: string) => ({
   posts: postsByTag.get(tagSlug) ?? [],
@@ -202,6 +213,23 @@ export const getContentByTag = (tagSlug: string) => ({
 
 export const getPostsBySeries = (seriesSlug: string) =>
   postsBySeries.get(seriesSlug) ?? [];
+
+
+export const getNextPostInSeries = (seriesSlug: string, postId: string) => {
+  const postsInSeries = postsBySeries.get(seriesSlug) ?? [];
+
+  const index = postsInSeries.findIndex((post) => post.id === postId);
+
+  if (index >= 0 && index < postsInSeries.length - 1) {
+    return postsInSeries[index + 1];
+  }
+
+  if (index > 0 && postsInSeries.length > 0) {
+    return postsInSeries[index - 1];
+  }
+
+  return undefined;
+};
 
 /* -------------------------------------------------------
  * Exports
