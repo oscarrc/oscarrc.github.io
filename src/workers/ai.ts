@@ -370,11 +370,16 @@ Answer (as Oscar RC, in first person):`;
         throw new Error("No generation output received");
       }
 
+      // Define the expected structure for generated messages
+      interface GeneratedMessage {
+        content: string;
+      }
+
       const answer =
         typeof firstResponse.generated_text === "string"
           ? firstResponse.generated_text.trim()
           : firstResponse.generated_text
-              .reduce((acc: string, msg: any) => acc + msg.content, "")
+              .reduce((acc: string, msg: GeneratedMessage) => acc + msg.content, "")
               .trim();
 
       progressCallback({
