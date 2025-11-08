@@ -29,21 +29,16 @@ const stripMarkdown = (text: string): string => {
 }
 
 const formatValue = (value: any): string | null => {
-   let formattedValue: string | null = null;
-
-    if (Array.isArray(value)) {
-      formattedValue = value.join(', ');
-    }
-
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-      formattedValue = String(value);
-    }
-
-    if (value instanceof Date) {
-      formattedValue = value.toISOString();
-    }
-
-    return formattedValue;
+  if (Array.isArray(value)) {
+    return value.join(', ');
+  }
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+  return null;
 }
 
 const getEntryText = (entry: CombinedEntry): string => {
