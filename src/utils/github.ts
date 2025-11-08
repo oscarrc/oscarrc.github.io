@@ -109,7 +109,7 @@ export const groupByMonths = (weeks: Array<GitHubActivityWeek>): Array<{ month: 
   return monthGroups
 }
 
-export const fetchGithubRepoData = async (repo: string ) => {
+export const fetchGithubRepoData = async (repo: string ): Promise<GithubRepoData | undefined> => {
   try {
     const apiUrl = 'https://api.github.com/repos/'
     const response = await fetch(`${apiUrl}${repo}`)
