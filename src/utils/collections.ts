@@ -1,7 +1,6 @@
 import type { TagStats, SeriesStats, ContentCollectionType, CombinedEntry } from "@/types";
 import {
   getCollection,
-  getEntry,
   type CollectionEntry,
 } from "astro:content";
 import { slug as slugify } from "github-slugger";
@@ -91,8 +90,8 @@ export const getCollectionBySlug = (
 }
 
 export const getEntryBySlug = async (
-  collection: ContentCollectionType,
-  entrySlug: string
+  entrySlug: string,
+  collection: ContentCollectionType
 ) => {
   return collectionsBySlug[collection].get(entrySlug);
 };

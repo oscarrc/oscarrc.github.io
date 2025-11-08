@@ -4,12 +4,14 @@ import ContentTree from "@/components/ContentTree.astro";
 import GiscusComments from "@/components/GiscusComments.astro";
 import GithubCard from "@/components/GithubCard.astro";
 import Icon from "@/components/Icon.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
 import Section from "@/components/Section.astro";
 import Subsection from "@/components/Subsection.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import { getEntryBySlug } from "@/utils/collections";
 import { getCollectionBySlug } from "@/utils/collections";
+import { getSimilarEntries } from "@/utils/embeddings";
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
 
@@ -26,10 +28,7 @@ export const getStaticPaths = (async () => {
 
 const { slug } = Astro.params;
 
-const project = (await getEntryBySlug(
-  "projects",
-  slug
-)) as CollectionEntry<"projects">;
+const project = (await getEntryBySlug(slug, "projects")) as CollectionEntry<"projects">;
 
 const { Content, headings } = await render(project);
 const { collection, data } = project;
@@ -39,6 +38,11 @@ const giscusConfig = siteConfig.giscus.projects;
 if (!giscusConfig) {
   throw new Error("Giscus configuration is missing in site.config.ts");
 }
+
+const similar = await getSimilarEntries(slug, 2, "projects");
+const similarEntries = await Promise.all(
+  similar.map((entry) => getEntryBySlug(entry.slug, "projects"))
+);
 ---
 
 <Layout
@@ -62,6 +66,15 @@ if (!giscusConfig) {
     <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
+    {
+      similarEntries.length > 0 ? (
+        <Subsection title="Similar projects">
+          {similarEntries.map((entry) => (
+            <ProjectCard project={entry as CollectionEntry<"projects">} />
+          ))}
+        </Subsection>
+      ) : null
+    }
     <Subsection title="Comments">
       <GiscusComments {...giscusConfig} />
     </Subsection>

@@ -13,6 +13,7 @@ import {
   getSeriesSlug,
 } from "@/utils/collections";
 import { getCollectionBySlug } from "@/utils/collections";
+import { getSimilarEntries } from "@/utils/embeddings";
 import type { GetStaticPaths } from "astro";
 import { render, type CollectionEntry } from "astro:content";
 
@@ -29,7 +30,7 @@ export const getStaticPaths = (async () => {
 
 const { slug } = Astro.params;
 
-const post = (await getEntryBySlug("posts", slug)) as CollectionEntry<"posts">;
+const post = (await getEntryBySlug(slug, "posts")) as CollectionEntry<"posts">;
 
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const { id, collection, data } = post;
@@ -43,6 +44,9 @@ const giscusConfig = siteConfig.giscus.blog;
 if (!giscusConfig) {
   throw new Error("Giscus configuration is missing in site.config.ts");
 }
+
+const similar = await getSimilarEntries(slug, 2, "posts");
+const similarEntries = await Promise.all(similar.map((entry) => getEntryBySlug(entry.slug, "posts")));
 ---
 
 <Layout
@@ -71,6 +75,13 @@ if (!giscusConfig) {
     { nextPost ? (
       <Subsection title="More from this series">
         <PostCard post={nextPost} />
+      </Subsection>
+    ) : null }
+    { similarEntries.length > 0 ? (
+      <Subsection title="Similar posts">
+        { similarEntries.map((entry) => (
+          <PostCard post={entry as CollectionEntry<"posts">} />
+        )) }
       </Subsection>
     ) : null }
     <Subsection title="Comments">
