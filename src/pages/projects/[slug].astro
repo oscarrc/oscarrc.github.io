@@ -5,6 +5,7 @@ import GiscusComments from "@/components/GiscusComments.astro";
 import GithubCard from "@/components/GithubCard.astro";
 import Icon from "@/components/Icon.astro";
 import Section from "@/components/Section.astro";
+import Subsection from "@/components/Subsection.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import { getEntryBySlug } from "@/utils/collections";
@@ -25,7 +26,10 @@ export const getStaticPaths = (async () => {
 
 const { slug } = Astro.params;
 
-const project = (await getEntryBySlug("projects", slug)) as CollectionEntry<"projects">;
+const project = (await getEntryBySlug(
+  "projects",
+  slug
+)) as CollectionEntry<"projects">;
 
 const { Content, headings } = await render(project);
 const { collection, data } = project;
@@ -58,7 +62,9 @@ if (!giscusConfig) {
     <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
-    <GiscusComments {...giscusConfig} />
+    <Subsection title="Comments">
+      <GiscusComments {...giscusConfig} />
+    </Subsection>
   </Section>
   {
     headings && headings.length > 0 && (

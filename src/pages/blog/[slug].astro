@@ -2,12 +2,14 @@
 import ContentHeader from "@/components/ContentHeader.astro";
 import ContentTree from "@/components/ContentTree.astro";
 import GiscusComments from "@/components/GiscusComments.astro";
+import PostCard from "@/components/PostCard.astro";
 import Section from "@/components/Section.astro";
+import Subsection from "@/components/Subsection.astro";
 import Layout from "@/layouts/Layout.astro";
 import siteConfig from "@/site.config";
 import {
   getEntryBySlug,
-  getPostsBySeries,
+  getNextPostInSeries,
   getSeriesSlug,
 } from "@/utils/collections";
 import { getCollectionBySlug } from "@/utils/collections";
@@ -31,16 +33,11 @@ const post = (await getEntryBySlug("posts", slug)) as CollectionEntry<"posts">;
 
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const { id, collection, data } = post;
-const { title, description, cover, published, updated, series, author, tags } =
-  data;
+const { title, description, cover, published, updated, series, author, tags } = data;
 const { minutesRead } = remarkPluginFrontmatter;
 
-const seriesSlug = getSeriesSlug(series ?? "");
-const seriesPosts = series
-  ? (await getPostsBySeries(seriesSlug ?? "")).filter((p) => p.id !== id)
-  : null;
-
-console.log(seriesPosts);
+const seriesSlug = series ? getSeriesSlug(series) : null;
+const nextPost = seriesSlug ? getNextPostInSeries(seriesSlug, id) : null;
 
 const giscusConfig = siteConfig.giscus.blog;
 if (!giscusConfig) {
@@ -71,7 +68,14 @@ if (!giscusConfig) {
     <article data-pagefind-body class="prose prose-invert max-w-none flex-1">
       <Content />
     </article>
-    <GiscusComments {...giscusConfig} />
+    { nextPost ? (
+      <Subsection title="More from this series">
+        <PostCard post={nextPost} />
+      </Subsection>
+    ) : null }
+    <Subsection title="Comments">
+      <GiscusComments {...giscusConfig} />
+    </Subsection>
   </Section>
   {
     headings && headings.length > 0 && (

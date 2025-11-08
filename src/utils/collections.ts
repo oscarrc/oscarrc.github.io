@@ -215,6 +215,23 @@ export const getContentByTag = (tagSlug: string) => ({
 export const getPostsBySeries = (seriesSlug: string) =>
   postsBySeries.get(seriesSlug) ?? [];
 
+
+export const getNextPostInSeries = (seriesSlug: string, postId: string) => {
+  const postsInSeries = postsBySeries.get(seriesSlug) ?? [];
+
+  const index = postsInSeries.findIndex((post) => post.id === postId);
+
+  if (index >= 0 && index < postsInSeries.length - 1) {
+    return postsInSeries[index + 1];
+  }
+
+  if (index > 0 && postsInSeries.length > 0) {
+    return postsInSeries[index - 1];
+  }
+
+  return undefined;
+};
+
 /* -------------------------------------------------------
  * Exports
  * -----------------------------------------------------*/
