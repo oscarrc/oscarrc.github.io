@@ -1,10 +1,9 @@
-import { posts, projects, sortByDate } from '@/utils/collections';
+import { getSeriesSlug, getTagSlug, posts, projects, sortByDate } from '@/utils/collections';
 
 import type { AstroGlobal } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import rss from '@astrojs/rss';
 import siteConfig from '@/site.config';
-import { slug } from 'github-slugger';
 
 const sortedEntities: CollectionEntry<'projects' | 'posts'>[] = [...posts, ...projects].sort(sortByDate);
 
@@ -28,14 +27,14 @@ export async function GET(context: AstroGlobal) {
         ${(entity as CollectionEntry<'posts'>).data.series ? `
           <series>
             <name>${(entity as CollectionEntry<'posts'>).data.series}</name>
-            <link>/series/${slug((entity as CollectionEntry<'posts'>).data.series!)}</link>
+            <link>/series/${getSeriesSlug((entity as CollectionEntry<'posts'>).data.series!)}</link>
           </series>
         ` : ''}
         ${entity.collection === 'projects' ? `<repo>${entity.data.repo}</repo>` : ''}
         <tags>${entity.data.tags.map((tag) => (
           `<tag>
             <name>${tag}</name>
-            <link>/tags/${slug(tag)}/${entity.collection}</link>
+            <link>/tags/${getTagSlug(tag)}/${entity.collection}</link>
           </tag>`
         )).join('')}</tags>
       `

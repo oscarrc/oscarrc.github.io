@@ -24,11 +24,12 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { slug } = Astro.params;
-const project = (await getEntryBySlug(
-  "projects",
-  slug
-)) as CollectionEntry<"projects">;
+
+const project = (await getEntryBySlug("projects", slug)) as CollectionEntry<"projects">;
+
 const { Content, headings } = await render(project);
+const { collection, data } = project;
+const { title, description, cover, published, updated, repo, tags } = data;
 
 const giscusConfig = siteConfig.giscus.projects;
 if (!giscusConfig) {
@@ -43,14 +44,14 @@ if (!giscusConfig) {
 >
   <div class="container max-w-4xl mx-auto p-4 space-y-8" slot="top">
     <ContentHeader
-      collection={project.collection}
-      title={project.data.title}
-      description={project.data.description}
-      cover={project.data.cover}
-      published={project.data.published}
-      updated={project.data?.updated}
-      repo={project.data.repo}
-      tags={project.data.tags}
+      collection={collection}
+      title={title}
+      description={description}
+      cover={cover}
+      published={published}
+      updated={updated}
+      repo={repo}
+      tags={tags}
     />
   </div>
   <Section class="flex flex-col gap-16">
