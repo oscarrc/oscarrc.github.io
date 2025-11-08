@@ -127,7 +127,7 @@ export const getSimilarEntries = async (slug: string, topK: number = 5, collecti
     return { ...rest, similarity };
   });
 
-  similarities.sort((a, b) => b.similarity - a.similarity);
-
-  return similarities.slice(0, topK);
+  const validSimilarities = similarities.filter(e => e.similarity !== -1);
+  validSimilarities.sort((a, b) => b.similarity - a.similarity);
+  return validSimilarities.slice(0, topK);
 };
