@@ -100,16 +100,14 @@ const nestedHeadings = filteredHeadings.reduce(
 
     if (headings.length === 0) return;
 
-    const allDetails = document.querySelectorAll("[data-details-section]");
-
     // Helper function to find the parent details element for a link
-    const findParentDetails = (link) => {
+    const findParentDetails = (link: HTMLAnchorElement) => {
       let parent = link.closest("details");
       return parent;
     };
 
     // Helper function to update details open/closed state
-    const updateDetailsState = (activeLink) => {
+    const updateDetailsState = (activeLink: HTMLAnchorElement | null) => {
       if (!activeLink) return;
 
       const activeDetails = findParentDetails(activeLink);
@@ -173,7 +171,7 @@ const nestedHeadings = filteredHeadings.reduce(
       });
 
       const activeHeading = visibleEntries[0]?.target;
-      let activeLink = null;
+      let activeLink: HTMLAnchorElement | null = null;
 
       tocLinks.forEach((link) => {
         link.classList.remove("active", "font-semibold");
@@ -182,7 +180,7 @@ const nestedHeadings = filteredHeadings.reduce(
           link.getAttribute("href") === `#${activeHeading.id}`
         ) {
           link.classList.add("active", "font-semibold");
-          activeLink = link;
+          activeLink = link as HTMLAnchorElement;
         }
       });
 
@@ -192,7 +190,8 @@ const nestedHeadings = filteredHeadings.reduce(
     headings.forEach((heading) => observer.observe(heading));
 
     // Fallback: update on scroll for headings that might not be observed
-    let scrollTimeout;
+    let scrollTimeout: number;
+    
     window.addEventListener(
       "scroll",
       () => {
