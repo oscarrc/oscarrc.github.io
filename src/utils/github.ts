@@ -1,4 +1,4 @@
-import type { GitHubActivityApiResponse, GitHubActivityDay, GitHubActivityWeek, WeekdayIndex } from "@/types"
+import type { GitHubActivityApiResponse, GitHubActivityDay, GitHubActivityWeek, GithubRepoData, WeekdayIndex } from "@/types"
 import { differenceInCalendarDays, eachDayOfInterval, formatISO, getDay, isValid, nextDay, parseISO, subWeeks } from "date-fns"
 
 export const validateActivities = (activities: Array<GitHubActivityDay>) => {
@@ -15,7 +15,7 @@ export const validateActivities = (activities: Array<GitHubActivityDay>) => {
   }
 }
 
-export const fetchData = async (
+export const fetchActivityData = async (
   username: string,
   year: number | 'last',
 ): Promise<GitHubActivityApiResponse> => {
@@ -32,6 +32,7 @@ export const fetchData = async (
 
   return data
 }
+
 export const fillHoles = (activities: Array<GitHubActivityDay>): Array<GitHubActivityDay> => {
   const calendar = new Map<string, GitHubActivityDay>(activities.map((a) => [a.date, a]))
   const firstActivity = activities[0] as GitHubActivityDay
@@ -106,4 +107,21 @@ export const groupByMonths = (weeks: Array<GitHubActivityWeek>): Array<{ month: 
   }
 
   return monthGroups
+}
+
+export const fetchGithubRepoData = async (repo: string ) => {
+  try {
+    const apiUrl = 'https://api.github.com/repos/'
+    const response = await fetch(`${apiUrl}${repo}`)
+    const data = (await response.json()) as GithubRepoData
+
+    if (!response.ok) {
+      const message = data.error || 'Unknown error'
+      throw Error(`Fetching GitHub repo data for "${repo}" failed: ${message}`)
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`Failed to fetch GitHub repo data for ${repo}:`, error);
+  }
 }
