@@ -40,13 +40,13 @@ const { minutesRead } = remarkPluginFrontmatter;
 const seriesSlug = series ? getSeriesSlug(series) : null;
 const nextPost = seriesSlug ? getNextPostInSeries(seriesSlug, id) : null;
 
+const similar = !nextPost ? await getSimilarEntries(slug, 2, "posts") : null;
+const similarEntries = similar ? await Promise.all(similar.map((entry) => getEntryBySlug(entry.slug, "posts"))) : [];
+
 const giscusConfig = siteConfig.giscus.blog;
 if (!giscusConfig) {
   throw new Error("Giscus configuration is missing in site.config.ts");
 }
-
-const similar = await getSimilarEntries(slug, 2, "posts");
-const similarEntries = await Promise.all(similar.map((entry) => getEntryBySlug(entry.slug, "posts")));
 ---
 
 <Layout

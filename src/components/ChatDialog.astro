@@ -45,7 +45,7 @@ import avatar from "@/assets/avatar.png";
             x-model="inputMessage"
             @input="resizeTextarea($el)"
             @keydown.enter.exact.prevent="sendMessage()"
-            @keydown.enter.shift.exact.prevent="inputMessage += '\n'"
+            @keydown.enter.shift.exact.prevent="insertNewline()"
             class="textarea textarea-bordered w-full pr-12 resize-none min-h-[2.5rem] max-h-32 text-sm"
             placeholder="Ask me anything..."
             rows="1"
@@ -89,6 +89,9 @@ import avatar from "@/assets/avatar.png";
     resizeTextarea(textarea: HTMLTextAreaElement) {
       textarea.style.height = "auto";
       textarea.style.height = `${Math.min(textarea.scrollHeight, 128)}px`;
+    },
+    insertNewline() {
+      this.inputMessage += "\n";
     },
     scrollToBottom() {
       this.$nextTick(() => {
