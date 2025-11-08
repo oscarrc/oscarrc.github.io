@@ -6,7 +6,6 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:pagefind": "pagefind --site dist && cp -r dist/pagefind public",
-    "build:embeddings": "tsx scripts/generate-embeddings.ts && cp -r dist/embeddings public",
     "postbuild": "npm run build:pagefind",
     "preview": "astro preview",
     "astro": "astro"
