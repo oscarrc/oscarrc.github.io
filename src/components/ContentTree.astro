@@ -43,10 +43,10 @@ const nestedHeadings = filteredHeadings.reduce(
   <div class="w-full min-w-0">
     <ul class="menu menu-xs p-4 pt-6 w-full min-w-0 box-border">
       {
-        nestedHeadings.map((h2) => (
+        nestedHeadings.map((h2, index) => (
           <li class="min-w-0 w-full overflow-hidden">
             {h2.children && h2.children.length > 0 ? (
-              <details open class="w-full min-w-0">
+              <details open={index === 0} class="w-full min-w-0" data-details-section>
                 <summary class="min-w-0 w-full overflow-hidden">
                   <a
                     href={`#${h2.slug}`}
@@ -100,6 +100,25 @@ const nestedHeadings = filteredHeadings.reduce(
 
     if (headings.length === 0) return;
 
+    // Helper function to find the parent details element for a link
+    const findParentDetails = (link: HTMLAnchorElement) => {
+      let parent = link.closest("details");
+      return parent;
+    };
+
+    // Helper function to update details open/closed state
+    const updateDetailsState = (activeLink: HTMLAnchorElement | null) => {
+      if (!activeLink) return;
+
+      const activeDetails = findParentDetails(activeLink);
+      
+      // Only open the active details section, don't close others
+      // This preserves manually opened sections and allows multiple to be open
+      if (activeDetails && !activeDetails.open) {
+        activeDetails.open = true;
+      }
+    };
+
     const updateActiveLink = () => {
       let activeHeading = null;
       const scrollPosition = window.scrollY + 100; // Offset for better UX
@@ -116,6 +135,8 @@ const nestedHeadings = filteredHeadings.reduce(
         activeHeading = headings[0];
       }
 
+      let activeLink = null;
+
       tocLinks.forEach((link) => {
         link.classList.remove("active", "font-semibold");
         if (
@@ -123,8 +144,11 @@ const nestedHeadings = filteredHeadings.reduce(
           link.getAttribute("href") === `#${activeHeading.id}`
         ) {
           link.classList.add("active", "font-semibold");
+          activeLink = link;
         }
       });
+
+      updateDetailsState(activeLink);
     };
 
     const observerOptions = {
@@ -147,6 +171,7 @@ const nestedHeadings = filteredHeadings.reduce(
       });
 
       const activeHeading = visibleEntries[0]?.target;
+      let activeLink: HTMLAnchorElement | null = null;
 
       tocLinks.forEach((link) => {
         link.classList.remove("active", "font-semibold");
@@ -155,14 +180,18 @@ const nestedHeadings = filteredHeadings.reduce(
           link.getAttribute("href") === `#${activeHeading.id}`
         ) {
           link.classList.add("active", "font-semibold");
+          activeLink = link as HTMLAnchorElement;
         }
       });
+
+      updateDetailsState(activeLink);
     }, observerOptions);
 
     headings.forEach((heading) => observer.observe(heading));
 
     // Fallback: update on scroll for headings that might not be observed
     let scrollTimeout: number;
+    
     window.addEventListener(
       "scroll",
       () => {
@@ -172,10 +201,24 @@ const nestedHeadings = filteredHeadings.reduce(
       { passive: true }
     );
 
+    // Initial update
     updateActiveLink();
   }
 
-  initScrollSpy();
+  // Ensure DOM is ready - use requestAnimationFrame for better timing
+  function runInit() {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        initScrollSpy();
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runInit);
+  } else {
+    runInit();
+  }
 </script>
 
 <style>

@@ -30,16 +30,14 @@ const { brand, links } = siteConfig;
         </button>
         <ul
           tabindex="-1"
-          class="dropdown-content rounded-box z-1 w-max shadow-sm border p-4 mt-2 border-double"
+          class="dropdown-content rounded-box z-1 w-max shadow-sm border px-4 py-2 bg-base-100 mt-2 border-double"
         >
           {
             Object.entries(links).map(([key, url]) => (
               <li>
                 [{" "}
-                <a href={url} class="underline capitalize" name={key}>
-                  {key}
-                </a>{" "}
-                ]
+                <a href={url} class="underline capitalize" name={key}>{key}</a>
+                {" "}]
               </li>
             ))
           }
