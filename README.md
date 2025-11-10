@@ -128,6 +128,97 @@ cover:
 # Project details
 ```
 
+## 📝 Markdown Features
+
+This project includes several custom markdown plugins that enhance the writing experience. Here are the available features:
+
+### Alerts / Callouts
+
+Use container directives to create styled alert boxes with icons:
+
+```markdown
+:::info
+This is an info alert! Use it to provide helpful information to your readers.
+:::
+
+:::error
+This is an error alert! Perfect for highlighting critical issues or problems.
+:::
+
+:::success
+This is a success alert! Great for confirming successful actions or positive outcomes.
+:::
+
+:::warning
+This is a warning alert! Use it to draw attention to potential issues or important cautions.
+:::
+
+:::question
+This is a question alert! Ideal for posing questions or highlighting areas that need clarification.
+:::
+```
+
+**Available alert types:** `info`, `error`, `success`, `warning`, `question`
+
+### Image Captions
+
+Add captions to images by including a `title` attribute. Images with titles are automatically wrapped in a `<figure>` element with a `<figcaption>`:
+
+```markdown
+![Alt text](./image.png "This is the caption text")
+```
+
+The title text will appear as a caption below the image.
+
+### External Links
+
+External links are automatically enhanced with:
+- `target="_blank"` attribute
+- `rel="noreferrer noopener"` for security
+- External link icon (🔗) indicator
+
+No special syntax needed - just use regular markdown links. The plugin automatically detects external links based on the URL.
+
+```markdown
+[External Link](https://example.com)  <!-- Automatically gets target="_blank" and icon -->
+[Internal Link](/about/)              <!-- No special handling -->
+```
+
+### Heading Hash Symbols
+
+Headings automatically display hash symbols based on their level:
+- `# Heading 1` → `# Heading 1`
+- `## Heading 2` → `## Heading 2`
+- `### Heading 3` → `### Heading 3`
+
+This happens automatically - no special syntax required.
+
+### Horizontal Rules
+
+Horizontal rules (`---`) are automatically styled as dashed lines:
+
+```markdown
+---
+```
+
+### Custom List Markers
+
+Lists automatically get custom markers:
+- Unordered lists: `> ` prefix
+- Ordered lists: `1> `, `2> `, etc. prefix
+
+```markdown
+- Item 1
+- Item 2
+
+1. First item
+2. Second item
+```
+
+### Reading Time
+
+Reading time is automatically calculated and displayed for all blog posts. This is handled automatically based on word count.
+
 ## 🎨 Customization
 
 ### Site Configuration
