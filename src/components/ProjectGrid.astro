@@ -1,0 +1,77 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  label: string;
+  items: CollectionEntry<"projects">[];
+  /** Offset for the staggered entrance, so sections reveal in sequence. */
+  baseDelay?: number;
+  /** Render names in mono — for libraries, whose names are code identifiers. */
+  mono?: boolean;
+}
+
+const { label, items, baseDelay = 0, mono = false } = Astro.props;
+const id = `section-${label.toLowerCase()}`;
+---
+
+{
+  items.length > 0 && (
+    <section aria-labelledby={id}>
+      {/* Label and count sit on the section divider line, interrupting it. */}
+      <h2
+        id={id}
+        class="absolute top-0 left-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs font-medium tracking-[0.25em] uppercase text-secondary"
+        data-reveal
+        style={`--i: ${baseDelay}`}
+      >
+        {label}
+      </h2>
+      <span
+        class="absolute top-0 right-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs text-secondary"
+        aria-hidden="true"
+        data-reveal
+        style={`--i: ${baseDelay}`}
+      >
+        {String(items.length).padStart(2, "0")}
+      </span>
+
+      <ul
+        class="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-x-4 gap-y-7"
+        role="list"
+      >
+        {items.map((project, i) => (
+          <li data-reveal style={`--i: ${baseDelay + i + 1}`}>
+            <a
+              href={project.data.url}
+              target="_blank"
+              rel="noopener"
+              class="group block rounded-box"
+              data-description={project.data.description}
+            >
+              <span class="block aspect-square overflow-hidden rounded-box border border-base-300 bg-base-200 transition duration-300 group-hover:border-secondary group-hover:shadow-[0_0_28px_oklch(88%_0.006_285/0.16)]">
+                <Image
+                  src={project.data.icon}
+                  alt=""
+                  width="256"
+                  height="256"
+                  class="size-full object-cover saturate-25 transition duration-300 ease-out group-hover:saturate-100"
+                />
+              </span>
+              <span
+                class:list={[
+                  "mt-2.5 line-clamp-2 text-center break-words text-secondary transition-colors duration-200 group-hover:text-base-content",
+                  mono ? "font-mono text-xs" : "text-sm",
+                ]}
+                title={project.data.name}
+              >
+                {project.data.name}
+              </span>
+              <span class="sr-only">{project.data.description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

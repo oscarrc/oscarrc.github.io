@@ -1,273 +1,124 @@
 @import "tailwindcss";
-
 @plugin "@tailwindcss/typography";
-@plugin "daisyui";
 
+@plugin "daisyui" {
+  themes: false;
+}
+
+/*
+ * "carbide" — the only theme. Dark, monochrome, tinted toward
+ * a cool violet-blue (hue 285, chroma ≤ 0.012). Hierarchy comes
+ * from lightness steps, not hue.
+ */
 @plugin "daisyui/theme" {
-  name: "catpuccin-mocha";
+  name: "carbide";
   default: true;
   prefersdark: true;
   color-scheme: dark;
-  --radius-selector: 0.25rem;
+
+  --color-base-100: oklch(15% 0.008 285);
+  --color-base-200: oklch(18.5% 0.01 285);
+  --color-base-300: oklch(26% 0.012 285);
+  --color-base-content: oklch(88% 0.006 285);
+
+  /* the "accent" is brightness: off-white on near-black */
+  --color-primary: oklch(94% 0.004 285);
+  --color-primary-content: oklch(17% 0.008 285);
+  --color-secondary: oklch(63% 0.01 285);
+  --color-secondary-content: oklch(15% 0.008 285);
+  --color-accent: oklch(94% 0.004 285);
+  --color-accent-content: oklch(17% 0.008 285);
+  --color-neutral: oklch(22% 0.01 285);
+  --color-neutral-content: oklch(88% 0.006 285);
+
+  --color-info: oklch(74% 0.09 230);
+  --color-info-content: oklch(16% 0.02 230);
+  --color-success: oklch(76% 0.11 155);
+  --color-success-content: oklch(16% 0.02 155);
+  --color-warning: oklch(82% 0.11 85);
+  --color-warning-content: oklch(18% 0.03 85);
+  --color-error: oklch(66% 0.15 25);
+  --color-error-content: oklch(96% 0.01 25);
+
+  --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
-  --radius-box: 0.5rem;
-  --size-field: 0.25rem;
+  --radius-box: 0.75rem;
   --size-selector: 0.25rem;
-  --border: 1px;
-  --depth: 1;
-  --noise: 0;
-  --color-primary: #b4befe;
-  --color-primary-content: #181825;
-  --color-secondary: #313244;
-  --color-secondary-content: #cdd6f4;
-  --color-accent: #f5e0dc;
-  --color-accent-content: #181825;
-  --color-neutral: #7f849c;
-  --color-neutral-content: #181825;
-  --color-success: #a6e3a1;
-  --color-success-content: #1e1e2e;
-  --color-warning: #f9e2af;
-  --color-warning-content: #1e1e2e;
-  --color-error: #f38ba8;
-  --color-error-content: #1e1e2e;
-  --color-info: #89dceb;
-  --color-info-content: #181825;
-  --color-base-100: #1e1e2e;
-  --color-base-200: #181825;
-  --color-base-300: #11111b;
-  --color-base-content: #cdd6f4;
-}
-
-/* @plugin "daisyui/theme" {
-  name: "catpuccin-latte";
-  default: false;
-  prefersdark: false;
-  color-scheme: light;
-  --radius-selector: 0.25rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.5rem;
   --size-field: 0.25rem;
-  --size-selector: 0.25rem;
   --border: 1px;
-  --depth: 1;
+  --depth: 0;
   --noise: 0;
-  --color-primary: #7287fd;
-  --color-primary-content: #e6e9ef;
-  --color-secondary: #ccd0da;
-  --color-secondary-content: #4c4f69;
-  --color-accent: #dc8a78;
-  --color-accent-content: #e6e9ef;
-  --color-neutral: #8c8fa1;
-  --color-neutral-content: #e6e9ef;
-  --color-success: #40a02b;
-  --color-success-content: #eff1f5;
-  --color-warning: #df8e1d;
-  --color-warning-content: #eff1f5;
-  --color-error: #d20f39;
-  --color-error-content: #eff1f5;
-  --color-info: #04a5e5;
-  --color-info-content: #e6e9ef;
-  --color-base-100: #eff1f5;
-  --color-base-200: #e6e9ef;
-  --color-base-300: #dce0e8;
-  --color-base-content: #4c4f69;
-} */
-
-@theme {
-  --font-nerd: "0xProtoMono", sans-serif;
-  --animate-typing: typing 1s steps(40, end), caret 500ms step-end infinite;
 }
 
-@layer typography {  
-  .prose h1 {
-    font-size: 1.75rem; /* text-2xl */
-    color: var(--color-primary);
-  }
-  
-  .prose h2 {
-    font-size: 1.5rem;
-  }  
-
-  .prose figure {
-    text-align: center;
-  }
-
-  .prose img {
-    border: 2px solid var(--color-base-content);
-    border-radius: var(--radius-lg);
-    margin: 0 auto;
-  }
+@theme inline {
+  --font-sans: var(--font-hubot);
+  --font-mono: var(--font-commit-mono);
 }
 
-@keyframes typing {
-  from { 
-    width: 0;
-  }
-  to { 
-    width: 100%;
-  }
+::selection {
+  background: oklch(88% 0.006 285);
+  color: oklch(15% 0.008 285);
 }
 
-@keyframes caret {
-  from, to { 
-    border-color: transparent;
-  }
-  50% { 
-    border-color: var(--color-neutral);
+:focus-visible {
+  outline: 2px solid var(--color-base-content);
+  outline-offset: 3px;
+}
+
+/*
+ * Structural texture — the Vercel-home grammar: a framed column,
+ * a faint blueprint grid behind the hero, plus-marks at intersections.
+ */
+/* Page-wide gutter grid — quieter than the hero's, sits behind the solid column. */
+.bg-blueprint-page {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-base-300) 30%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-base-300) 30%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+}
+
+.bg-blueprint {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-base-300) 50%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-base-300) 50%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(140% 140% at 25% 0%, black 0%, transparent 78%);
+  mask-image: radial-gradient(140% 140% at 25% 0%, black 0%, transparent 78%);
+}
+
+/* Orchestrated entrance: one staggered reveal on load, nothing else. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
   }
 }
 
-@custom-variant hover (&:hover);
-
-@layer base {
-  html {
-    @apply font-nerd;
-    scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    animation: reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation-delay: calc(var(--i, 0) * 55ms);
   }
 }
 
-/* 0xProtoNerdFont Regular */
-@font-face {
-  font-family: "0xProto";
-  src: url("/fonts/0xProtoNerdFont-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "0xProto";
-  src: url("/fonts/0xProtoNerdFont-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "0xProto";
-  src: url("/fonts/0xProtoNerdFont-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* 0xProtoNerdFontMono */
-@font-face {
-  font-family: "0xProtoMono";
-  src: url("/fonts/0xProtoNerdFontMono-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "0xProtoMono";
-  src: url("/fonts/0xProtoNerdFontMono-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "0xProtoMono";
-  src: url("/fonts/0xProtoNerdFontMono-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* 0xProtoNerdFontPropo */
-@font-face {
-  font-family: "0xProtoPropo";
-  src: url("/fonts/0xProtoNerdFontPropo-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "0xProtoPropo";
-  src: url("/fonts/0xProtoNerdFontPropo-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "0xProtoPropo";
-  src: url("/fonts/0xProtoNerdFontPropo-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@layer utilities {  
-  .btn-sm{
-    font-weight: normal;
-    --size: calc(var(--size-field, 0.25rem) * 6);
-  }
-}
-
-@layer components {
-  .path li:before {
-    content: "/";
-  }
-  
-  .hr-dashes {
-    display: block;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: clip;
-  }
-
-  /* Hide default list markers and style custom ones */
-  .prose ul {
-    list-style: none !important;
-    padding-left: 1.5rem;
-  }
-  
-  .prose ul li {
-    position: relative;
-    list-style: none !important;
-  }
-  
-  .prose ol {
-    list-style: none !important;
-    padding-left: 0;
-    counter-reset: list-counter;
-  }
-  
-  .prose ol li {
-    position: relative;
-    list-style: none !important;
-    counter-increment: list-counter;
-  }
-
-  .prose li > * {
-    display: inline;
-  }
-  
-  .prose li::marker {
-    content: none !important;
-  }
-  
-  .prose .list-marker {
-    top: 0;
-    position: relative;
-    color: var(--color-primary);
-  }   
-
-  .expressive-code .frame pre {
-    border: 1px solid var(--color-base-300) !important;
-    background: var(--color-base-200) !important;
-  }
-
-  /* Pagefind search result highlighting */
-  #search-results mark {
-    background-color: var(--color-base-content);
-    color: var(--color-base-300);
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.125rem;
-    font-weight: 600;
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    animation: none;
   }
 }

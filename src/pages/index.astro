@@ -1,53 +1,183 @@
 ---
-import AboutCard from "@/components/AboutCard.astro";
-import GithubCalendar from "@/components/GithubCalendar.astro";
-import SkillsSection from "@/components/SkillsSection.astro";
-import config from "@/site.config";
-import Layout from "@/layouts/Layout.astro";
-import { getCollection, render } from "astro:content";
-import Section from "@/components/Section.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
-import PostCard from "@/components/PostCard.astro";
-import SectionButton from "@/components/SectionButton.astro";
-import { projects as allProjects, posts as allPosts } from "@/utils/collections";
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import ProjectGrid from "../components/ProjectGrid.astro";
+import PlusMark from "../components/PlusMark.astro";
+import Footer from "../components/Footer.astro";
+import CursorBubble from "../components/CursorBubble.astro";
 
-const home = await getCollection("home");
-const projects = allProjects.slice(0, 3);
-const posts = allPosts.slice(0, 3);
+const projects = await getCollection("projects");
+const byOrder = (a: (typeof projects)[number], b: (typeof projects)[number]) =>
+  a.data.order - b.data.order;
 
-const github = config.github;
+const apps = projects.filter((p) => p.data.type === "app").sort(byOrder);
+const libraries = projects
+  .filter((p) => p.data.type === "library")
+  .sort(byOrder);
 
-let AboutContent;
-let aboutAvatar;
-let aboutTitle;
-
-if (home.length > 0) {
-  const homeEntry = home[0];
-  const { Content } = await render(homeEntry);
-  AboutContent = Content;
-  aboutTitle = homeEntry.data.title;
-  aboutAvatar = homeEntry.data.avatar;
-}
+const edge = "border-base-300/60";
 ---
 
 <Layout>
-  <Section class="flex flex-col gap-16">
-    <AboutCard title={aboutTitle} avatar={aboutAvatar}>
-      {AboutContent && <AboutContent />}
-    </AboutCard>
-  </Section>
-  <Section>
-    <SkillsSection />
-  </Section>
-  <Section title="Personal Projects" class="flex flex-col gap-8">
-    {projects.map((project) => <ProjectCard project={project} />)}
-    <SectionButton href="/projects">View all projects</SectionButton>
-  </Section>
-  <Section>
-    {github && <GithubCalendar username={github} year={2025} />}
-  </Section>
-  <Section title="Latest Posts" class="flex flex-col gap-8">
-    {posts.map((post) => <PostCard post={post} />)}
-    <SectionButton href="/blog">Read the blog</SectionButton>
-  </Section>
+  {/* first in DOM so every positioned column paints above it */}
+  <div
+    class="bg-blueprint-page pointer-events-none fixed inset-0"
+    aria-hidden="true"
+  >
+    {
+      /* a single light pulse that travels along the grid lines, driven by the script below */
+    }
+    <div
+      id="grid-pulse"
+      class="absolute top-0 left-0 opacity-0 will-change-transform"
+    >
+    </div>
+  </div>
+
+  <div class="flex min-h-dvh flex-col">
+    {/* Hero — framed column over a fading blueprint grid */}
+    <section class:list={["border-b", edge]}>
+      <div
+        class:list={[
+          "relative mx-auto w-full max-w-3xl border-x bg-base-100",
+          edge,
+        ]}
+      >
+        <div class="bg-blueprint absolute inset-0" aria-hidden="true"></div>
+        <PlusMark class="-bottom-[5.5px] -left-[6px]" />
+        <PlusMark class="-right-[6px] -bottom-[5.5px]" />
+        <header
+          class="relative px-6 pt-28 pb-20 sm:pt-36 sm:pb-24"
+          data-reveal
+          style="--i: 0"
+        >
+          <h1
+            class="text-[clamp(2.75rem,1.8rem+4vw,4.25rem)] leading-[0.98] font-extrabold tracking-[-0.02em]"
+          >
+            OSCAR RC
+          </h1>
+          <p class="mt-5 text-lg leading-relaxed text-secondary">
+            Web developer &amp; software architect
+          </p>
+        </header>
+      </div>
+    </section>
+
+    <section class:list={["border-b", edge]}>
+      <div
+        class:list={[
+          "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
+          edge,
+        ]}
+      >
+        <PlusMark class="-bottom-[5.5px] -left-[6px]" />
+        <PlusMark class="-right-[6px] -bottom-[5.5px]" />
+        <ProjectGrid label="Apps" items={apps} baseDelay={1} mono />
+      </div>
+    </section>
+
+    {/* flex (not h-full) so the framed column stretches to meet the footer */}
+    <section class="flex flex-1">
+      <div
+        class:list={[
+          "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
+          edge,
+        ]}
+      >
+        <ProjectGrid
+          label="Libraries"
+          items={libraries}
+          baseDelay={apps.length + 2}
+          mono
+        />
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+
+  <CursorBubble />
 </Layout>
+
+<script>
+  /*
+   * Grid pulse — one dot of light with a tail travelling along a random
+   * blueprint-grid line. transform-only (composited), one at a time,
+   * silent under prefers-reduced-motion or when the tab is hidden.
+   */
+  const pulse = document.getElementById("grid-pulse");
+  const CELL = 56; // must match .bg-blueprint-page background-size
+  const SPEED = 640; // px/s — constant speed regardless of span
+  const TAIL = 96;
+  const COLUMN = 768; // max-w-3xl, the solid center column
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+
+  const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+  function verticalCandidates(w: number): number[] {
+    // only grid lines in the gutters — center ones are hidden behind the column
+    const left = (w - Math.min(w, COLUMN)) / 2;
+    const right = w - left;
+    const xs = [];
+    for (let x = CELL; x < w; x += CELL) if (x < left || x > right) xs.push(x);
+    return xs;
+  }
+
+  async function run() {
+    if (!pulse || reduced.matches) return;
+    if (document.hidden) return schedule();
+
+    const w = innerWidth;
+    const h = innerHeight;
+    const verticals = verticalCandidates(w);
+    if (w - Math.min(w, COLUMN) < CELL * 2) return schedule(); // gutters too thin to see anything
+
+    const horizontal = verticals.length === 0 || Math.random() < 0.5;
+    const line = horizontal
+      ? Math.floor(rand(1, Math.floor(h / CELL))) * CELL
+      : verticals[Math.floor(Math.random() * verticals.length)];
+    const forward = Math.random() < 0.5;
+    const span = horizontal ? w : h;
+
+    // tail fades out behind the direction of travel; head is the bright tip
+    const dir = horizontal
+      ? forward
+        ? "right"
+        : "left"
+      : forward
+        ? "bottom"
+        : "top";
+    pulse.style.width = horizontal ? `${TAIL}px` : "1px";
+    pulse.style.height = horizontal ? "1px" : `${TAIL}px`;
+    pulse.style.background = `linear-gradient(to ${dir}, transparent, oklch(88% 0.006 285 / 0.5) 75%, oklch(96% 0.004 285 / 0.95))`;
+    pulse.style.opacity = "1";
+
+    const at = (p: number) =>
+      horizontal
+        ? `translate3d(${p}px, ${line}px, 0)`
+        : `translate3d(${line}px, ${p}px, 0)`;
+    const from = forward ? -TAIL : span;
+    const to = forward ? span : -TAIL;
+    const duration = ((span + TAIL) / SPEED) * 1000;
+
+    try {
+      await pulse.animate([{ transform: at(from) }, { transform: at(to) }], {
+        duration,
+        easing: "linear",
+      }).finished;
+    } catch {
+      /* animation cancelled — fall through to reschedule */
+    }
+    pulse.style.opacity = "0";
+    schedule();
+  }
+
+  function schedule() {
+    setTimeout(run, rand(600, 2000));
+  }
+
+  reduced.addEventListener("change", () => {
+    if (!reduced.matches) schedule();
+  });
+  if (!reduced.matches) schedule();
+</script>

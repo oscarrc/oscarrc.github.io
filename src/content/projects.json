@@ -1,0 +1,47 @@
+[
+  {
+    "id": "imagemonster",
+    "name": "ImageMonster",
+    "description": "AI powered background removal, right in the browser.",
+    "type": "app",
+    "url": "https://imagemonster.oscarrc.me",
+    "icon": "../assets/logos/imagemonster.png",
+    "order": 1
+  },
+  {
+    "id": "gbcam",
+    "name": "GBcam",
+    "description": "A Lo-Fi camera for nostalgic 90s kids. Pixelated photos in limited shades of green.",
+    "type": "app",
+    "url": "https://gbcam.oscarrc.me",
+    "icon": "../assets/logos/gbcam.png",
+    "order": 2
+  },
+  {
+    "id": "tactylophone",
+    "name": "Tactylophone",
+    "description": "The synthesizer you play with your fingertips.",
+    "type": "app",
+    "url": "https://tactylophone.oscarrc.me",
+    "icon": "../assets/logos/tactylophone.png",
+    "order": 3
+  },
+  {
+    "id": "nts-web",
+    "name": "NTSweb",
+    "description": "A web editor and sequencer for the Korg NTS-1.",
+    "type": "app",
+    "url": "https://nts-web.oscarrc.me",
+    "icon": "../assets/logos/nts-web.png",
+    "order": 4
+  },
+  {
+    "id": "crust",
+    "name": "Crust",
+    "description": "Don't throw the crust. A crisp toast library for Astro and React.",
+    "type": "library",
+    "url": "https://crust.oscarrc.me",
+    "icon": "../assets/logos/crust.png",
+    "order": 1
+  }
+]

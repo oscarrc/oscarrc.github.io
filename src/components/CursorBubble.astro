@@ -1,0 +1,240 @@
+---
+/**
+ * A small dot of light that trails behind the cursor (offset to its lower
+ * right, like a companion). Over any element with [data-description] the dot
+ * itself MORPHS into the description card — width/height/color transition on
+ * one pointer-events-none element, so nothing in the document reflows.
+ *
+ * The open card parks just OUTSIDE the hovered element's nearest edge and
+ * slides along it following the cursor — it never covers the icon. The
+ * destination size is measured up front (.measure) so text never rewraps
+ * mid-morph. Pointer-fine devices only; instant under reduced motion.
+ */
+---
+
+<div id="cursor-bubble" class="bubble" aria-hidden="true">
+  <span class="blob"><span class="blob-text"></span></span>
+  <span class="measure"></span>
+</div>
+
+<style>
+  .bubble {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+    will-change: transform;
+  }
+
+  .bubble.is-visible {
+    opacity: 1;
+  }
+
+  /* the dot — and, once open, the card. One element, one morph. */
+  .blob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: var(--radius-box);
+    background: oklch(88% 0.006 285 / 0.6);
+    /* --sx/--sy are lerped by the script: dot offset at rest, card anchor when open */
+    transform: translate(calc(-50% + var(--sx, 22px)), calc(-50% + var(--sy, 22px)));
+    transition:
+      width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.3s ease-out,
+      border-color 0.3s ease-out;
+  }
+
+  .bubble.is-open .blob {
+    width: var(--w, 200px);
+    height: var(--h, 56px);
+    border-color: var(--color-base-300);
+    background: var(--color-base-200);
+  }
+
+  .blob-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--tw, auto);
+    transform: translate(-50%, -50%);
+    color: var(--color-base-content);
+    opacity: 0;
+    transition: opacity 0.12s ease-out;
+  }
+
+  .bubble.is-open .blob-text {
+    opacity: 1;
+    /* let the container take shape before the words arrive */
+    transition: opacity 0.25s ease-out 0.12s;
+  }
+
+  /* hidden twin used to measure the card's destination size */
+  .measure,
+  .blob-text {
+    display: block;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+  }
+
+  .measure {
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: max-content;
+    max-width: 13.5rem;
+    visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bubble,
+    .blob,
+    .blob-text {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.getElementById('cursor-bubble');
+  const blob = root?.querySelector<HTMLElement>('.blob');
+  const text = root?.querySelector<HTMLElement>('.blob-text');
+  const measure = root?.querySelector<HTMLElement>('.measure');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (root && blob && text && measure && fine.matches) {
+    const OFFSET = 22; // rest dot trails at the pointer's lower right
+    const PAD_X = 28; // card padding + border, both sides
+    const PAD_Y = 22;
+    const GAP = 12; // breathing room between card and the hovered element
+    const MARGIN = 10; // minimum gap to the viewport edge
+
+    let mx = 0;
+    let my = 0;
+    let x = 0;
+    let y = 0;
+    let sx = OFFSET; // blob offset from the wrapper, lerped toward its target
+    let sy = OFFSET;
+    let w = 0;
+    let h = 0;
+    let raf = 0;
+    let shown = false;
+    let open = false;
+    let side: 'top' | 'bottom' | 'left' | 'right' = 'bottom';
+    let rect: DOMRect | null = null;
+
+    const clampX = (v: number) => Math.min(Math.max(v, MARGIN + w / 2), innerWidth - MARGIN - w / 2);
+    const clampY = (v: number) =>
+      Math.min(Math.max(v, MARGIN + h / 2), innerHeight - MARGIN - h / 2);
+
+    /* where the blob wants to be, relative to the wrapper (which rides the cursor) */
+    const target = (): [number, number] => {
+      if (!open || !rect) return [OFFSET, OFFSET];
+      // park outside the chosen edge; the free axis follows the cursor
+      if (side === 'bottom') return [clampX(x) - x, rect.bottom + GAP + h / 2 - y];
+      if (side === 'top') return [clampX(x) - x, rect.top - GAP - h / 2 - y];
+      if (side === 'right') return [rect.right + GAP + w / 2 - x, clampY(y) - y];
+      return [rect.left - GAP - w / 2 - x, clampY(y) - y];
+    };
+
+    const tick = () => {
+      const k = reduced.matches ? 1 : 0.16;
+      x += (mx - x) * k;
+      y += (my - y) * k;
+      const [tx, ty] = target();
+      sx += (tx - sx) * (reduced.matches ? 1 : 0.2);
+      sy += (ty - sy) * (reduced.matches ? 1 : 0.2);
+      root.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      blob.style.setProperty('--sx', `${sx}px`);
+      blob.style.setProperty('--sy', `${sy}px`);
+      if (Math.abs(mx - x) + Math.abs(my - y) + Math.abs(tx - sx) + Math.abs(ty - sy) > 0.3) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        raf = 0;
+      }
+    };
+
+    const wake = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    addEventListener(
+      'mousemove',
+      (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        if (!shown) {
+          // first sighting: appear in place instead of flying in from 0,0
+          x = mx;
+          y = my;
+          shown = true;
+          root.classList.add('is-visible');
+        }
+        wake();
+      },
+      { passive: true }
+    );
+
+    document.addEventListener('mouseover', (e) => {
+      const el = e.target instanceof Element && e.target.closest('[data-description]');
+      if (!el) return;
+      const desc = el.getAttribute('data-description') ?? '';
+      measure.textContent = desc;
+      text.textContent = desc;
+      w = measure.offsetWidth + PAD_X;
+      h = measure.offsetHeight + PAD_Y;
+      root.style.setProperty('--w', `${w}px`);
+      root.style.setProperty('--h', `${h}px`);
+      root.style.setProperty('--tw', `${measure.offsetWidth}px`);
+
+      // pick the exit edge nearest to where the cursor entered, preferring
+      // sides where the card actually fits inside the viewport
+      rect = el.getBoundingClientRect();
+      const fits = {
+        top: rect.top - GAP - h >= MARGIN,
+        bottom: rect.bottom + GAP + h <= innerHeight - MARGIN,
+        left: rect.left - GAP - w >= MARGIN,
+        right: rect.right + GAP + w <= innerWidth - MARGIN
+      };
+      const byEntry: Array<[typeof side, number]> = [
+        ['left', e.clientX - rect.left],
+        ['right', rect.right - e.clientX],
+        ['top', e.clientY - rect.top],
+        ['bottom', rect.bottom - e.clientY]
+      ];
+      byEntry.sort((a, b) => a[1] - b[1]);
+      side = byEntry.find(([s]) => fits[s])?.[0] ?? 'bottom';
+
+      open = true;
+      root.classList.add('is-open');
+      wake();
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const el = e.target instanceof Element && e.target.closest('[data-description]');
+      const next = e.relatedTarget instanceof Element ? e.relatedTarget : null;
+      if (el && !(next && el.contains(next))) {
+        open = false;
+        rect = null;
+        root.classList.remove('is-open');
+        wake();
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      root.classList.remove('is-visible', 'is-open');
+      shown = false;
+      open = false;
+      rect = null;
+    });
+  }
+</script>

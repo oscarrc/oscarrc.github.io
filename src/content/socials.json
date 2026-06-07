@@ -1,0 +1,6 @@
+[
+  { "name": "GitHub", "url": "https://github.com/oscarrc", "icon": "github.svg" },
+  { "name": "LinkedIn", "url": "https://www.linkedin.com/in/oscarrc", "icon": "linkedin.svg" },
+  { "name": "Instagram", "url": "https://www.instagram.com/oscarrc", "icon": "instagram.svg" },
+  { "name": "Ko-fi", "url": "https://ko-fi.com/oscarrc", "icon": "kofi.svg" }
+]

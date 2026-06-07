@@ -1,102 +1,32 @@
 ---
-import { ClientRouter } from "astro:transitions";
-import Footer from "@/components/Footer.astro";
-import Navbar from "@/components/Navbar.astro";
-import siteConfig from "@/site.config";
-
-import "@/styles/global.css";
-import Breadcrumbs from "@/components/Breadcrumbs.astro";
-import ShortcutsDialog from "@/components/ShortcutsDialog.astro";
-import SearchDialog from "@/components/SearchDialog.astro";
-import ChatDialog from "@/components/ChatDialog.astro";
+import { Font } from 'astro:assets';
+import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
-  breadcrumbs?: boolean;
-  collapse?: {
-    right?: "first" | "last" | "none";
-    left?: "first" | "last" | "none";
-  };
 }
 
 const {
-  title = siteConfig.title,
-  description = siteConfig.description,
-  breadcrumbs = true,
-  collapse = {
-    right: "last",
-    left: "first",
-  },
+  title = 'Oscar R.C. — Web Developer & Software Architect',
+  description = 'Apps and open-source libraries by Oscar R.C., web developer and software architect.'
 } = Astro.props;
-
-const { name } = siteConfig;
 ---
 
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="carbide">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={`${siteConfig.name} | ${siteConfig.title} RSS Feed`}
-      href={new URL("rss.xml", Astro.site)}
-    />
-    <meta name="viewport" content="width=device-width" />
-    <title>{name} | {title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <ClientRouter />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <Font cssVariable="--font-hubot" preload />
+    <Font cssVariable="--font-commit-mono" preload />
+    <title>{title}</title>
   </head>
-  <body>
-    <div class="min-h-screen flex flex-col gap-8">
-      <header class="container max-w-4xl mx-auto p-4 space-y-8">
-        <Navbar />
-        {breadcrumbs ? <Breadcrumbs /> : null}
-      </header>
-
-      <slot name="top" />
-
-      <div class="w-full flex flex-1">
-        <div
-          class="flex-1 grid 2xl:grid-cols-[minmax(0,1fr)_minmax(0,_min(56rem,100%))_minmax(0,1fr)] gap-8"
-        >
-          <aside
-            data-pagefind-ignore
-            class:list={[
-              "w-full min-w-0",
-              { "order-last 2xl:order-first": collapse.left === "last" },
-            ]}
-          >
-            <slot name="left" />
-          </aside>
-
-          <div
-            class="min-w-0 container max-w-4xl mx-auto w-full flex flex-col gap-8 p-4 flex-1"
-          >
-            <main class="flex flex-col flex-1 gap-16">
-              <slot />
-            </main>
-          </div>
-
-          <aside
-            data-pagefind-ignore
-            class:list={[
-              "w-full min-w-0",
-              { "order-first 2xl:order-last": collapse.right === "first" },
-            ]}
-          >
-            <slot name="right" />
-          </aside>
-        </div>
-      </div>
-
-      <footer class="container max-w-4xl mx-auto p-4">
-        <Footer />
-      </footer>
-    </div>
-    <SearchDialog />
-    <!-- <ChatDialog /> -->
-    <ShortcutsDialog />
+  <body class="min-h-dvh bg-base-100 font-sans text-base-content antialiased">
+    <slot />
   </body>
 </html>

@@ -1,83 +1,40 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from 'astro:content';
+import { file } from 'astro/loaders';
+import { z } from 'astro/zod';
 
-import config from "@/site.config";
-import { glob } from "astro/loaders";
-
-const homeCollection = defineCollection({
-  loader: glob({ pattern: ['*.md', '*.mdx'], base: './src/content/home' }),
+const projects = defineCollection({
+  loader: file('./src/content/projects.json'),
   schema: ({ image }) =>
     z.object({
-      title: z.string().default(config.description),
-      avatar: z
-        .object({
-          src: image(),
-          alt: z.string().optional().default(config.name),
-        })
-        .optional(),
-      github: z.string().optional(),
-    }),
+      name: z.string(),
+      description: z.string(),
+      type: z.enum(['app', 'library']),
+      url: z.url(),
+      icon: image(),
+      order: z.number().default(0)
+    })
 });
 
-const skillsCollection = defineCollection({
-  loader: glob({ pattern: ['*.json'], base: './src/content/skills' }),
-  schema: z.object({
-    skills: z.array(z.object({
-      skill: z.string(),
-      level: z.number().min(1).max(10),
-      category: z.string(),
-    })),
+// Footer socials. The file() loader needs a unique `id` per entry, but the
+// data we want to author is just name/url/icon — so derive `id` from `name`
+// in the parser. getCollection() sorts by `id`, so also stamp `order` from
+// the array index to keep the authored JSON order as the source of truth.
+const socials = defineCollection({
+  loader: file('./src/content/socials.json', {
+    parser: (text) =>
+      JSON.parse(text).map((social: Record<string, unknown>, order: number) => ({
+        id: social.name,
+        order,
+        ...social
+      }))
   }),
+  schema: z.object({
+    name: z.string(),
+    url: z.url(),
+    // SVG filename in src/assets/icons/social, resolved to a component at render time.
+    icon: z.string(),
+    order: z.number()
+  })
 });
 
-const projectsCollection = defineCollection({
-  loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: './src/content/projects' }),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      published: z.coerce.date(),
-      updated: z.coerce.date().optional(),
-      draft: z.boolean().optional().default(false),
-      description: z.string().optional(),
-      author: z.string().optional(),
-      tags: z.array(z.string()).optional().default([]),
-      slug: z.string().optional(),
-      cover: z
-        .strictObject({
-          src: image(),
-          alt: z.string(),
-        })
-        .optional(),
-      repo: z.string().optional(),
-      url: z.string().url().optional(),
-      active: z.boolean().optional().default(true),
-    }),
-})
-
-const postsCollection = defineCollection({
-  loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: './src/content/posts' }),
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      published: z.coerce.date(),
-      updated: z.coerce.date().optional(),
-      draft: z.boolean().optional().default(false),
-      description: z.string().optional(),
-      author: z.string().optional(),
-      series: z.string().optional(),
-      tags: z.array(z.string()).optional().default([]),
-      slug: z.string().optional(),
-      cover: z
-        .strictObject({
-          src: image(),
-          alt: z.string(),
-        })
-        .optional(),
-    }),
-})
-
-export const collections = {
-  home: homeCollection,
-  skills: skillsCollection,
-  projects: projectsCollection,
-  posts: postsCollection,
-};
+export const collections = { projects, socials };

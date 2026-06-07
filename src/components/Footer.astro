@@ -1,27 +1,67 @@
 ---
-import config from "@/site.config";
-import Icon from "./Icon.astro";
+import { getCollection } from "astro:content";
+import PlusMark from "./PlusMark.astro";
+import GitHub from "../assets/icons/social/github.svg";
 
-const { name, socials } = config;
+const year = new Date().getFullYear();
+
+const socials = (await getCollection("socials")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+// Resolve each social's `icon` filename to its imported SVG component.
+// `typeof GitHub` is the imported-SVG component type, so the resolved
+// values type-check as renderable components.
+const socialIcons = import.meta.glob<{ default: typeof GitHub }>(
+  "../assets/icons/social/*.svg",
+  { eager: true },
+);
 ---
 
-<div class="footer footer-horizontal footer-center text-base-content rounded gap-8">
-  <nav>
-    <div class="grid grid-flow-col gap-8">
-      {
-        Object.entries(socials).map(([key, url]) => (
-          <a href={url} target="_blank" rel="noopener noreferrer" name={`${key} ${name}`}>
-            <Icon name={key as any} class="text-4xl" />
-          </a>
-        ))
-      }
-    </div>
-  </nav>
-  <aside>
-    <p>
-      {name} © {new Date().getFullYear()} :: Last updated on {
-        new Date().toLocaleDateString()
-      } :: <a href="/rss.xml" aria-label="RSS Feed">RSS Feed</a>
+<footer class="border-t border-base-300/60" data-reveal style="--i: 12">
+  <div
+    class="relative mx-auto grid w-full max-w-3xl items-center gap-3 border-x border-base-300/60 bg-base-100 px-6 py-5 text-center sm:grid-cols-3 sm:text-left"
+  >
+    <PlusMark class="-top-[5.5px] -left-[6px]" />
+    <PlusMark class="-top-[5.5px] -right-[6px]" />
+    <p class="font-mono text-xs text-secondary">&copy; {year} Oscar R.C.</p>
+
+    <p class="text-xs text-secondary sm:text-center">
+      Made with
+      <svg
+        class="inline-block size-3 align-[-1px] text-error"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 21s-7.5-4.7-10-9.3C.4 8.6 2.2 5 5.7 5c2 0 3.4 1 4.3 2.4l2 .1 2-.1C14.9 6 16.3 5 18.3 5c3.5 0 5.3 3.6 3.7 6.7C19.5 16.3 12 21 12 21Z"
+        ></path>
+      </svg>
+      <span class="sr-only">love</span>
+      Oscar R.C.
     </p>
-  </aside>
-</div>
+
+    <nav
+      aria-label="Social links"
+      class="flex justify-center gap-1 sm:justify-end"
+    >
+      {
+        socials.map((social) => {
+          const Icon =
+            socialIcons[`../assets/icons/social/${social.data.icon}`]?.default;
+          return (
+            <a
+              href={social.data.url}
+              target="_blank"
+              rel="noopener"
+              aria-label={`Oscar R.C. on ${social.data.name}`}
+              class="btn btn-square btn-ghost text-base-content/65 transition-colors hover:text-base-content"
+            >
+              {Icon && <Icon class="size-[1.15rem]" />}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
+</footer>

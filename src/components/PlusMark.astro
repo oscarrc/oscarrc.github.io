@@ -1,0 +1,17 @@
+---
+/** A small "+" placed at hairline intersections, à la vercel.com/home. */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<svg
+  class:list={['pointer-events-none absolute z-10 size-[11px] text-base-content/35', className]}
+  viewBox="0 0 11 11"
+  fill="none"
+  aria-hidden="true"
+>
+  <path d="M5.5 0v11M0 5.5h11" stroke="currentColor"></path>
+</svg>
