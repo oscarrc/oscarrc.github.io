@@ -1,43 +1,44 @@
-# Astro Starter Kit: Minimal
+# oscarrc.me
 
-```sh
-pnpm create astro@latest -- --template minimal
-```
+My personal site — a single-page landing built with [Astro](https://astro.build),
+[Tailwind CSS](https://tailwindcss.com) and [daisyUI](https://daisyui.com), deployed to GitHub
+Pages at [oscarrc.me](https://oscarrc.me).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```text
 /
-├── public/
+├── public/                 # static assets (favicon, …)
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── assets/             # bundled images (project logos, social icons)
+│   ├── components/         # ProjectGrid, Footer, CursorBubble, PlusMark
+│   ├── content/            # content collections (projects.json, socials.json)
+│   ├── content.config.ts   # collection schemas (projects + socials)
+│   ├── layouts/            # Layout.astro
+│   ├── pages/              # index.astro (the landing page)
+│   └── styles/             # global.css
+└── astro.config.mjs        # site config + font providers
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Content is data-driven: the project grid is generated from `src/content/projects.json` and the
+footer social links from `src/content/socials.json`, both validated by the schemas in
+`src/content.config.ts`. To add a project or social link, edit the JSON and drop the referenced
+icon into `src/assets/`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Commands
 
-Any static assets, like images, can be placed in the `public/` directory.
+This project uses **pnpm** (pinned via the `packageManager` field). Requires Node ≥ 22.13.
 
-## 🧞 Commands
+| Command          | Action                                       |
+| :--------------- | :------------------------------------------- |
+| `pnpm install`   | Install dependencies                         |
+| `pnpm dev`       | Start the dev server at `localhost:4321`     |
+| `pnpm build`     | Build the production site to `./dist/`       |
+| `pnpm preview`   | Preview the build locally before deploying   |
+| `pnpm astro ...` | Run Astro CLI commands (`astro add`, etc.)   |
 
-All commands are run from the root of the project, from a terminal:
+## Deployment
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Pushing to `master` triggers the [`Deploy to GitHub Pages`](.github/workflows/deploy.yml) workflow,
+which builds the site with `withastro/action` and publishes it to GitHub Pages. The custom domain
+`oscarrc.me` is configured in the repository's Pages settings.
