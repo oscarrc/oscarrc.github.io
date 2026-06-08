@@ -37,51 +37,55 @@ const edge = "border-base-300/60";
   <div class="flex min-h-dvh flex-col">
     {
       /*
-      The framed column over the full section stack. One continuous gradient
-      strip — solid at the bottom, transparent toward the top — replaces each
-      column's flat fill, so the page grid and travelling particle bleed through
-      around the hero. `relative` anchors the strip; `flex-1` lets the last
-      section stretch to meet the footer.
+      Each section owns its own solid column fill; only the hero carries the
+      gradient (transparent toward the top so the page grid and travelling
+      particle bleed through, solidifying as it collapses). `flex-1` lets the
+      last section stretch to meet the footer.
     */
     }
     <div class="relative flex flex-1 flex-col">
-      <div
-        class="pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto w-full max-w-3xl bg-linear-to-t from-base-100 from-75% to-transparent"
-        aria-hidden="true"
-      >
-      </div>
-
-      {/* Hero */}
-      <section class:list={["border-b", edge]}>
-        <div class:list={["relative mx-auto w-full max-w-3xl border-x", edge]}>
-          <PlusMark class="-bottom-[5.5px] -left-[6px]" />
-          <PlusMark class="-right-[6px] -bottom-[5.5px]" />
-          <header
-            class="relative px-6 pt-28 pb-20 sm:pt-36 sm:pb-24"
-            data-reveal
-            style="--i: 0"
+      {
+        /*
+        Hero — pins to the top and collapses as you scroll through the
+        `.hero-track` spacer, then releases and scrolls away (see global.css).
+        A single stacked `<header>`: the title + slogan shrink, their gap
+        tightens, and the block settles onto the divider rule. Each following
+        section owns its top divider + corner marks (so they paint above the
+        backgrounds), the way the footer does. Degrades to the static tall hero
+        without scroll-timeline support or under prefers-reduced-motion.
+      */
+      }
+      <section>
+        <div class="hero-track">
+          <div
+            class:list={[
+              "hero-col relative mx-auto w-full max-w-3xl border-x bg-linear-to-t from-base-100 from-50% to-transparent",
+              edge,
+            ]}
           >
-            <h1
-              class="text-[clamp(2.75rem,1.8rem+4vw,4.25rem)] leading-[0.98] font-extrabold tracking-[-0.02em]"
-            >
-              OSCAR RC
-            </h1>
-            <p class="mt-5 text-lg leading-relaxed text-secondary">
-              Web developer &amp; software architect
-            </p>
-          </header>
+            <div class="hero-inner relative">
+              <header class="hero-content" data-reveal style="--i: 0">
+                <h1 class="hero-title font-extrabold tracking-[-0.02em] leading-[0.98]">
+                  OSCAR RC
+                </h1>
+                <p class="hero-slogan leading-relaxed text-secondary">
+                  Web developer &amp; software architect
+                </p>
+              </header>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class:list={["border-b", edge]}>
+      <section class:list={["border-t", edge]}>
         <div
           class:list={[
-            "relative mx-auto w-full max-w-3xl border-x px-6 py-14",
+            "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
             edge,
           ]}
         >
-          <PlusMark class="-bottom-[5.5px] -left-[6px]" />
-          <PlusMark class="-right-[6px] -bottom-[5.5px]" />
+          <PlusMark class="-top-[5.5px] -left-[6px]" />
+          <PlusMark class="-top-[5.5px] -right-[6px]" />
           <ProjectGrid label="Apps" items={apps} baseDelay={1} mono />
         </div>
       </section>
@@ -89,13 +93,15 @@ const edge = "border-base-300/60";
       {
         /* flex (not h-full) so the framed column stretches to meet the footer */
       }
-      <section class="flex flex-1">
+      <section class:list={["flex flex-1 border-t", edge]}>
         <div
           class:list={[
-            "relative mx-auto w-full max-w-3xl border-x px-6 py-14",
+            "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
             edge,
           ]}
         >
+          <PlusMark class="-top-[5.5px] -left-[6px]" />
+          <PlusMark class="-top-[5.5px] -right-[6px]" />
           <ProjectGrid
             label="Libraries"
             items={libraries}

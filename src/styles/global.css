@@ -106,3 +106,122 @@
     animation: none;
   }
 }
+
+/*
+ * Scroll-collapsing hero. The hero pins inside a tall `.hero-track` spacer
+ * and a scroll-driven animation scrubs `--collapse` 0→1 over the budget:
+ * the column shrinks toward footer height, the tall stacked copy fades out
+ * while a compact inline copy fades in, and the fill goes from transparent
+ * (grid bleeds through, as on load) to solid (a legible bar). Past the
+ * budget it un-pins and scrolls away. All of it is gated so that browsers
+ * without scroll-timeline support, and reduced-motion users, get the static
+ * tall hero unchanged (`--collapse` holds at its initial 0).
+ */
+@property --collapse {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/*
+ * Single component — base layout is stacked (title over slogan), vertically
+ * centred and left-aligned. This is what mobile uses at every collapse level,
+ * and what every browser sees as the static fallback when `--collapse` holds
+ * at 0. Identical to the previous tall hero.
+ */
+:root {
+  --hero-expanded: 19rem; /* the static tall-hero height */
+  --hero-collapsed: 3.75rem; /* ~footer height, the collapsed bar */
+}
+.hero-inner {
+  position: relative;
+  height: var(--hero-expanded); /* fallback: absolute content needs a box */
+}
+.hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-inline: 1.5rem;
+}
+.hero-title {
+  font-size: clamp(2.75rem, 1.8rem + 4vw, 4.25rem);
+}
+.hero-slogan {
+  margin-top: 1.25rem;
+  font-size: 1.125rem;
+}
+
+@keyframes hero-collapse {
+  to {
+    --collapse: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      /* The budget is the hero's own shrinkage, so the track needs no extra
+         height — at rest the hero fills it and the first section sits right
+         below (no empty gap). The pin then lasts exactly this distance and
+         the collapse finishes just as the hero releases. */
+      --hero-budget: calc(var(--hero-expanded) - var(--hero-collapsed));
+    }
+
+    .hero-track {
+      height: var(--hero-expanded);
+    }
+
+    .hero-col {
+      position: sticky;
+      top: 0;
+      /* the gradient's solid stop rises with the collapse: grid bleeds through
+         the top at rest, fully solid once collapsed into the bar */
+      background: linear-gradient(
+        to top,
+        var(--color-base-100) calc(50% + var(--collapse) * 50%),
+        transparent
+      );
+      /* the hero is the first thing on the page, so collapse maps to the
+         first `--hero-budget` of document scroll */
+      animation: hero-collapse linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 var(--hero-budget);
+    }
+
+    /* the column height scrubs from expanded down to ~footer height */
+    .hero-inner {
+      height: calc(
+        (1 - var(--collapse)) * var(--hero-expanded) + var(--collapse) *
+          var(--hero-collapsed)
+      );
+    }
+
+    /* the block stays left-aligned and rides the bottom of the box: centred
+       at rest, settling onto the divider rule as it collapses. */
+    .hero-content {
+      justify-content: flex-end;
+      padding-bottom: calc(
+        (1 - var(--collapse)) * 5.75rem + var(--collapse) * 0.5rem
+      );
+    }
+
+    /* every viewport: fonts shrink and the line gap tightens with the
+       collapse (mobile stays stacked). Only continuous values — no snap. */
+    .hero-title {
+      font-size: calc(
+        (1 - var(--collapse)) * clamp(2.75rem, 1.8rem + 4vw, 4.25rem) +
+          var(--collapse) * 1.05rem
+      );
+    }
+    .hero-slogan {
+      font-size: calc(
+        (1 - var(--collapse)) * 1.125rem + var(--collapse) * 0.8rem
+      );
+      /* the gap between title and slogan tightens as it collapses */
+      margin-top: calc(var(--collapse) * -1rem);
+    }
+  }
+}

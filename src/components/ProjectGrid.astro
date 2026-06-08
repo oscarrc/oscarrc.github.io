@@ -1,6 +1,7 @@
 ---
-import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+
+import ProjectCard from "./ProjectCard.astro";
 
 interface Props {
   label: string;
@@ -42,33 +43,7 @@ const id = `section-${label.toLowerCase()}`;
       >
         {items.map((project, i) => (
           <li data-reveal style={`--i: ${baseDelay + i + 1}`}>
-            <a
-              href={project.data.url}
-              target="_blank"
-              rel="noopener"
-              class="group block rounded-box"
-              data-description={project.data.description}
-            >
-              <span class="block aspect-square overflow-hidden rounded-box border border-base-300 bg-base-200 transition duration-300 group-hover:border-secondary group-hover:shadow-[0_0_28px_oklch(88%_0.006_285/0.16)]">
-                <Image
-                  src={project.data.icon}
-                  alt=""
-                  width="256"
-                  height="256"
-                  class="size-full object-cover saturate-75 transition duration-300 ease-out group-hover:saturate-100"
-                />
-              </span>
-              <span
-                class:list={[
-                  "mt-2.5 line-clamp-2 text-center break-words text-secondary transition-colors duration-200 group-hover:text-base-content",
-                  mono ? "font-mono text-xs" : "text-sm",
-                ]}
-                title={project.data.name}
-              >
-                {project.data.name}
-              </span>
-              <span class="sr-only">{project.data.description}</span>
-            </a>
+            <ProjectCard project={project} mono={mono} />
           </li>
         ))}
       </ul>
