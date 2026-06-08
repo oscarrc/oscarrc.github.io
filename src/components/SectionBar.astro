@@ -1,0 +1,60 @@
+---
+import PlusMark from "./PlusMark.astro";
+
+/**
+ * A section's header bar: the full-bleed divider hairline, the two corner
+ * plus-marks, and the mono label + count — mirroring the footer's structure.
+ * It becomes `position: sticky` (see global.css `.sec-bar`) and stacks under
+ * the navbar; `index` drives its stick offset and stacking order.
+ */
+interface Props {
+  label: string;
+  count: number;
+  /** id the following section references via `aria-labelledby` */
+  id: string;
+  /** stack position below the navbar (0 = first) */
+  index?: number;
+  /** stagger offset for the entrance reveal */
+  baseDelay?: number;
+}
+
+const { label, count, id, index = 0, baseDelay = 0 } = Astro.props;
+const edge = "border-base-300";
+
+// Stick offset accumulates below the navbar; earlier bars sit ABOVE later ones
+// (nav > bar > bar). Explicit values so the order never depends on calc() in z-index.
+const top = `calc(var(--nav-h) + ${index} * var(--bar-h))`;
+const zIndex = 50 + (index + 1);
+---
+
+<div
+  class:list={["sec-bar border-t", edge]}
+  style={`top: ${top}; z-index: ${zIndex}`}
+>
+  <div
+    class:list={[
+      "relative mx-auto h-full w-full max-w-3xl border-x bg-base-100",
+      edge,
+    ]}
+  >
+    <PlusMark class="-top-[5.5px] -left-[6px]" />
+    <PlusMark class="-top-[5.5px] -right-[6px]" />
+    {/* label + count straddle the divider line, masking it (as before) */}
+    <h2
+      id={id}
+      class="absolute top-0 left-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs font-medium tracking-[0.25em] text-secondary uppercase"
+      data-reveal
+      style={`--i: ${baseDelay}`}
+    >
+      {label}
+    </h2>
+    <span
+      class="absolute top-0 right-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs text-secondary"
+      aria-hidden="true"
+      data-reveal
+      style={`--i: ${baseDelay}`}
+    >
+      {String(count).padStart(2, "0")}
+    </span>
+  </div>
+</div>

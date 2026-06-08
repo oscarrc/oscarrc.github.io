@@ -4,7 +4,6 @@ import type { CollectionEntry } from "astro:content";
 import ProjectCard from "./ProjectCard.astro";
 
 interface Props {
-  label: string;
   items: CollectionEntry<"projects">[];
   /** Offset for the staggered entrance, so sections reveal in sequence. */
   baseDelay?: number;
@@ -12,41 +11,20 @@ interface Props {
   mono?: boolean;
 }
 
-const { label, items, baseDelay = 0, mono = false } = Astro.props;
-const id = `section-${label.toLowerCase()}`;
+const { items, baseDelay = 0, mono = false } = Astro.props;
 ---
 
 {
   items.length > 0 && (
-    <section aria-labelledby={id}>
-      {/* Label and count sit on the section divider line, interrupting it. */}
-      <h2
-        id={id}
-        class="absolute top-0 left-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs font-medium tracking-[0.25em] uppercase text-secondary"
-        data-reveal
-        style={`--i: ${baseDelay}`}
-      >
-        {label}
-      </h2>
-      <span
-        class="absolute top-0 right-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs text-secondary"
-        aria-hidden="true"
-        data-reveal
-        style={`--i: ${baseDelay}`}
-      >
-        {String(items.length).padStart(2, "0")}
-      </span>
-
-      <ul
-        class="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-x-4 gap-y-7"
-        role="list"
-      >
-        {items.map((project, i) => (
-          <li data-reveal style={`--i: ${baseDelay + i + 1}`}>
-            <ProjectCard project={project} mono={mono} />
-          </li>
-        ))}
-      </ul>
-    </section>
+    <ul
+      class="grid grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-x-4 gap-y-7"
+      role="list"
+    >
+      {items.map((project, i) => (
+        <li data-reveal style={`--i: ${baseDelay + i + 1}`}>
+          <ProjectCard project={project} mono={mono} />
+        </li>
+      ))}
+    </ul>
   )
 }

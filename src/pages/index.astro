@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import ProjectGrid from "../components/ProjectGrid.astro";
-import PlusMark from "../components/PlusMark.astro";
+import SectionBar from "../components/SectionBar.astro";
 import Footer from "../components/Footer.astro";
 import CursorBubble from "../components/CursorBubble.astro";
 
@@ -15,7 +15,7 @@ const libraries = projects
   .filter((p) => p.data.type === "library")
   .sort(byOrder);
 
-const edge = "border-base-300/60";
+const edge = "border-base-300";
 ---
 
 <Layout>
@@ -37,78 +37,64 @@ const edge = "border-base-300/60";
   <div class="flex min-h-dvh flex-col">
     {
       /*
-      Each section owns its own solid column fill; only the hero carries the
-      gradient (transparent toward the top so the page grid and travelling
-      particle bleed through, solidifying as it collapses). `flex-1` lets the
-      last section stretch to meet the footer.
+      One flat stack of sticky siblings (the shared containing block): the
+      navbar, then each section's `SectionBar` + its grid. As you scroll the
+      hero collapses and stays pinned, and each bar sticks beneath it, the
+      headers accumulating at the top while the cards scroll under (see
+      global.css). Each column owns its own solid fill; only the navbar carries
+      the gradient so the grid bleeds through its top. `flex-1` on the last
+      grid stretches the framed column to meet the footer.
     */
     }
     <div class="relative flex flex-1 flex-col">
-      {
-        /*
-        Hero — pins to the top and collapses as you scroll through the
-        `.hero-track` spacer, then releases and scrolls away (see global.css).
-        A single stacked `<header>`: the title + slogan shrink, their gap
-        tightens, and the block settles onto the divider rule. Each following
-        section owns its top divider + corner marks (so they paint above the
-        backgrounds), the way the footer does. Degrades to the static tall hero
-        without scroll-timeline support or under prefers-reduced-motion.
-      */
-      }
-      <section>
-        <div class="hero-track">
-          <div
-            class:list={[
-              "hero-col relative mx-auto w-full max-w-3xl border-x bg-linear-to-t from-base-100 from-50% to-transparent",
-              edge,
-            ]}
-          >
-            <div class="hero-inner relative">
-              <header class="hero-content" data-reveal style="--i: 0">
-                <h1 class="hero-title font-extrabold tracking-[-0.02em] leading-[0.98]">
-                  OSCAR RC
-                </h1>
-                <p class="hero-slogan leading-relaxed text-secondary">
-                  Web developer &amp; software architect
-                </p>
-              </header>
-            </div>
+      {/* Navbar — the hero; collapses on scroll and stays pinned. The visual
+          column is `.hero-inner`; `.hero-track` (below) reserves the scroll. */}
+      <header class="hero-col">
+        <div
+          class:list={[
+            "hero-inner mx-auto w-full max-w-3xl border-x bg-linear-to-t from-base-100 from-50% to-transparent",
+            edge,
+          ]}
+        >
+          <div class="hero-content" data-reveal style="--i: 0">
+            <h1 class="hero-title font-extrabold tracking-[-0.02em] leading-[0.98]">
+              OSCAR RC
+            </h1>
+            <p class="hero-slogan leading-relaxed text-secondary">
+              Web developer &amp; software architect
+            </p>
           </div>
         </div>
+      </header>
+      <div class="hero-track" aria-hidden="true"></div>
+
+      <SectionBar id="sec-apps" label="Apps" count={apps.length} index={0} baseDelay={1} />
+      <section
+        aria-labelledby="sec-apps"
+        class:list={[
+          "mx-auto w-full max-w-3xl border-x bg-base-100 px-6 pt-4 pb-14",
+          edge,
+        ]}
+      >
+        <ProjectGrid items={apps} baseDelay={1} mono />
       </section>
 
-      <section class:list={["border-t", edge]}>
-        <div
-          class:list={[
-            "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
-            edge,
-          ]}
-        >
-          <PlusMark class="-top-[5.5px] -left-[6px]" />
-          <PlusMark class="-top-[5.5px] -right-[6px]" />
-          <ProjectGrid label="Apps" items={apps} baseDelay={1} mono />
-        </div>
-      </section>
-
-      {
-        /* flex (not h-full) so the framed column stretches to meet the footer */
-      }
-      <section class:list={["flex flex-1 border-t", edge]}>
-        <div
-          class:list={[
-            "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
-            edge,
-          ]}
-        >
-          <PlusMark class="-top-[5.5px] -left-[6px]" />
-          <PlusMark class="-top-[5.5px] -right-[6px]" />
-          <ProjectGrid
-            label="Libraries"
-            items={libraries}
-            baseDelay={apps.length + 2}
-            mono
-          />
-        </div>
+      <SectionBar
+        id="sec-libraries"
+        label="Libraries"
+        count={libraries.length}
+        index={1}
+        baseDelay={apps.length + 2}
+      />
+      {/* flex-1 so the framed column stretches to meet the footer */}
+      <section
+        aria-labelledby="sec-libraries"
+        class:list={[
+          "mx-auto w-full max-w-3xl flex-1 border-x bg-base-100 px-6 pt-4 pb-14",
+          edge,
+        ]}
+      >
+        <ProjectGrid items={libraries} baseDelay={apps.length + 2} mono />
       </section>
     </div>
 
