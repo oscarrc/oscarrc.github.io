@@ -35,63 +35,76 @@ const edge = "border-base-300/60";
   </div>
 
   <div class="flex min-h-dvh flex-col">
-    {/* Hero — framed column over a fading blueprint grid */}
-    <section class:list={["border-b", edge]}>
+    {
+      /*
+      The framed column over the full section stack. One continuous gradient
+      strip — solid at the bottom, transparent toward the top — replaces each
+      column's flat fill, so the page grid and travelling particle bleed through
+      around the hero. `relative` anchors the strip; `flex-1` lets the last
+      section stretch to meet the footer.
+    */
+    }
+    <div class="relative flex flex-1 flex-col">
       <div
-        class:list={[
-          "relative mx-auto w-full max-w-3xl border-x bg-base-100",
-          edge,
-        ]}
+        class="pointer-events-none absolute inset-y-0 right-0 left-0 mx-auto w-full max-w-3xl bg-linear-to-t from-base-100 from-75% to-transparent"
+        aria-hidden="true"
       >
-        <div class="bg-blueprint absolute inset-0" aria-hidden="true"></div>
-        <PlusMark class="-bottom-[5.5px] -left-[6px]" />
-        <PlusMark class="-right-[6px] -bottom-[5.5px]" />
-        <header
-          class="relative px-6 pt-28 pb-20 sm:pt-36 sm:pb-24"
-          data-reveal
-          style="--i: 0"
-        >
-          <h1
-            class="text-[clamp(2.75rem,1.8rem+4vw,4.25rem)] leading-[0.98] font-extrabold tracking-[-0.02em]"
+      </div>
+
+      {/* Hero */}
+      <section class:list={["border-b", edge]}>
+        <div class:list={["relative mx-auto w-full max-w-3xl border-x", edge]}>
+          <PlusMark class="-bottom-[5.5px] -left-[6px]" />
+          <PlusMark class="-right-[6px] -bottom-[5.5px]" />
+          <header
+            class="relative px-6 pt-28 pb-20 sm:pt-36 sm:pb-24"
+            data-reveal
+            style="--i: 0"
           >
-            OSCAR RC
-          </h1>
-          <p class="mt-5 text-lg leading-relaxed text-secondary">
-            Web developer &amp; software architect
-          </p>
-        </header>
-      </div>
-    </section>
+            <h1
+              class="text-[clamp(2.75rem,1.8rem+4vw,4.25rem)] leading-[0.98] font-extrabold tracking-[-0.02em]"
+            >
+              OSCAR RC
+            </h1>
+            <p class="mt-5 text-lg leading-relaxed text-secondary">
+              Web developer &amp; software architect
+            </p>
+          </header>
+        </div>
+      </section>
 
-    <section class:list={["border-b", edge]}>
-      <div
-        class:list={[
-          "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
-          edge,
-        ]}
-      >
-        <PlusMark class="-bottom-[5.5px] -left-[6px]" />
-        <PlusMark class="-right-[6px] -bottom-[5.5px]" />
-        <ProjectGrid label="Apps" items={apps} baseDelay={1} mono />
-      </div>
-    </section>
+      <section class:list={["border-b", edge]}>
+        <div
+          class:list={[
+            "relative mx-auto w-full max-w-3xl border-x px-6 py-14",
+            edge,
+          ]}
+        >
+          <PlusMark class="-bottom-[5.5px] -left-[6px]" />
+          <PlusMark class="-right-[6px] -bottom-[5.5px]" />
+          <ProjectGrid label="Apps" items={apps} baseDelay={1} mono />
+        </div>
+      </section>
 
-    {/* flex (not h-full) so the framed column stretches to meet the footer */}
-    <section class="flex flex-1">
-      <div
-        class:list={[
-          "relative mx-auto w-full max-w-3xl border-x bg-base-100 px-6 py-14",
-          edge,
-        ]}
-      >
-        <ProjectGrid
-          label="Libraries"
-          items={libraries}
-          baseDelay={apps.length + 2}
-          mono
-        />
-      </div>
-    </section>
+      {
+        /* flex (not h-full) so the framed column stretches to meet the footer */
+      }
+      <section class="flex flex-1">
+        <div
+          class:list={[
+            "relative mx-auto w-full max-w-3xl border-x px-6 py-14",
+            edge,
+          ]}
+        >
+          <ProjectGrid
+            label="Libraries"
+            items={libraries}
+            baseDelay={apps.length + 2}
+            mono
+          />
+        </div>
+      </section>
+    </div>
 
     <Footer />
   </div>

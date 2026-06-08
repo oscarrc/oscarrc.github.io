@@ -66,10 +66,11 @@
 }
 
 /*
- * Structural texture — the Vercel-home grammar: a framed column,
- * a faint blueprint grid behind the hero, plus-marks at intersections.
+ * Structural texture — the Vercel-home grammar: a framed column over a
+ * faint blueprint grid, plus-marks at intersections. The column fades to
+ * transparent toward the top (see the gradient strip in index.astro), so
+ * this grid and the travelling pulse show through around the hero.
  */
-/* Page-wide gutter grid — quieter than the hero's, sits behind the solid column. */
 .bg-blueprint-page {
   background-image:
     linear-gradient(
@@ -83,23 +84,6 @@
       transparent 1px
     );
   background-size: 56px 56px;
-}
-
-.bg-blueprint {
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in oklab, var(--color-base-300) 50%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklab, var(--color-base-300) 50%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 56px 56px;
-  -webkit-mask-image: radial-gradient(140% 140% at 25% 0%, black 0%, transparent 78%);
-  mask-image: radial-gradient(140% 140% at 25% 0%, black 0%, transparent 78%);
 }
 
 /* Orchestrated entrance: one staggered reveal on load, nothing else. */
