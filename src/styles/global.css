@@ -145,15 +145,8 @@
   position: relative;
   height: var(--hero-expanded); /* fallback: the absolute content needs a box */
 }
-.hero-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-inline: 1.5rem;
-}
+/* .hero-content's static layout lives in the markup as utilities; only its
+   collapse-driven vertical padding (below, gated) needs to be CSS. */
 .hero-title {
   font-size: clamp(2.75rem, 1.8rem + 4vw, 4.25rem);
 }
