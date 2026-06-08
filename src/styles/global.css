@@ -73,6 +73,18 @@
 }
 
 /*
+ * z-index ladder — one scale for the whole page, low → high. The travelling
+ * grid pulse sits below everything (it's `fixed` and first in the DOM, so
+ * positioned content paints over it at the default z).
+ */
+:root {
+  --z-mark: 10; /* plus-marks at column intersections */
+  --z-nav: 20; /* the collapsed navbar (header) */
+  --z-bar: 30; /* section header bars, above the header (+ index: later above earlier) */
+  --z-bubble: 50; /* cursor companion + its expanded description — above all */
+}
+
+/*
  * Structural texture — the Vercel-home grammar: a framed column over a
  * faint blueprint grid, plus-marks at intersections. The column fades to
  * transparent toward the top (see the gradient strip in index.astro), so
@@ -190,7 +202,7 @@
     .hero-col {
       position: sticky;
       top: 0;
-      z-index: 40;
+      z-index: var(--z-nav);
       height: var(--hero-collapsed);
       animation: hero-collapse linear both;
       animation-timeline: scroll(root block);

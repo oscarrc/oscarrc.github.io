@@ -21,10 +21,10 @@ interface Props {
 const { label, count, id, index = 0, baseDelay = 0 } = Astro.props;
 const edge = "border-base-300";
 
-// Stick offset accumulates below the navbar; earlier bars sit ABOVE later ones
-// (nav > bar > bar). Explicit values so the order never depends on calc() in z-index.
+// Stick offset accumulates below the navbar; z sits above the header, with
+// later bars above earlier ones (+ index) — see the z-index ladder.
 const top = `calc(var(--nav-h) + ${index} * var(--bar-h))`;
-const zIndex = 50 + (index + 1);
+const zIndex = `calc(var(--z-bar) + ${index})`;
 ---
 
 <div
