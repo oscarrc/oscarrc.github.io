@@ -65,6 +65,13 @@
   outline-offset: 3px;
 }
 
+/* Section-label links scroll smoothly to their section (quiet for reduced motion). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /*
  * Structural texture — the Vercel-home grammar: a framed column over a
  * faint blueprint grid, plus-marks at intersections. The column fades to

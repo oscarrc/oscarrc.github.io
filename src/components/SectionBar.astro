@@ -41,12 +41,17 @@ const zIndex = 50 + (index + 1);
     <PlusMark class="-top-[5.5px] -right-[6px]" />
     {/* label + count straddle the divider line, masking it (as before) */}
     <h2
-      id={id}
-      class="absolute top-0 left-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs font-medium tracking-[0.25em] text-secondary uppercase"
+      id={`${id}-label`}
+      class="absolute top-0 left-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs font-medium tracking-[0.25em] uppercase"
       data-reveal
       style={`--i: ${baseDelay}`}
     >
-      {label}
+      <a
+        href={`#${id}`}
+        class="text-secondary transition-colors hover:text-base-content"
+      >
+        {label}
+      </a>
     </h2>
     <span
       class="absolute top-0 right-2 -translate-y-1/2 bg-base-100 px-4 font-mono text-xs text-secondary"

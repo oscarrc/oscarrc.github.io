@@ -74,9 +74,10 @@ const edge = "border-base-300";
 
       <SectionBar id="sec-apps" label="Apps" count={apps.length} index={0} baseDelay={1} />
       <section
-        aria-labelledby="sec-apps"
+        id="sec-apps"
+        aria-labelledby="sec-apps-label"
         class:list={[
-          "mx-auto w-full max-w-3xl border-x bg-base-100 px-6 pt-4 pb-14",
+          "mx-auto w-full max-w-3xl scroll-mt-[calc(var(--nav-h)_+_var(--bar-h))] border-x bg-base-100 px-6 pt-4 pb-14",
           edge,
         ]}
       >
@@ -92,9 +93,10 @@ const edge = "border-base-300";
       />
       {/* flex-1 so the framed column stretches to meet the footer */}
       <section
-        aria-labelledby="sec-libraries"
+        id="sec-libraries"
+        aria-labelledby="sec-libraries-label"
         class:list={[
-          "mx-auto w-full max-w-3xl flex-1 border-x bg-base-100 px-6 pt-4 pb-14",
+          "mx-auto w-full max-w-3xl flex-1 scroll-mt-[calc(var(--nav-h)_+_2*var(--bar-h))] border-x bg-base-100 px-6 pt-4 pb-14",
           edge,
         ]}
       >
